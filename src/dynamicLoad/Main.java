@@ -166,6 +166,10 @@ public class Main extends SimpleApplication implements AnalogListener,AnimEventL
         if (left) {
             walkDirection.addLocal(camLeft);
             left=false;
+             Node pp =(Node) assetManager.loadModel("Models/Oto/Oto.mesh.xml");
+        pp.setLocalScale(1f);
+        rootNode.attachChild(pp);
+        pp.setLocalTranslation(new Vector3f(player.getPhysicsLocation().x+30,player.getPhysicsLocation().y,player.getPhysicsLocation().z));
         }
         if (right) {
             walkDirection.addLocal(camLeft.negate());
