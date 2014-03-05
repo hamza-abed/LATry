@@ -1,0 +1,30 @@
+<project name="essaye v001">
+<scenes>
+<scene id="scene01" extension="j3o" path="Scenes/scene1.j3o" active="true" />
+</scenes>
+<actors>
+
+<actor name="sinbad" extension="mesh.xml" path="Models/high-sinbad/Sinbad.mesh.xml" onScene="true">
+
+<animations>
+<animation name="idle"  description="stand"/>
+<animation name="walk"  description="walk"/>
+<animation name="dance" description="dance"/>
+</animations>
+
+</actor>
+<actor name="oto" extension="mesh.xml"    path="Models/Oto/Oto.mesh.xml" onScene="false">
+
+<animations>
+<animation name="stand" description="stand"/>
+<animation name="walk"  description="walk"/>
+<animation name="dance" description="dance"/>
+</animations>
+<postion x="10" y="0" z="0" />
+
+</actor>
+</actors>
+
+<objects>
+</objects>
+</project>	
