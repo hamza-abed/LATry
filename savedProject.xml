@@ -11,7 +11,7 @@
 <animation name="walk"  description="walk"/>
 <animation name="dance" description="dance"/>
 </animations>
-
+<postion x="10" y="0" z="0" />
 </actor>
 <actor name="oto" extension="mesh.xml"    path="Models/Oto/Oto.mesh.xml" onScene="false">
 
