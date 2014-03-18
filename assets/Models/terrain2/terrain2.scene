@@ -1,0 +1,36 @@
+<scene previous_export_time="1395069895.438325" formatVersion="1.0.1" exported_by="admin" export_time="1395070296.503325" >
+  <nodes >
+    <node name="Plane" >
+      <position z="0.042809" y="0.034244" x="0.013147" />
+      <rotation qw="1.000000" qy="0.000000" qx="0.000000" qz="-0.000000" />
+      <scale z="9.042763" y="9.042763" x="9.042763" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity lock_rot_x="False" lock_rot_y="False" lock_rot_z="False" anisotropic_friction="False" inertia_tensor="0.4000000059604645" velocity_min="0.0" damping_rot="0.10000000149011612" damping_trans="0.03999999910593033" meshFile="Plane.mesh" name="Plane" actor="False" lock_trans_z="False" lock_trans_y="False" lock_trans_x="False" velocity_max="0.0" mass_radius="1.0" mass="1.0" ghost="False" physics_type="STATIC" friction_y="1.0" friction_x="1.0" friction_z="1.0" />
+    </node>
+    <node name="Camera" >
+      <position z="8.367534" y="7.185375" x="-5.270982" />
+      <rotation qw="0.870453" qy="-0.248523" qx="0.409267" qz="0.114235" />
+      <scale z="1.000000" y="1.000000" x="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <camera fov="0.5033799435163735" name="Camera" projectionType="perspective" >
+        <clipping near="0.10000000149011612" nearPlaneDist="0.10000000149011612" far="100.0" farPlaneDist="100.0" />
+      </camera>
+    </node>
+  </nodes>
+  <externals >
+    <item type="material" >
+      <file name="C:\Users\stagiaire\Desktop\newTerrain\terrain17_3\new\Material.material" />
+    </item>
+  </externals>
+  <environment >
+    <colourDiffuse g="0.05087608844041824" r="0.05087608844041824" b="0.05087608844041824" />
+    <colourBackground g="0.05087608844041824" r="0.05087608844041824" b="0.05087608844041824" />
+    <colourAmbient g="0.0" r="0.0" b="0.0" />
+  </environment>
+</scene>
