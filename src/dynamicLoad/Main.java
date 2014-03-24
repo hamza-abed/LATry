@@ -50,6 +50,9 @@ import com.jme3.texture.Texture2D;
 import com.jme3.water.SimpleWaterProcessor;
 import com.jme3.water.WaterFilter;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyEventSubscriber;
+import de.lessvoid.nifty.elements.events.NiftyMousePrimaryClickedEvent;
+import staticClasses.Variables;
 
 /**
  * test
@@ -239,11 +242,11 @@ sceneModel.collideWith(ray, results);
     private BitmapText afficherTexte(String txt)
     {
         guiNode.detachAllChildren();
-        guiFont = assetManager.loadFont("Interface/Fonts/Orbitron.fnt");
+        guiFont = assetManager.loadFont("Interface/Fonts/Mangal.fnt");
         BitmapText helloText = new BitmapText(guiFont, false);
         helloText.setSize(guiFont.getCharSet().getRenderedSize());
         helloText.setText(txt);
-        helloText.setLocalTranslation(300, helloText.getLineHeight(), 0);
+        helloText.setLocalTranslation(500, helloText.getLineHeight(), 0);
         guiNode.attachChild(helloText);
         return helloText;
     }
@@ -404,7 +407,7 @@ sceneModel.collideWith(ray, results);
        
        
      //  assetManager.registerLocator("newScene.zip", ZipLocator.class);
-    //sceneModel = assetManager.loadModel("Models/terrain2/terrain2.j3o"); sceneModel.setLocalScale(10f, 2f, 10f);
+   // sceneModel = assetManager.loadModel("Models/terrain2/terrain2.j3o"); sceneModel.setLocalScale(10f, 2f, 10f);
     
     rootNode.attachChild(sceneModel);
      
@@ -558,6 +561,7 @@ private void removeArrow()
    public void initNiftyGUI()
    {
         
+       Variables.setMain(this);
     NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(
             assetManager, inputManager, audioRenderer, guiViewPort);
     Nifty nifty = niftyDisplay.getNifty();
@@ -571,9 +575,21 @@ private void removeArrow()
     
     //nifty.setDebugOptionPanelColors(true);
     nifty.fromXml("Interface/int.xml", "start");
+    
     //nifty.fromXml("Interface/tutorial/screen2.xml", "hud");
     
    
    }
+   public void saySomething()
+   {
+       System.out.println("hello this is me");
+   }
+   
+@NiftyEventSubscriber(id="connect")
+public void onClick(String id, NiftyMousePrimaryClickedEvent event) {
+ System.out.println("element with id [" + id + "] "
+         + "clicked at [" + event.getMouseX() +
+", " + event.getMouseY() + "]");
+}
 
 }

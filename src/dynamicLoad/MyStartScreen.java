@@ -9,6 +9,7 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import staticClasses.Variables;
 
 /**
  *
@@ -21,15 +22,23 @@ public class MyStartScreen extends AbstractAppState implements ScreenController 
 
   /** custom methods */
   public MyStartScreen() {
+      
     /** You custom constructor, can accept arguments */
   }
 String nextScreen;
   public void startGame(String nextScreen) {
-    nifty.gotoScreen(nextScreen);  // switch to another screen
+  //  nifty.gotoScreen(nextScreen);  // switch to another screen
    this.nextScreen=nextScreen;
   // displaySplashScreen();
-   nifty.removeScreen(nextScreen);
-    
+   //nifty.removeScreen(nextScreen);
+  
+       if(app==null) System.out.println("app= null");
+       Main m= Variables.getMain();
+       //m = th
+      m.saySomething();
+     //System.out.println("class = ");
+   nifty.gotoScreen("chatbar");
+  
   }
 
   
@@ -43,6 +52,7 @@ String nextScreen;
       }
      nifty.removeScreen(nextScreen);
   }
+  
   public void quitGame() {
     app.stop();
   }
@@ -80,4 +90,10 @@ String nextScreen;
     }
    
   }
+  
+  public void connectServer()
+  {
+  System.out.println("Connection au serveur");
+  }
+  
 }
