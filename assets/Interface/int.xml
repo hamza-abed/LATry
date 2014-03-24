@@ -36,7 +36,7 @@
 	          <onStartScreen name="move" timeType="exp" factor="3.5" direction="left" mode="in" length="500" inherit="true"/>
 	          <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" inherit="true"/>
 	   </effect>
-        <control height="25px" id="textfield2" name="textfield" width="100%" x="0" y="90%" color="#bbaa00">
+        <control height="80%" lines="10" id="textfield2" name="nifty-console" width="100%" x="0" y="37px">
              <interact onClick="quitGame()"/>
        </control>
        <control height="32px" id="connect" label="Connect" name="button" x="5%" y="0px">

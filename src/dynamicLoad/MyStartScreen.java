@@ -3,14 +3,22 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyEventSubscriber;
+import de.lessvoid.nifty.controls.ChatTextSendEvent;
+import de.lessvoid.nifty.controls.ConsoleExecuteCommandEvent;
+import de.lessvoid.nifty.controls.TextFieldChangedEvent;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.events.NiftyMousePrimaryClickedEvent;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.tools.SizeValue;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import staticClasses.Variables;
-
+import  de.lessvoid.nifty.controls.Console;
 /**
  *
  */
@@ -19,14 +27,22 @@ public class MyStartScreen extends AbstractAppState implements ScreenController 
   private Nifty nifty;
   private Application app;
   private Screen screen;
-
+  private boolean firstTime=true;
   /** custom methods */
   public MyStartScreen() {
+      //screen= this
+   
       
     /** You custom constructor, can accept arguments */
   }
 String nextScreen;
   public void startGame(String nextScreen) {
+     Variables.console=nifty.getScreen("chatbar").
+             findNiftyControl("textfield2",Console.class);
+    
+       //textfield2
+      if(nifty==null)System.out.println("\n\n null");   
+      
   //  nifty.gotoScreen(nextScreen);  // switch to another screen
    this.nextScreen=nextScreen;
   // displaySplashScreen();
@@ -38,8 +54,7 @@ String nextScreen;
       m.saySomething();
      //System.out.println("class = ");
    nifty.gotoScreen("chatbar");
-  
-  }
+   }
 
   
   public void displaySplashScreen()
@@ -87,6 +102,7 @@ String nextScreen;
       Element niftyElement = nifty.getCurrentScreen().findElementByName("score");
       // Display the time-per-frame -- this field could also display the score etc...
       niftyElement.getRenderer(TextRenderer.class).setText((int)(tpf*100000) + ""); 
+     
     }
    
   }
@@ -94,6 +110,19 @@ String nextScreen;
   public void connectServer()
   {
   System.out.println("Connection au serveur");
+  Variables.getMain().connect();
   }
+  
+  
+  
+  @NiftyEventSubscriber(id="textfield2")
+ public void onChatTextSendEvent(String id, ConsoleExecuteCommandEvent event) {
+ System.out.println("element with id [" + id + "] "
+         + "clicked at [" + event.getCommandLine());
+      
+       
+      Variables.console.output(">J'ai recu sa", Color.BLACK);
+     
+}
   
 }

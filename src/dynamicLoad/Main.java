@@ -1,4 +1,5 @@
 package dynamicLoad;
+import client.task.PingPongTask;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.AnimEventListener;
@@ -49,9 +50,23 @@ import com.jme3.texture.Texture.WrapMode;
 import com.jme3.texture.Texture2D;
 import com.jme3.water.SimpleWaterProcessor;
 import com.jme3.water.WaterFilter;
+import com.sun.sgs.client.ClientChannel;
+import com.sun.sgs.client.ClientChannelListener;
+import com.sun.sgs.client.simple.SimpleClient;
+import com.sun.sgs.client.simple.SimpleClientListener;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.elements.events.NiftyMousePrimaryClickedEvent;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.PasswordAuthentication;
+import java.nio.ByteBuffer;
+import java.nio.channels.UnresolvedAddressException;
+import java.util.Properties;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import shared.constants.PckCode;
+import shared.pck.Pck;
 import staticClasses.Variables;
 
 /**
@@ -59,7 +74,7 @@ import staticClasses.Variables;
  * @author Hamza ABED 2014
  * hamza.abed.professionel@gmail.com
  */
-public class Main extends SimpleApplication implements AnalogListener,AnimEventListener{
+public class Main extends SimpleApplication implements AnalogListener,AnimEventListener,SimpleClientListener{
 
     
     
@@ -76,7 +91,33 @@ public class Main extends SimpleApplication implements AnalogListener,AnimEventL
   private Vector3f camLeft = new Vector3f();
   private Vector3f walkDirection = new Vector3f();
   private static Main app;
+  // about connecting to the server
   
+  private Properties props;
+    /** The version of the serialized form of this class. */
+    private static final long serialVersionUID = 1L;
+
+    /** The name of the host property. */
+    public static final String HOST_PROPERTY = "server.0.host";
+
+    /** The default hostname. */
+    public static final String DEFAULT_HOST = "127.0.0.1";
+
+    /** The name of the port property. */
+    public static final String PORT_PROPERTY = "server.0.port";
+
+    /** The default port. */
+    public static final String DEFAULT_PORT = "10513";//"1139";
+
+    /** The message encoding. */
+    public static final String MESSAGE_CHARSET = "UTF-8";
+
+  
+
+   
+    /** The {@link SimpleClient} instance for this client. */
+    protected SimpleClient simpleClient;
+
   
   
   public static void main(String[] args) {
@@ -92,6 +133,8 @@ public class Main extends SimpleApplication implements AnalogListener,AnimEventL
     private WaterFilter water;
 
     public Main() {
+        
+        simpleClient = new SimpleClient(this);
         this.actionListener = new ActionListener() { 
 public void onAction(String name, boolean keyPressed, float tpf) {
 if (name.equals("addObject")) {
@@ -585,11 +628,216 @@ private void removeArrow()
        System.out.println("hello this is me");
    }
    
-@NiftyEventSubscriber(id="connect")
-public void onClick(String id, NiftyMousePrimaryClickedEvent event) {
- System.out.println("element with id [" + id + "] "
-         + "clicked at [" + event.getMouseX() +
-", " + event.getMouseY() + "]");
-}
+   
+   
+   
+   
+   
+/**
+			 * gestionnaire de tache
+			 * 
+			 * @return
+			 */
+			/**
+			 * service de programmation de task
+			 */
+			private ScheduledThreadPoolExecutor scheduledExecutor;
+
+			public ScheduledThreadPoolExecutor getSchedulerTaskExecutor() {
+				if (scheduledExecutor == null) {
+					/*scheduledExecutor = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(
+							Integer.parseInt(props.getProperty("la.scheduled.task","10")));
+*/
+					scheduledExecutor = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(4);
+				}
+				return scheduledExecutor;
+			}
+			
+			
+			/**
+			 * tache de test de connexion
+			 */
+			private PingPongTask pingPongTask;
+			public PingPongTask getPingPongTask() {
+				if (pingPongTask == null) 
+					pingPongTask = new PingPongTask(this);
+				return pingPongTask;
+			}
+
+       /**
+        	     * {@inheritDoc}
+        	     * <p>
+        	     * Returns dummy credentials where user is "guest-&lt;random&gt;"
+        	     * and the password is "guest."  Real-world clients are likely
+        	     * to pop up a login dialog to get these fields from the player.
+        	     */
+                        private String login,pass;
+        	    public PasswordAuthentication getPasswordAuthentication() {
+        	    	 System.out.println("Password authentification called");
+        	    	
+        	    	return new PasswordAuthentication(this.login, this.pass.toCharArray());
+        	    }
+
+     /**
+   * Initiates asynchronous login to the RDS server specified by
+   * the host and port properties.
+   */
+  protected void login() {
+	  System.out.println("this is login method");
+      String host = System.getProperty(HOST_PROPERTY, DEFAULT_HOST);
+      String port = System.getProperty(PORT_PROPERTY, DEFAULT_PORT);
+
+      
+      
+      
+      try {
+    	  System.out.println("try to login");
+          Properties connectProps = new Properties();
+          connectProps.put("host", host);
+          connectProps.put("port", port);
+          simpleClient.login(connectProps);
+      } catch (Exception e) {
+    	  System.out.println("exception in login void");
+          e.printStackTrace();
+          disconnected(false, e.getMessage());
+      }
+  }
+    
+    
+    /**
+   * Encodes a {@code String} into an array of bytes.
+   *
+   * @param s the string to encode
+   * @return the byte array which encodes the given string
+   */
+  protected static byte[] encodeString(String s) {
+      try {
+          return s.getBytes(MESSAGE_CHARSET);
+      } catch (UnsupportedEncodingException e) {
+          throw new Error("Required character set " + MESSAGE_CHARSET +
+              " not found", e);
+      }
+  }
+  
+  /**
+   * Decodes an array of bytes into a {@code String}.
+   *
+   * @param bytes the bytes to decode
+   * @return the decoded string
+   */
+  
+  	public void connect() {
+				Properties properties = new Properties();
+				properties.put("host", System.getProperty("server.0.host", "127.0.0.1"));
+				 System.out.println("first prop setted");
+				properties.put("port", System.getProperty("server.0.port", "10510"));
+				System.out.println("second prop setted");
+			//	rmi = props.getProperty("server."+num+".rmi", null);
+				//ressourceHttp= props.getProperty("server."+num+".http.resources", null);
+				
+			//	initRessourcesHttp();
+
+				this.login = "demo";
+				this.pass = "demo";
+//				this.rmiEditorAdress = props.getProperty("server."+num+".editorhost", "rmi://127.0.0.1/");
+//				TODO
+				this.simpleClient = new SimpleClient(this);
+				try {
+					 System.out.println("connection au server");
+					
+					 simpleClient.login(properties);
+				} catch (Exception e) {
+					System.out.println("warning : IOException : Probablement un probleme avec la connexion au serveur.");
+				}
+			}
+			
+
+// à propos des propriètés
+			/**
+			 * Charge les propriétes de LaClient	
+			 * @author philippe pernelle 
+			 */
+		
+			/* ********************************************************** *
+			 * * 				ENVOI MESSAGE REDDWARF 					* *
+			 * ********************************************************** */
+			/**
+			 * Envoie un message au server
+			 * 
+			 * @param pck
+			 */
+			public void send(Pck pck) {
+				try {
+					simpleClient.send(pck.toByteBuffer());
+					Variables.console.output(">a message has been sent to the server ! : "+pck.toString());
+				} catch (IOException e) {
+					//logger.warning("Connection au serveur echoué");
+					disconnect("Broken Pipe");
+					Variables.console.output(">Broken pipe1");
+				} catch (IllegalStateException e) {
+					//logger.warning("Connection au serveur echoué");
+					// ca arrive quand on envoie un packet alors que le joueur est déconnecté
+					disconnect("Broken Pipe");
+					Variables.console.output(">Broken pipe2");
+				} catch (Exception e) {
+					//logger.warning(e.getClass().getName()+"\n lors de la communication serveur");
+					disconnect("Broken Pipe");
+					Variables.console.output(">Broken pipe3");
+				}
+			}
+                        
+                        
+                        /**
+			 * demande la deconnection
+			 */
+			public void disconnect(final String reason) {
+				try {
+					this.simpleClient.logout(true);
+				} catch (IllegalStateException e) {
+				}
+				getPingPongTask().stop();
+				Variables.console.output(">this is disconnection");
+			
+			}
+    public void loggedIn() {
+      
+        	       
+        	        Variables.console.output(">logged in");
+        	        getPingPongTask().start();
+        	        Variables.console.output(">ping pong task has just started !");
+    }
+
+    public void loginFailed(String string) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public ClientChannelListener joinedChannel(ClientChannel cc) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+   	public void receivedMessage(ByteBuffer message) {
+					
+					 short c = message.getShort();
+			Variables.console.output(">a message received from server ! : "+c);
+                        System.out.println(">a message received from server ! : "+c);
+					switch (c) {
+				case PckCode.PING:
+					getPingPongTask().pong();
+					break;
+					}
+				}
+
+    public void reconnecting() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void reconnected() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void disconnected(boolean bln, String string) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 
 }

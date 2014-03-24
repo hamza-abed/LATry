@@ -14,7 +14,7 @@ public class Variables {
     
     public static Main main;
     
-    
+    public static de.lessvoid.nifty.controls.Console console;
     public static Main getMain()
     {
         return main;
