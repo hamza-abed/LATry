@@ -31,12 +31,12 @@
 
 <screen id="chatbar" controller="dynamicLoad.MyStartScreen">
     <layer childLayout="absolute" id="layer1"  >
-      <panel childLayout="absolute" height="30%" id="panel0" style="nifty-panel-simple" width="35%" x="0%" y="70%" backgroundImage="Interface/imgs/bgp.png" alpha="30%">
+      <panel childLayout="absolute" height="35%" id="panel0" style="nifty-panel-simple" width="400px" x="2px" y="70%" backgroundImage="Interface/imgs/bgp.png" alpha="30%">
           <effect>
 	          <onStartScreen name="move" timeType="exp" factor="3.5" direction="left" mode="in" length="500" inherit="true"/>
 	          <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" inherit="true"/>
 	   </effect>
-        <control height="80%" lines="10" id="textfield2" name="nifty-console" width="100%" x="0" y="37px">
+        <control height="80%" lines="12" id="textfield2" name="nifty-console" width="100%" x="0" y="37px">
              <interact onClick="quitGame()"/>
        </control>
        <control height="32px" id="connect" label="Connect" name="button" x="5%" y="0px">
