@@ -38,7 +38,8 @@
  */
 package client.task;
 
-import dynamicLoad.Main;
+import client.LaGame;
+import client.network.SimpleClientConnector;
 import java.util.concurrent.TimeUnit;
 
 import shared.constants.PckCode;
@@ -75,7 +76,7 @@ public class PingPongTask implements Runnable {
 	/**
 	 * Conteneur du jeux
 	 */
-	private Main game;
+	private SimpleClientConnector game;
 
 	private Pck pck;
 
@@ -88,7 +89,7 @@ public class PingPongTask implements Runnable {
 	/**
 	 * @param laGame
 	 */
-	public PingPongTask(Main game) {
+	public PingPongTask(SimpleClientConnector game) {
 		this.game = game;
 		this.pck = new Pck(PckCode.PING);
 		game.getSchedulerTaskExecutor().scheduleAtFixedRate(this, delay, delay, TimeUnit.MILLISECONDS);

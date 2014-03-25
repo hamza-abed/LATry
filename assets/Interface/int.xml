@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <nifty>
   <useStyles filename="nifty-default-styles.xml"/>
+  
   <useControls filename="nifty-default-controls.xml"/>
-  <screen id="start" controller="dynamicLoad.MyStartScreen">
+  <useControls filename="Interface/nifty-console.xml"/> 
+  <screen id="start" controller="client.MyStartScreen">
     <layer childLayout="absolute" id="layer2">
       <image filename="Interface/imgs/img1.png" height="100%" id="image0" width="100%" x="0" y="0"/>
     </layer>
@@ -23,23 +25,21 @@
       </panel>
     </layer>
   </screen>
-  <screen id="hud" controller="dynamicLoad.MyStartScreen">
+  <screen id="hud" controller="client.MyStartScreen">
     <layer childLayout="absolute" id="layer2">
       <image filename="Interface/imgs/img1.png" height="100%" id="image0" width="100%" x="0" y="0"/>
     </layer>
 </screen>
 
-<screen id="chatbar" controller="dynamicLoad.MyStartScreen">
+<screen id="chatbar" controller="client.MyStartScreen">
     <layer childLayout="absolute" id="layer1"  >
       <panel childLayout="absolute" height="35%" id="panel0" style="nifty-panel-simple" width="400px" x="2px" y="70%" backgroundImage="Interface/imgs/bgp.png" alpha="30%">
           <effect>
 	          <onStartScreen name="move" timeType="exp" factor="3.5" direction="left" mode="in" length="500" inherit="true"/>
 	          <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" inherit="true"/>
 	   </effect>
-        <control height="80%" lines="12" id="textfield2" name="nifty-console" width="100%" x="0" y="37px">
-             <interact onClick="quitGame()"/>
-       </control>
-       <control height="32px" id="connect" label="Connect" name="button" x="5%" y="0px">
+        <control height="80%" lines="12" id="textfield2" name="nifty-console" width="100%" x="0" y="37px"/>
+        <control height="32px" id="connect" label="Connect" name="button" x="5%" y="0px">
             <interact onClick="connectServer()"/>
         </control>
       </panel>

@@ -1,4 +1,5 @@
-package dynamicLoad;
+package client;
+import client.network.SimpleClientConnector;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
@@ -17,7 +18,7 @@ import de.lessvoid.nifty.tools.SizeValue;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import staticClasses.Variables;
+import shared.variables.Variables;
 import  de.lessvoid.nifty.controls.Console;
 /**
  *
@@ -37,6 +38,8 @@ public class MyStartScreen extends AbstractAppState implements ScreenController 
   }
 String nextScreen;
   public void startGame(String nextScreen) {
+      
+      System.out.println("this is start game");
      Variables.console=nifty.getScreen("chatbar").
              findNiftyControl("textfield2",Console.class);
     
@@ -49,7 +52,7 @@ String nextScreen;
    //nifty.removeScreen(nextScreen);
   
        if(app==null) System.out.println("app= null");
-       Main m= Variables.getMain();
+       LaGame m= Variables.getLaGame();
        //m = th
       m.saySomething();
      //System.out.println("class = ");
@@ -110,7 +113,8 @@ String nextScreen;
   public void connectServer()
   {
   System.out.println("Connection au serveur");
-  Variables.getMain().connect();
+  Variables.setClientConnecteur(new SimpleClientConnector());
+  Variables.getClientConnecteur().connect();
   }
   
   

@@ -1,4 +1,6 @@
-package dynamicLoad;
+package client;
+import client.input.MainGameMouseListener;
+import client.network.SimpleClientConnector;
 import client.task.PingPongTask;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
@@ -67,17 +69,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import shared.constants.PckCode;
 import shared.pck.Pck;
-import staticClasses.Variables;
+import shared.variables.Variables;
 
 /**
  * test
  * @author Hamza ABED 2014
  * hamza.abed.professionel@gmail.com
  */
-public class Main extends SimpleApplication implements AnalogListener,AnimEventListener,SimpleClientListener{
+public class LaGame extends SimpleApplication implements AnalogListener,AnimEventListener{
 
     
-    
+ private  MainGameMouseListener mouseListener;
   private AnimChannel channel;
   private AnimControl control;
   private CharacterControl player;
@@ -90,7 +92,7 @@ public class Main extends SimpleApplication implements AnalogListener,AnimEventL
   private Vector3f camDir  = new Vector3f();
   private Vector3f camLeft = new Vector3f();
   private Vector3f walkDirection = new Vector3f();
-  private static Main app;
+  private static LaGame app;
   // about connecting to the server
   
   private Properties props;
@@ -121,20 +123,30 @@ public class Main extends SimpleApplication implements AnalogListener,AnimEventL
   
   
   public static void main(String[] args) {
-        app = new Main();
+        app = new LaGame();
         AppSettings settings = new AppSettings(true);
     settings.setResolution(1024, 763);
     app.setShowSettings(false); // splashscreen
     app.setSettings(settings);
     
         app.start();
+        
+        /*
+         * ici on doit se connecter pour commencer à recevoir les message ping pong
+         * on appelle la methode connect du SimpleClientConnector
+         */
     }
     private Quad quad;
     private WaterFilter water;
 
-    public Main() {
+    public LaGame() {
         
-        simpleClient = new SimpleClient(this);
+        //SimpleClientConnector = new SimpleClientConnector();
+        /*
+         * On a même pas besoin d'ajouter du code ici pour connecter le serveur 
+         * on se connecte que lorsque c'est essentiel,
+         * alors sa sera utile pour se connecter dans le main
+         */
         this.actionListener = new ActionListener() { 
 public void onAction(String name, boolean keyPressed, float tpf) {
 if (name.equals("addObject")) {
@@ -156,7 +168,7 @@ afficherFlecheDestination();
  private Arrow arrow;
 
  public void afficherFlecheDestination()
-    {
+{
         
 ///This is about arrow
 arrow = new Arrow(Vector3f.UNIT_Y);
@@ -214,7 +226,7 @@ sceneModel.collideWith(ray, results);
 
 ///
 
-    }
+ }
     @Override
     public void simpleInitApp() {
        
@@ -228,24 +240,30 @@ sceneModel.collideWith(ray, results);
    
         initLight();
         initScene();
+        mouseListener=new MainGameMouseListener(sceneModel);
         initPlayer();
-        
+        initCamera();
         
         setUpKeys();
-        viewPort.setBackgroundColor(new ColorRGBA(0.7f,0.8f,1f,1f));
-        flyCam.setMoveSpeed(150);
-       // cam.setLocation(lightDirection);
-       // channel.reset(true); // this stop the animation
-      
-        //***** DISABLING THE FLYING CAMERA  ******///
-       flyCam.setEnabled(false);
-       ChaseCamera chaseCam = new ChaseCamera(cam, sinbadPlayer, inputManager);
+       
       
        // bulletAppState.getPhysicsSpace().enableDebug(assetManager);
         afficherTexte("Version d'essai");
        initSimpleWater();initPPcWater();       
       
  
+    }
+    ChaseCamera chaseCam;
+    private void initCamera()
+    {
+         viewPort.setBackgroundColor(new ColorRGBA(0.7f,0.8f,1f,1f));
+        flyCam.setMoveSpeed(150);
+       // cam.setLocation(lightDirection);
+       // channel.reset(true); // this stop the animation
+      
+        //***** DISABLING THE FLYING CAMERA  ******///
+       flyCam.setEnabled(false);
+       chaseCam = new ChaseCamera(cam, sinbadPlayer, inputManager);
     }
     
     
@@ -275,7 +293,7 @@ sceneModel.collideWith(ray, results);
        
         
         bulletAppState.getPhysicsSpace().add(player);
-        
+        Variables.setMainPlayer(sinbadPlayer);
         
          
        
@@ -404,6 +422,7 @@ sceneModel.collideWith(ray, results);
     
     /** We over-write some navigational key mappings here, so we can
    * add physics-controlled walking and jumping: */
+   
   private void setUpKeys() {
     inputManager.addMapping("Left", new  KeyTrigger(KeyInput.KEY_LEFT));
     inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_RIGHT));
@@ -422,7 +441,7 @@ sceneModel.collideWith(ray, results);
     inputManager.addListener(this, "Up");
     inputManager.addListener(this, "Down");
     inputManager.addListener(this, "Jump");
-    inputManager.addListener(actionListener,"LClick");
+    inputManager.addListener(mouseListener,"LClick");
     inputManager.addListener(actionListener, "addObject");
   }
     
@@ -468,7 +487,7 @@ sceneModel.collideWith(ray, results);
         
         bulletAppState.getPhysicsSpace().add(landscape);
               
-       
+       Variables.setSceneModel(sceneModel);
     
    }
    Geometry g=null;
@@ -604,7 +623,7 @@ private void removeArrow()
    public void initNiftyGUI()
    {
         
-       Variables.setMain(this);
+       Variables.setLaGame(this);
     NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(
             assetManager, inputManager, audioRenderer, guiViewPort);
     Nifty nifty = niftyDisplay.getNifty();
@@ -633,211 +652,5 @@ private void removeArrow()
    
    
    
-/**
-			 * gestionnaire de tache
-			 * 
-			 * @return
-			 */
-			/**
-			 * service de programmation de task
-			 */
-			private ScheduledThreadPoolExecutor scheduledExecutor;
-
-			public ScheduledThreadPoolExecutor getSchedulerTaskExecutor() {
-				if (scheduledExecutor == null) {
-					/*scheduledExecutor = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(
-							Integer.parseInt(props.getProperty("la.scheduled.task","10")));
-*/
-					scheduledExecutor = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(4);
-				}
-				return scheduledExecutor;
-			}
-			
-			
-			/**
-			 * tache de test de connexion
-			 */
-			private PingPongTask pingPongTask;
-			public PingPongTask getPingPongTask() {
-				if (pingPongTask == null) 
-					pingPongTask = new PingPongTask(this);
-				return pingPongTask;
-			}
-
-       /**
-        	     * {@inheritDoc}
-        	     * <p>
-        	     * Returns dummy credentials where user is "guest-&lt;random&gt;"
-        	     * and the password is "guest."  Real-world clients are likely
-        	     * to pop up a login dialog to get these fields from the player.
-        	     */
-                        private String login,pass;
-        	    public PasswordAuthentication getPasswordAuthentication() {
-        	    	 System.out.println("Password authentification called");
-        	    	
-        	    	return new PasswordAuthentication(this.login, this.pass.toCharArray());
-        	    }
-
-     /**
-   * Initiates asynchronous login to the RDS server specified by
-   * the host and port properties.
-   */
-  protected void login() {
-	  System.out.println("this is login method");
-      String host = System.getProperty(HOST_PROPERTY, DEFAULT_HOST);
-      String port = System.getProperty(PORT_PROPERTY, DEFAULT_PORT);
-
-      
-      
-      
-      try {
-    	  System.out.println("try to login");
-          Properties connectProps = new Properties();
-          connectProps.put("host", host);
-          connectProps.put("port", port);
-          simpleClient.login(connectProps);
-      } catch (Exception e) {
-    	  System.out.println("exception in login void");
-          e.printStackTrace();
-          disconnected(false, e.getMessage());
-      }
-  }
-    
-    
-    /**
-   * Encodes a {@code String} into an array of bytes.
-   *
-   * @param s the string to encode
-   * @return the byte array which encodes the given string
-   */
-  protected static byte[] encodeString(String s) {
-      try {
-          return s.getBytes(MESSAGE_CHARSET);
-      } catch (UnsupportedEncodingException e) {
-          throw new Error("Required character set " + MESSAGE_CHARSET +
-              " not found", e);
-      }
-  }
-  
-  /**
-   * Decodes an array of bytes into a {@code String}.
-   *
-   * @param bytes the bytes to decode
-   * @return the decoded string
-   */
-  
-  	public void connect() {
-				Properties properties = new Properties();
-				properties.put("host", System.getProperty("server.0.host", "127.0.0.1"));
-				 System.out.println("first prop setted");
-				properties.put("port", System.getProperty("server.0.port", "10510"));
-				System.out.println("second prop setted");
-			//	rmi = props.getProperty("server."+num+".rmi", null);
-				//ressourceHttp= props.getProperty("server."+num+".http.resources", null);
-				
-			//	initRessourcesHttp();
-
-				this.login = "demo";
-				this.pass = "demo";
-//				this.rmiEditorAdress = props.getProperty("server."+num+".editorhost", "rmi://127.0.0.1/");
-//				TODO
-				this.simpleClient = new SimpleClient(this);
-				try {
-					 System.out.println("connection au server");
-					
-					 simpleClient.login(properties);
-				} catch (Exception e) {
-					System.out.println("warning : IOException : Probablement un probleme avec la connexion au serveur.");
-				}
-			}
-			
-
-// à propos des propriètés
-			/**
-			 * Charge les propriétes de LaClient	
-			 * @author philippe pernelle 
-			 */
-		
-			/* ********************************************************** *
-			 * * 				ENVOI MESSAGE REDDWARF 					* *
-			 * ********************************************************** */
-			/**
-			 * Envoie un message au server
-			 * 
-			 * @param pck
-			 */
-			public void send(Pck pck) {
-				try {
-					simpleClient.send(pck.toByteBuffer());
-					Variables.console.output(">a message has been sent to the server ! : "+pck.toString());
-				} catch (IOException e) {
-					//logger.warning("Connection au serveur echoué");
-					disconnect("Broken Pipe");
-					Variables.console.output(">Broken pipe1");
-				} catch (IllegalStateException e) {
-					//logger.warning("Connection au serveur echoué");
-					// ca arrive quand on envoie un packet alors que le joueur est déconnecté
-					disconnect("Broken Pipe");
-					Variables.console.output(">Broken pipe2");
-				} catch (Exception e) {
-					//logger.warning(e.getClass().getName()+"\n lors de la communication serveur");
-					disconnect("Broken Pipe");
-					Variables.console.output(">Broken pipe3");
-				}
-			}
-                        
-                        
-                        /**
-			 * demande la deconnection
-			 */
-			public void disconnect(final String reason) {
-				try {
-					this.simpleClient.logout(true);
-				} catch (IllegalStateException e) {
-				}
-				getPingPongTask().stop();
-				Variables.console.output(">this is disconnection");
-			
-			}
-    public void loggedIn() {
-      
-        	       
-        	        Variables.console.output(">logged in");
-        	        getPingPongTask().start();
-        	        Variables.console.output(">ping pong task has just started !");
-    }
-
-    public void loginFailed(String string) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public ClientChannelListener joinedChannel(ClientChannel cc) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-   	public void receivedMessage(ByteBuffer message) {
-					
-					 short c = message.getShort();
-			Variables.console.output(">a message received from server ! : "+c);
-                        System.out.println(">a message received from server ! : "+c);
-					switch (c) {
-				case PckCode.PING:
-					getPingPongTask().pong();
-					break;
-					}
-				}
-
-    public void reconnecting() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void reconnected() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void disconnected(boolean bln, String string) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
 
 }
