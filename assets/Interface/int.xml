@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<nifty>
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd http://nifty-gui.sourceforge.net/nifty.xsd">
+    
   <useStyles filename="nifty-default-styles.xml"/>
   
   <useControls filename="nifty-default-controls.xml"/>
-  <useControls filename="Interface/nifty-console.xml"/> 
+  
   <screen id="start" controller="client.MyStartScreen">
     <layer childLayout="absolute" id="layer2">
       <image filename="Interface/imgs/img1.png" height="100%" id="image0" width="100%" x="0" y="0"/>
@@ -33,15 +35,36 @@
 
 <screen id="chatbar" controller="client.MyStartScreen">
     <layer childLayout="absolute" id="layer1"  >
-      <panel childLayout="absolute" height="35%" id="panel0" style="nifty-panel-simple" width="400px" x="2px" y="70%" backgroundImage="Interface/imgs/bgp.png" alpha="30%">
+      <panel childLayout="vertical" height="35%" id="panel0" style="nifty-panel-simple" width="400px" x="2px" y="70%" backgroundImage="Interface/imgs/bgp.png" alpha="30%">
+       
           <effect>
 	          <onStartScreen name="move" timeType="exp" factor="3.5" direction="left" mode="in" length="500" inherit="true"/>
 	          <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" inherit="true"/>
 	   </effect>
-        <control height="80%" lines="12" id="textfield2" name="nifty-console" width="100%" x="0" y="37px"/>
-        <control height="32px" id="connect" label="Connect" name="button" x="5%" y="0px">
+          
+        
+        <!--  
+       
+        THIS IS ABOUT TABS
+        -->
+        
+<control id="edit_tabs" name="tabGroup"> 
+    <control id="tab_1" name="tab" caption="tab 1" >
+        <text text="foo" font="Interface/Fonts/Mangal.fnt" />
+        
+    </control>
+
+    <control id="tab_2" name="tab" caption="tab 2" >
+       
+        <control height="80%" lines="8" id="textfield2" name="nifty-console" width="100%" x="0" y="0px"/>
+        <!--
+        <control height="20%" id="connect" label="Connect" name="button" x="80%" y="0px">
             <interact onClick="connectServer()"/>
         </control>
+        -->
+    </control>
+</control>
+        
       </panel>
     </layer>
  </screen>

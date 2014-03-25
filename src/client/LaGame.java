@@ -157,76 +157,12 @@ fireCamp.setLocalTranslation(new Vector3f(player.getPhysicsLocation().x+30,playe
 System.out.println("child attached !!");
 
 }
-if(name.equals("LClick"))
-{
-afficherFlecheDestination();
-}
 
 }
-};  }
+}; 
+}
 
- private Arrow arrow;
-
- public void afficherFlecheDestination()
-{
-        
-///This is about arrow
-arrow = new Arrow(Vector3f.UNIT_Y);
-arrow.setLineWidth(4); // make arrow thicker
-
-Vector3f origin    = sinbadPlayer.getLocalTranslation();
-Vector3f direction = cam.getWorldCoordinates(inputManager.getCursorPosition(), 0.3f);
-
-
-Vector3f location = direction.subtractLocal(origin).normalizeLocal();
-//putShape(arrow, ColorRGBA.Green).setLocalTranslation(
-//new Vector3f(location.x, location.y,location.z)
-//); 
-//System.out.println("location "+location + "sinbad "+sinbadPlayer.getLocalTranslation());
-
-
-/////
- // 1. Reset results list.
-CollisionResults results = new CollisionResults();
-Vector2f click2d = inputManager.getCursorPosition();
-Vector3f click3d = cam.getWorldCoordinates(
-    new Vector2f(click2d.x, click2d.y), 0f).clone();
-Vector3f dir = cam.getWorldCoordinates(
-    new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d).normalizeLocal();
-Ray ray = new Ray(click3d, dir);
-sceneModel.collideWith(ray, results);
-
-
-
-//        CollisionResults results = new CollisionResults();
-        // 2. Aim the ray from cam loc to cam direction.
-  //      Ray ray = new Ray(cam.getLocation(), cam.getDirection());
-        // 3. Collect intersections between Ray and Shootables in results list.
-        sceneModel.collideWith(ray, results);
-        // 4. Print the results
-        System.out.println("----- Collisions? " + results.size() + "-----");
-        Vector3f pt=null;
-        for (int i = 0; i < results.size(); i++) {
-          // For each hit, we know distance, impact point, name of geometry.
-          float dist = results.getCollision(i).getDistance();
-          pt = results.getCollision(i).getContactPoint();
-          String hit = results.getCollision(i).getGeometry().getName();
-          System.out.println("* Collision #" + i);
-          System.out.println("  You shot " + hit + " at " + pt + ", " + dist + " wu away.");
-        }
-        System.out.println("sinbad "+sinbadPlayer.getLocalTranslation());
-        // 5. Use the results (we mark the hit object)
-        
-        
-       // if(arrow!=null) rootNode.detachChild(arrow);
-        removeArrow();
-        putShape(arrow, ColorRGBA.Green).setLocalTranslation(new Vector3f(pt.x, pt.y,pt.z));
-        
-        //rootNode.detachChild(sceneModel);
-
-///
-
- }
+ 
     @Override
     public void simpleInitApp() {
        
@@ -490,21 +426,9 @@ sceneModel.collideWith(ray, results);
        Variables.setSceneModel(sceneModel);
     
    }
-   Geometry g=null;
-private Geometry putShape(Mesh shape, ColorRGBA color){
-  g = new Geometry("coordinate axis", shape);
-  Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-  mat.getAdditionalRenderState().setWireframe(true);
-  mat.setColor("Color", color);
-  g.setMaterial(mat);
-  rootNode.attachChild(g);
-  return g;
-}
+ 
 
-private void removeArrow()
-{    if(g!=null)
-    rootNode.detachChild(g);
-}
+
     @Override
     public void simpleRender(RenderManager rm) {
         

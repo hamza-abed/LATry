@@ -29,6 +29,14 @@ public class MoveCursor extends Arrow{
         super();
     }
     private boolean targetAttended=false;
+
+    public boolean isTargetAttended() {
+        return targetAttended;
+    }
+
+    public void setTargetAttended(boolean targetAttended) {
+        this.targetAttended = targetAttended;
+    }
     private Arrow arrow;
     public void afficherFlecheDestination()
     {
@@ -114,4 +122,5 @@ private void walkToTarget()
 {
     
 }
+
 }
