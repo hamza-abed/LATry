@@ -2,7 +2,7 @@
 <nifty xmlns="http://nifty-gui.sourceforge.net/nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
        xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd http://nifty-gui.sourceforge.net/nifty.xsd">
     
-  <useStyles filename="nifty-default-styles.xml"/>
+  <useStyles filename="Interface/nifty-default-styles.xml"/>
   
   <useControls filename="nifty-default-controls.xml"/>
   
@@ -48,21 +48,29 @@
         THIS IS ABOUT TABS
         -->
         
-<control id="edit_tabs" name="tabGroup"> 
-    <control id="tab_1" name="tab" caption="tab 1" >
-        <text text="foo" font="Interface/Fonts/Mangal.fnt" />
+<control id="edit_tabs" name="tabGroup" width="100%"> 
+   
+    <control id="tab_local" name="tab" caption="Local" >
+        <text text="Tab Locale" font="Interface/Fonts/Mangal.fnt" />
         
     </control>
 
-    <control id="tab_2" name="tab" caption="tab 2" >
-       
-        <control height="80%" lines="8" id="textfield2" name="nifty-console" width="100%" x="0" y="0px"/>
-        <!--
-        <control height="20%" id="connect" label="Connect" name="button" x="80%" y="0px">
+    <control id="tab_groupe" name="tab" caption="Groupe" >
+       <panel childLayout="vertical" height="100%" id="panel_grp" style="nifty-panel-simple" width="100%" x="0%" y="0%" backgroundImage="Interface/imgs/bgp.png">
+        <control height="75%" lines="10" id="textfield2" name="nifty-console" width="100%" x="0" y="0px">
+          
+        </control>        
+        <control height="15%" id="connect" label="Connect" name="button" x="0px" y="75%">
             <interact onClick="connectServer()"/>
         </control>
-        -->
+       </panel>
     </control>
+    <control id="tab_guide" name="tab" caption="Guide" />
+    <control id="tab_monde" name="tab" caption="Monde" />
+    <control id="tab_debug" name="tab" caption="Debug" />
+    <!--
+   J'AI VU QUE L'ONGLET GUIDE PEUT REMPLACER LE DEBUG
+   -->
 </control>
         
       </panel>

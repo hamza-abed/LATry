@@ -184,7 +184,7 @@ System.out.println("child attached !!");
        
       
        // bulletAppState.getPhysicsSpace().enableDebug(assetManager);
-        afficherTexte("Version d'essai");
+      //  afficherTexte("Version d'essai");
        initSimpleWater();initPPcWater();       
       
  
