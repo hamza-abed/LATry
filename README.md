@@ -10,3 +10,6 @@
 C'est le projet Nifty que j'ai recompilé après  avoir modifier les tabs pour les rendre transparents
 
 3/Ajouter les différents librairies du JEM3 sans oublier d'ajouter les librairies de JME3 définie pour blender
+
+
+trouver le tout sur ce lien : http://www.mediafire.com/download/dbjg455b85fst28/librairies.rar
