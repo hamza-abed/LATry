@@ -5,7 +5,15 @@
   <useStyles filename="Interface/nifty-default-styles.xml"/>
   
   <useControls filename="nifty-default-controls.xml"/>
-  
+  <style id="nifty-btn">
+      <attributes backgroundImage="Interface/imgs/rightarrow-12.png" />
+      <effect>
+           
+            <onEnabled name="imageOverlay" filename="button/button.png"
+                    />
+            
+        </effect>
+  </style>
   <screen id="start" controller="client.MyStartScreen">
     <layer childLayout="absolute" id="layer2">
       <image filename="Interface/imgs/img1.png" height="100%" id="image0" width="100%" x="0" y="0"/>
@@ -15,7 +23,7 @@
            <effect>
 	          <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" inherit="true"/>
 	          <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" inherit="true"/>
-	        </effect>
+	   </effect>
         <control font="aurulent-sans-16.fnt" height="46px" id="label0" name="label" text="This is a serious learning adventure game" width="100%" x="0px" y="35"/>
         <control childLayout="center" height="33px" id="button0" label="Continue" name="button" x="30%" y="101">
             <interact onClick="startGame(hud)" />
@@ -35,13 +43,13 @@
 
 <screen id="chatbar" controller="client.MyStartScreen">
     <layer childLayout="absolute" id="layer1"  >
-      <panel childLayout="vertical" height="35%" id="panel0" style="nifty-panel-simple" width="400px" x="2px" y="70%" backgroundImage="Interface/imgs/bgp.png" alpha="30%">
+      <panel childLayout="horizontal" height="35%" id="panel0" style="nifty-panel-simple" width="400px" x="2px" y="70%" backgroundImage="Interface/imgs/bgp.png" alpha="30%">
        
           <effect>
 	          <onStartScreen name="move" timeType="exp" factor="3.5" direction="left" mode="in" length="500" inherit="true"/>
 	          <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" inherit="true"/>
 	   </effect>
-          
+       
         
         <!--  
        
@@ -52,7 +60,6 @@
    
     <control id="tab_local" name="tab" caption="Local" >
         <text text="Tab Locale" font="Interface/Fonts/Mangal.fnt" />
-        
     </control>
 
     <control id="tab_groupe" name="tab" caption="Groupe" >
@@ -72,6 +79,8 @@
    J'AI VU QUE L'ONGLET GUIDE PEUT REMPLACER LE DEBUG
    -->
 </control>
+ <control childLayout="absolute" height="12px" width="12px" id="btnReduce" label="-" name="button" x="368px" y="0px" 
+        style="nifty-btn" />
         
       </panel>
     </layer>

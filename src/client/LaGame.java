@@ -316,7 +316,6 @@ System.out.println("child attached !!");
 
     @Override
     public void simpleRender(RenderManager rm) {
-            
         //TODO: add render code
     }
 

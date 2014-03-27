@@ -124,9 +124,13 @@ String nextScreen;
  System.out.println("element with id [" + id + "] "
          + "clicked at [" + event.getCommandLine());
       
-       
+     
       Variables.console.output(">J'ai recu sa", Color.BLACK);
      
 }
   
+  public void disablePanel()
+  {
+        Variables.console.disable();
+  }
 }
