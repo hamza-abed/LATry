@@ -235,9 +235,11 @@ System.out.println("child attached !!");
          
       
         joueur.update();
-        joueur.getPlayerModel().setLocalTranslation(new Vector3f(
-        joueur.getPlayer().getPhysicsLocation().x, joueur.getPlayer().getPhysicsLocation().y-12.5f,
-        joueur.getPlayer().getPhysicsLocation().z));
+        joueur.getPlayerModel().removeFromParent();
+                joueur.getPlayerModel().setLocalTranslation(new Vector3f(
+        joueur.getPlayer().getPhysicsLocation().x, joueur.getPlayer().getPhysicsLocation().y-2.5f,
+        joueur.getPlayer().getPhysicsLocation().z)); 
+                joueur.attachToScene(); 
         //walkDirection.set(0, 0, 0);
          
     }
