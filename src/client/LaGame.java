@@ -1,5 +1,6 @@
 package client;
-import client.input.MainGameMouseListener;
+import client.input.MainGameListener;
+import client.map.character.Player;
 import client.network.SimpleClientConnector;
 import client.task.PingPongTask;
 import com.jme3.animation.AnimChannel;
@@ -76,60 +77,34 @@ import shared.variables.Variables;
  * @author Hamza ABED 2014
  * hamza.abed.professionel@gmail.com
  */
-public class LaGame extends SimpleApplication implements AnalogListener,AnimEventListener{
+public class LaGame extends SimpleApplication {
 
     
- private  MainGameMouseListener mouseListener;
-  private AnimChannel channel;
-  private AnimControl control;
-  private CharacterControl player;
-  private  Node sinbadPlayer;
+  private  MainGameListener gameListener;
+  
   private Vector3f lightDirection=new Vector3f(-4,-1,5);
   private Spatial sceneModel;
   private BulletAppState bulletAppState;
   private RigidBodyControl landscape;
-  private boolean left = false, right = false, up = false, down = false;
-  private Vector3f camDir  = new Vector3f();
-  private Vector3f camLeft = new Vector3f();
-  private Vector3f walkDirection = new Vector3f();
+  
   private static LaGame app;
-  // about connecting to the server
   
-  private Properties props;
-    /** The version of the serialized form of this class. */
-    private static final long serialVersionUID = 1L;
-
-    /** The name of the host property. */
-    public static final String HOST_PROPERTY = "server.0.host";
-
-    /** The default hostname. */
-    public static final String DEFAULT_HOST = "127.0.0.1";
-
-    /** The name of the port property. */
-    public static final String PORT_PROPERTY = "server.0.port";
-
-    /** The default port. */
-    public static final String DEFAULT_PORT = "10513";//"1139";
-
-    /** The message encoding. */
-    public static final String MESSAGE_CHARSET = "UTF-8";
-
+  protected SimpleClient simpleClient;
   
-
-   
-    /** The {@link SimpleClient} instance for this client. */
-    protected SimpleClient simpleClient;
+  private Player joueur;
 
   
   
   public static void main(String[] args) {
-        app = new LaGame();
-        AppSettings settings = new AppSettings(true);
+    /*
+     * Setting main properties for the game
+     */
+    app = new LaGame();
+    AppSettings settings = new AppSettings(true);
     settings.setResolution(1024, 763);
     app.setShowSettings(false); // splashscreen
     app.setSettings(settings);
-    
-        app.start();
+    app.start();
         
         /*
          * ici on doit se connecter pour commencer à recevoir les message ping pong
@@ -153,7 +128,9 @@ if (name.equals("addObject")) {
 //Node fireCamp=(Node) assetManager.loadModel("Models/Oto/Oto.mesh.xml");
 Spatial fireCamp = assetManager.loadModel("Models/campfire/campfire.j3o");
 rootNode.attachChild(fireCamp);
-fireCamp.setLocalTranslation(new Vector3f(player.getPhysicsLocation().x+30,player.getPhysicsLocation().y,player.getPhysicsLocation().z));
+
+fireCamp.setLocalTranslation(new Vector3f(joueur.getPlayer().getPhysicsLocation().x+30,joueur.getPlayer().getPhysicsLocation().y
+        ,joueur.getPlayer().getPhysicsLocation().z));
 System.out.println("child attached !!");
 
 }
@@ -170,26 +147,37 @@ System.out.println("child attached !!");
     app.setDisplayStatView(false);
     bulletAppState = new BulletAppState(); //Ceci c'est pour spécifier 
     stateManager.attach(bulletAppState); //qu'on va travailler avec des physics
+    //le bulletAppState est un variable utilisé dans tout le jeux
+    //pour ajouter des palyers
     
    initNiftyGUI();  
     
    
         initLight();
         initScene();
-        mouseListener=new MainGameMouseListener(sceneModel);
-        initPlayer();
-        initCamera();
         
+        initPlayer();
+        gameListener=new MainGameListener(sceneModel);
+        initCamera();
         setUpKeys();
        
       
-       // bulletAppState.getPhysicsSpace().enableDebug(assetManager);
+       bulletAppState.getPhysicsSpace().enableDebug(assetManager);
       //  afficherTexte("Version d'essai");
        initSimpleWater();initPPcWater();       
       
  
     }
+
+    public BulletAppState getBulletAppState() {
+        return bulletAppState;
+    }
+
+    public void setBulletAppState(BulletAppState bulletAppState) {
+        this.bulletAppState = bulletAppState;
+    }
     ChaseCamera chaseCam;
+    
     private void initCamera()
     {
          viewPort.setBackgroundColor(new ColorRGBA(0.7f,0.8f,1f,1f));
@@ -199,39 +187,18 @@ System.out.println("child attached !!");
       
         //***** DISABLING THE FLYING CAMERA  ******///
        flyCam.setEnabled(false);
-       chaseCam = new ChaseCamera(cam, sinbadPlayer, inputManager);
+       chaseCam = new ChaseCamera(cam, joueur.getPlayerModel(), inputManager);
     }
     
     
     private void initPlayer()
     {
-          sinbadPlayer =(Node) assetManager.loadModel("Models/high-sinbad/Sinbad.mesh.xml");
-        sinbadPlayer.setLocalScale(0.5f);
-        rootNode.attachChild(sinbadPlayer);
-        sinbadPlayer.move(-10, 5, -10); 
-        
-        control = sinbadPlayer.getControl(AnimControl.class);
-        control.addListener((AnimEventListener) this);
-        channel = control.createChannel();
-        channel.setAnim("idle");
-        
-         CapsuleCollisionShape capsuleShape = 
-         new CapsuleCollisionShape(2f, 1f, 1);
-        
-        
-        player = new CharacterControl(capsuleShape, 0.1f);
-        player.setJumpSpeed(30);
-        player.setFallSpeed(600);
-        player.setGravity(50);
-        
-        player.setPhysicsLocation(new Vector3f(-10, 5, -10));
-        // sinbadPlayer.addControl(player);
+        joueur=new  Player();
+      
+       // walkDirection=joueur.getWalkDirection();
+        joueur.attachToScene();
+        Variables.setMainPlayer(joueur);
        
-        
-        bulletAppState.getPhysicsSpace().add(player);
-        Variables.setMainPlayer(sinbadPlayer);
-        
-         
        
     }    
     
@@ -248,59 +215,15 @@ System.out.println("child attached !!");
         return helloText;
     }
     
-     public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
-    if (animName.equals("walk")&&!up) {
-      channel.setAnim("idle");
-      
-    }
-    else channel.setAnim("walk");
-  }
-   
+    
      
      private ActionListener actionListener;
      
     
      
      
-     private int verifyUpAnalog1=0; 
-     private int verifyUpAnalog2=0; 
-  public void onAnalog(String binding, float isPressed, float tpf) {
-         turnCharacterDependentlyOnCam();
-    if (binding.equals("Left")) {
-      left = true;
-      
-    } else if (binding.equals("Right")) {
-      right= true;
-      
-    } else if (binding.equals("Up")) {
-      up = true;
-      verifyUpAnalog1++;
-   // sinbadPlayer.rotateUpTo(new Vector3f(player.getViewDirection().x,cam.getRotation().getY(),sinbadPlayer.getLocalRotation().getZ()));
-      
-    } else if (binding.equals("Down")) {
-      down = true;
-    } else if (binding.equals("Jump")) {
-       player.jump(); 
-    }
     
-    
-  // System.out.println("walk "+ isPressed +" "+ binding);
-        if (up && !channel.getAnimationName().equals("walk")) {
-          channel.setAnim("walk",0.5f);
-          channel.setLoopMode(LoopMode.DontLoop);
-        }
-        if(!up) channel.setAnim("idle");
-    }
   
-     
-   private float turned=0;
-   public  void turnCharacterDependentlyOnCam()
-   { if(turned==0) turned=walkDirection.y;
-       System.out.println("walkDirection = "+cam.getRotation().getY()+"  "+sinbadPlayer.getLocalRotation().getY());
-       Quaternion q=sinbadPlayer.getLocalRotation();
-       sinbadPlayer.setLocalRotation(new Quaternion(q.getX(),cam.getRotation().getY(),q.getZ(),cam.getRotation().getW()));
-    //  sinbadPlayer.rotate(0, ((int)walkDirection.y)*30, 0); 
-  }
      
     
    
@@ -310,49 +233,12 @@ System.out.println("child attached !!");
         // cam.setLocation(new Vector3f(0, 10, 0) );
         // if(!up) channel.setAnim("idle");
          
-         camDir.set(cam.getDirection()).multLocal(0.6f);
-        camLeft.set(cam.getLeft()).multLocal(0.4f);
-        walkDirection.set(0, 0, 0);
-       
-        if (left) {
-            walkDirection.addLocal(camLeft);
-            left=false;
-        
-                  }
-        if (right) {
-            walkDirection.addLocal(camLeft.negate());
-            right=false;
-        }
-        if (up) {
-            walkDirection.addLocal(camDir);
-           
-            if(verifyUpAnalog1 ==verifyUpAnalog2){up=false; verifyUpAnalog1 =verifyUpAnalog2=0; }
-            else
-                verifyUpAnalog2=verifyUpAnalog1;
-        }
-        if (down) {
-            walkDirection.addLocal(camDir.negate());
-            down=false;
-        }
-        
-       player.setWalkDirection(walkDirection);
-        
-     
-        /*cam.setLocation(new Vector3f(player.getPhysicsLocation().x,
-                player.getPhysicsLocation().y+15,
-                player.getPhysicsLocation().z
-                )); */
-        
-      /// modifaction de la la position du player 
-        
-        sinbadPlayer.setLocalTranslation(new Vector3f(
-        player.getPhysicsLocation().x, player.getPhysicsLocation().y-2.5f,
-        player.getPhysicsLocation().z));
-        
-      // System.out.println(walkDirection.toString());
       
-        
-       
+        joueur.update();
+        joueur.getPlayerModel().setLocalTranslation(new Vector3f(
+        joueur.getPlayer().getPhysicsLocation().x, joueur.getPlayer().getPhysicsLocation().y-12.5f,
+        joueur.getPlayer().getPhysicsLocation().z));
+        //walkDirection.set(0, 0, 0);
          
     }
     
@@ -367,17 +253,14 @@ System.out.println("child attached !!");
     inputManager.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
     inputManager.addMapping("addObject", new KeyTrigger(KeyInput.KEY_X));
     
-   inputManager.addMapping("LClick", new MouseButtonTrigger(0));         // Left-button click
-   inputManager.addMapping("RClick", new MouseButtonTrigger(1));         // Right-button click
-
-    
-    
-    inputManager.addListener(this, "Left");
-    inputManager.addListener(this, "Right");
-    inputManager.addListener(this, "Up");
-    inputManager.addListener(this, "Down");
-    inputManager.addListener(this, "Jump");
-    inputManager.addListener(mouseListener,"LClick");
+    inputManager.addMapping("LClick", new MouseButtonTrigger(0));         // Left-button click
+    inputManager.addMapping("RClick", new MouseButtonTrigger(1));         // Right-button click
+    inputManager.addListener(gameListener, "Left");
+    inputManager.addListener(gameListener, "Right");
+    inputManager.addListener(gameListener, "Up");
+    inputManager.addListener(gameListener, "Down");
+    inputManager.addListener(gameListener, "Jump");
+    inputManager.addListener(gameListener,"LClick");
     inputManager.addListener(actionListener, "addObject");
   }
     
@@ -431,8 +314,7 @@ System.out.println("child attached !!");
 
     @Override
     public void simpleRender(RenderManager rm) {
-        
-        
+            
         //TODO: add render code
     }
 

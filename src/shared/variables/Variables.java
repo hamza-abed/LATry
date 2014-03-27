@@ -6,6 +6,7 @@ package shared.variables;
 
 import client.LaGame;
 import client.hud3D.MoveCursor;
+import client.map.character.Player;
 import client.network.SimpleClientConnector;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
@@ -30,7 +31,7 @@ public class Variables {
     }
     public static de.lessvoid.nifty.controls.Console console;
     private static SimpleClientConnector clientConnecteur;
-    private static  Node mainPlayer;
+    private static  Player mainPlayer;
     private static Spatial sceneModel;
 
     public static Spatial getSceneModel() {
@@ -47,11 +48,11 @@ public class Variables {
     }
 
   
-    public static Node getMainPlayer() {
+    public static Player getMainPlayer() {
         return mainPlayer;
     }
 
-    public static void setMainPlayer(Node mainPlayer) {
+    public static void setMainPlayer(Player mainPlayer) {
         Variables.mainPlayer = mainPlayer;
     }
     

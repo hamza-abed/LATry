@@ -45,11 +45,11 @@ public class MoveCursor extends Arrow{
 arrow = new Arrow(Vector3f.UNIT_Y);
 arrow.setLineWidth(4); // make arrow thicker
 
-Vector3f origin    = Variables.getMainPlayer().getLocalTranslation();
-Vector3f direction = Variables.getCam().getWorldCoordinates(Variables.getLaGame().getInputManager().getCursorPosition(), 0.3f);
+///Vector3f origin    = Variables.getMainPlayer().getPlayerModel().getLocalTranslation();
+///Vector3f direction = Variables.getCam().getWorldCoordinates(Variables.getLaGame().getInputManager().getCursorPosition(), 0.3f);
 /*ame().getInputManager().getCursorPosition(), 0.3f);*/
 
-Vector3f location = direction.subtractLocal(origin).normalizeLocal();
+///Vector3f location = direction.subtractLocal(origin).normalizeLocal();
 //putShape(arrow, ColorRGBA.Green).setLocalTranslation(
 //new Vector3f(location.x, location.y,location.z)
 //); 
@@ -85,7 +85,7 @@ Variables.getSceneModel().collideWith(ray, results);
           System.out.println("* Collision #" + i);
           System.out.println("  You shot " + hit + " at " + pt + ", " + dist + " wu away.");
         }
-        System.out.println("sinbad "+Variables.getMainPlayer().getLocalTranslation());
+        System.out.println("sinbad "+Variables.getMainPlayer().getPlayerModel().getLocalTranslation());
         // 5. Use the results (we mark the hit object)
         
         
