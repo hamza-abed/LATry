@@ -14,6 +14,18 @@
             
         </effect>
   </style>
+  
+  
+  <style id="nifty-btn-hide">
+      <attributes backgroundImage="Interface/imgs/leftarrow-12.png" />
+      <effect>
+           
+            <onEnabled name="imageOverlay" filename="button/button.png"
+                    />
+            
+        </effect>
+  </style>
+  
   <screen id="start" controller="client.MyStartScreen">
     <layer childLayout="absolute" id="layer2">
       <image filename="Interface/imgs/img1.png" height="100%" id="image0" width="100%" x="0" y="0"/>
@@ -43,11 +55,13 @@
 
 <screen id="chatbar" controller="client.MyStartScreen">
     <layer childLayout="absolute" id="layer1"  >
-      <panel childLayout="horizontal" height="35%" id="panel0" style="nifty-panel-simple" width="400px" x="2px" y="70%" backgroundImage="Interface/imgs/bgp.png" alpha="30%">
+      <panel  childLayout="horizontal" height="35%" id="panel0" style="nifty-panel-simple" width="400px" x="2px" y="70%" backgroundImage="Interface/imgs/bgp.png" alpha="30%">
        
           <effect>
 	          <onStartScreen name="move" timeType="exp" factor="3.5" direction="left" mode="in" length="500" inherit="true"/>
-	          <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" inherit="true"/>
+	           <onEndScreen name="move" timeType="exp" factor="3.5" direction="left" mode="out" length="370" inherit="true"/>
+                  <onHide name="move" timeType="exp" factor="3.5" direction="left" mode="out" length="370" inherit="true"/>
+                  
 	   </effect>
        
         
@@ -56,33 +70,51 @@
         THIS IS ABOUT TABS
         -->
         
-<control id="edit_tabs" name="tabGroup" width="100%"> 
+<control id="edit_tabs" name="tabGroup" width="100%" focusable="false"> 
    
-    <control id="tab_local" name="tab" caption="Local" >
+    <control id="tab_local" name="tab" caption="Local" focusable="false">
         <text text="Tab Locale" font="Interface/Fonts/Mangal.fnt" />
     </control>
 
-    <control id="tab_groupe" name="tab" caption="Groupe" >
+    <control id="tab_groupe" name="tab" caption="Groupe" focusable="false">
        <panel childLayout="vertical" height="100%" id="panel_grp" style="nifty-panel-simple" width="100%" x="0%" y="0%" backgroundImage="Interface/imgs/bgp.png">
-        <control height="75%" lines="10" id="textfield2" name="nifty-console" width="100%" x="0" y="0px">
+        <control height="75%" lines="10" id="textfield2" name="nifty-console" width="100%" x="0" y="0px" focusable="false">
           
         </control>        
-        <control height="15%" id="connect" label="Connect" name="button" x="0px" y="75%">
+        <control height="15%" id="connect" label="Connect" name="button" x="0px" y="75%" focusable="false">
             <interact onClick="connectServer()"/>
         </control>
        </panel>
     </control>
-    <control id="tab_guide" name="tab" caption="Guide" />
-    <control id="tab_monde" name="tab" caption="Monde" />
-    <control id="tab_debug" name="tab" caption="Debug" />
+    <control id="tab_guide" name="tab" caption="Guide" focusable="false" />
+    <control id="tab_monde" name="tab" caption="Monde" focusable="false" />
+    <control id="tab_debug" name="tab" caption="Debug" focusable="false" />
     <!--
    J'AI VU QUE L'ONGLET GUIDE PEUT REMPLACER LE DEBUG
    -->
 </control>
  <control childLayout="absolute" height="12px" width="12px" id="btnReduce" label="-" name="button" x="368px" y="0px" 
-        style="nifty-btn" />
+        style="nifty-btn-hide" focusable="false">
+      <interact onClick="hideChatBar(true,btnReduce)" />
+ </control>
         
       </panel>
     </layer>
  </screen>
+ 
+ <screen id="chatbarHidden" controller="client.MyStartScreen">
+    <layer childLayout="absolute" id="layer11"  >
+      <panel childLayout="horizontal" height="35%" id="panelChatBarHidden" style="nifty-panel-simple" width="30px" x="2px" y="70%" backgroundImage="Interface/imgs/bgp.png" alpha="30%">
+          <effect>
+	          <onStartScreen name="move" timeType="exp" factor="3.5" direction="left" mode="in" length="500" inherit="true"/>
+	          <onHide name="move" timeType="exp" factor="3.5" direction="left" mode="out" length="370" inherit="true"/>
+	   </effect>
+ <control childLayout="absolute" height="12px" width="12px" id="btnRetour" label="-" name="button" x="368px" y="0px" 
+        style="nifty-btn" focusable="false">
+      <interact onClick="hideChatBar(false,btnRetour)" />
+ </control>
+      </panel>
+    </layer>
+ </screen>
+ 
 </nifty>

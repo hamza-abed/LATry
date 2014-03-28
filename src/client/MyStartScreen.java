@@ -20,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import shared.variables.Variables;
 import  de.lessvoid.nifty.controls.Console;
+
 /**
  *
  */
@@ -107,7 +108,7 @@ String nextScreen;
       niftyElement.getRenderer(TextRenderer.class).setText((int)(tpf*100000) + ""); 
      
     }
-   
+  System.out.println("this is nifty update");
   }
   
   public void connectServer()
@@ -119,7 +120,7 @@ String nextScreen;
   
   
   
-  @NiftyEventSubscriber(id="textfield2")
+ @NiftyEventSubscriber(id="textfield2")
  public void onChatTextSendEvent(String id, ConsoleExecuteCommandEvent event) {
  System.out.println("element with id [" + id + "] "
          + "clicked at [" + event.getCommandLine());
@@ -132,5 +133,39 @@ String nextScreen;
   public void disablePanel()
   {
         Variables.console.disable();
+  }
+  
+  
+  private boolean chatBarHidden=false;
+  public void hideChatBar(String ch, String btn)
+  {
+      
+      Element btnClicked=nifty.getCurrentScreen().findElementByName("edit_tabs");
+     
+      if(ch.equals("true"))
+      {
+      //Variables.console.output("this is hide chatBar");
+      
+    chatBarHidden=true;
+      nifty.gotoScreen("chatbarHidden");
+      
+      }
+      else
+      {
+          chatBarHidden=false;
+          nifty.gotoScreen("chatbar");
+          
+      }
+    Variables.getLaGame().gainFocus();
+      //btnClicked.disableFocus();
+      //btnClicked.enable();
+      //nifty.getCurrentScreen().findElementByName("btnReduce").disableFocus();
+      //nifty.getCurrentScreen().findElementByName("btnRetour").disableFocus();
+    System.out.println("focus is on \n\n\n\n"+
+           nifty.getCurrentScreen().getDefaultFocusElementId()+"\n\n\n");
+    //Variables.getLaGame().restart();
+      
+   // nifty.getClipboard().
+      
   }
 }

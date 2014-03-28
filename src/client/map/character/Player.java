@@ -8,6 +8,7 @@ import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.AnimEventListener;
 import com.jme3.animation.LoopMode;
+import com.jme3.app.state.AbstractAppState;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.math.Quaternion;
@@ -177,6 +178,9 @@ public class Player implements AnimEventListener{
     }
     Vector3f lastWalkDirection=new Vector3f(0,0,0);
     Vector3f nullVector=new Vector3f(0,0,0);
+   
+    private boolean moving=false;
+    
     public void update()
     {
         //System.out.println("this is update from the player class");
