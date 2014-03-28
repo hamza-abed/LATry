@@ -91,8 +91,16 @@ Variables.getSceneModel().collideWith(ray, results);
         
        // if(arrow!=null) rootNode.detachChild(arrow);
         removeArrow();
-        putShape(arrow, ColorRGBA.Green).setLocalTranslation(new Vector3f(pt.x, pt.y,pt.z));
-        
+        Vector3f camDir=new Vector3f();
+        camDir.set(Variables.getCam().getDirection()).multLocal(0.6f);
+        if(pt!=null)
+        {
+            putShape(arrow, ColorRGBA.Green).setLocalTranslation(new Vector3f(pt.x, pt.y,pt.z));
+           // putShape(arrow, ColorRGBA.Green).setLocalTranslation(new Vector3f(camDir.x+5,camDir.y-5,camDir.z+2));
+            System.out.println("pt= "+pt.toString());
+        Variables.getMainPlayer().moveTo(pt.normalize());
+      //  System.out.println("this is after move to");
+        }
         //rootNode.detachChild(sceneModel);
 
 ///

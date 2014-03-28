@@ -20,6 +20,7 @@ import shared.variables.Variables;
  *
  * @author admin
  */
+
 public class Player implements AnimEventListener{
     private AnimChannel channel;
     private boolean left=false,right=false,up=false,down=false;
@@ -147,16 +148,14 @@ public class Player implements AnimEventListener{
     private int verifyUpAnalog2=0; 
     public void freeMovePlayer(String binding)
     {
-      
-    
-       turnCharacterDependentlyOnCam();
+      turnCharacterDependentlyOnCam();
       if (binding.equals("Left")) {
       left = true;
       
     } else if (binding.equals("Right")) {
       right= true;
       
-    } else if (binding.equals("Up")) {
+    } else if (binding.equals("Up") || moving) {
       up = true;
       verifyUpAnalog1++;
    // sinbadPlayer.rotateUpTo(new Vector3f(player.getViewDirection().x,cam.getRotation().getY(),sinbadPlayer.getLocalRotation().getZ()));
@@ -176,24 +175,49 @@ public class Player implements AnimEventListener{
         if(!up) channel.setAnim("idle");
         
     }
+    
     Vector3f lastWalkDirection=new Vector3f(0,0,0);
     Vector3f nullVector=new Vector3f(0,0,0);
-   
-    private boolean moving=false;
     
-    public void update()
+    private boolean moving=false;
+    private Vector3f target;
+    
+    public void moveTo(Vector3f to)
+    {
+        i1=1;
+       
+        target=new Vector3f(to);
+        moving=true;
+    }
+    public void endMoving()
+    {
+        moving=false;
+    }
+  
+   int i1=0;
+   public void update()
+   
     {
         //System.out.println("this is update from the player class");
           
         camDir.set(Variables.getCam().getDirection()).multLocal(0.6f);
         camLeft.set(Variables.getCam().getLeft()).multLocal(0.4f);
-        walkDirection.set(0, 0, 0);
+         walkDirection.set(0, 0, 0);
+        if(moving && i1<50)
+        { i1++;
+            if(target.x==playerModel.getLocalTranslation().x) moving=false;
+        walkDirection.addLocal(target.x,target.y,target.z);
+        player.setWalkDirection(walkDirection);
+        player.setViewDirection(walkDirection);
+            System.out.println("is moving "+target.x+" "+camDir.y+" "+target.z);
+        }
+        else{
+       
        
        if (left) {
             walkDirection.addLocal(camLeft);
             left=false;
-        
-                  }
+                 }
         if (right) {
             walkDirection.addLocal(camLeft.negate());
             right=false;
@@ -209,26 +233,29 @@ public class Player implements AnimEventListener{
             walkDirection.addLocal(camDir.negate());
             down=false;
         }
-        
-        
+       
+         
        player.setWalkDirection(walkDirection);
+      
        if(walkDirection.equals(nullVector))
        player.setViewDirection(new Vector3f(lastWalkDirection.x, 0, lastWalkDirection.z));
        else
        {
+           System.err.println("walkDirection= "+walkDirection.toString());
        player.setViewDirection(new Vector3f(walkDirection.x, 0, walkDirection.z)); 
        lastWalkDirection=new Vector3f(walkDirection.x,walkDirection.y,walkDirection.z);
        }
-       
-      // playerModel.rotate(5, 0, 0);
-       //player.setViewDirection(walkDirection);
-       
-     
-        // modification de l'emplacement du character
-     /*   playerModel.move(new Vector3f(
+      //  System.err.println("walkdirection= "+walkDirection.toString());
+ // playerModel.rotate(5, 0, 0);
+ //player.setViewDirection(walkDirection);
+ // modification de l'emplacement du character
+ 
+      /*
+        playerModel.move(new Vector3f(
         player.getPhysicsLocation().x, player.getPhysicsLocation().y-10,
         player.getPhysicsLocation().z-10));
       */
+    }
     }
  
 }
