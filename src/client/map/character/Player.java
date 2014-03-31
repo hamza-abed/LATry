@@ -11,6 +11,7 @@ import com.jme3.animation.LoopMode;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -257,5 +258,49 @@ public class Player implements AnimEventListener{
       */
     }
     }
+ /*  
+   * @author Ludovic Kepka, <b> shionn@gmail.com</b>, 2009-2011
+   * updated for the v.2014 by Hamza ABED  @2014
+ */
+   public void moveTo(float x, float z) {
+		//this.moving = Moving.target;
+		//moveAnimation();
+
+		Vector3f o = playerModel.getLocalTranslation();
+
+		// check je crois que c'est inutile
+		// Rep : oui c'est utile pour le calcul de déplacement
+		//this.x = x;
+		//this.z = z;
+		// fin check
+
+		Vector3f t = new Vector3f(x, o.y, z);
+		t.subtractLocal(o).normalizeLocal();
+
+		Matrix3f m = new Matrix3f();
+		m.fromStartEndVectors(Vector3f.UNIT_Z, t);
+
+		Quaternion q = new Quaternion().fromRotationMatrix(m);
+		Quaternion q2 = new Quaternion().fromRotationMatrix(m.invert());
+
+		// correction d'un bug survenant quand la camera est dans l'axe des Z
+		if (q.getX() > 0.5f) {
+                    q.set(0,q.getX(),q.getZ(),q.getW());
+			//q.y = q.x;
+			//q.x = 0;
+                    q2.set(0, q2.getX(), q2.getZ(), q2.getW());
+			//q2.y = q2.x;
+			//q2.x = 0;	
+		}
+//this is about rotation
+                
+                playerModel.setLocalRotation(q);
+                /*
+		if (characterNode != null) {
+			characterNode.setLocalRotation(q);
+			onHead.setLocalRotation(q2);
+		}
+                */
+	}
  
 }
