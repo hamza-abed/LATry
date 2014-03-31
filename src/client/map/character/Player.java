@@ -9,12 +9,20 @@ import com.jme3.animation.AnimControl;
 import com.jme3.animation.AnimEventListener;
 import com.jme3.animation.LoopMode;
 import com.jme3.app.state.AbstractAppState;
+import com.jme3.bounding.BoundingBox;
+import com.jme3.bullet.collision.PhysicsCollisionEvent;
+import com.jme3.bullet.collision.PhysicsCollisionListener;
+import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
+import com.jme3.bullet.control.GhostControl;
+import com.jme3.collision.CollisionResult;
+import com.jme3.collision.CollisionResults;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import com.jme3.scene.shape.Box;
 import shared.variables.Variables;
 
 /**
@@ -22,7 +30,7 @@ import shared.variables.Variables;
  * @author admin
  */
 
-public class Player implements AnimEventListener{
+public class Player implements AnimEventListener {
     private AnimChannel channel;
     private boolean left=false,right=false,up=false,down=false;
     private Vector3f camDir  = new Vector3f();
@@ -75,8 +83,9 @@ public class Player implements AnimEventListener{
     public Player()
     {
         initPlayer();
+      //  Variables.getLaGame().getPhysicsSpace().addCollisionListener(this);
     }
-    
+     private CapsuleCollisionShape capsuleShape;
     private void initPlayer()
     {
           
@@ -90,7 +99,7 @@ public class Player implements AnimEventListener{
         channel = control.createChannel();
         channel.setAnim("idle");
         
-         CapsuleCollisionShape capsuleShape = 
+          capsuleShape = 
          new CapsuleCollisionShape(2f, 1f, 1);
         
         
@@ -156,7 +165,7 @@ public class Player implements AnimEventListener{
     } else if (binding.equals("Right")) {
       right= true;
       
-    } else if (binding.equals("Up") || moving) {
+    } else if (binding.equals("Up")) {
       up = true;
       verifyUpAnalog1++;
    // sinbadPlayer.rotateUpTo(new Vector3f(player.getViewDirection().x,cam.getRotation().getY(),sinbadPlayer.getLocalRotation().getZ()));
@@ -169,11 +178,11 @@ public class Player implements AnimEventListener{
     }
       
   // System.out.println("walk "+ isPressed +" "+ binding);
-        if (up && !channel.getAnimationName().equals("walk")) {
+        if ((up||moving) && !channel.getAnimationName().equals("walk")) {
           channel.setAnim("walk",0.5f);
           channel.setLoopMode(LoopMode.Loop);
         }
-        if(!up) channel.setAnim("idle");
+        if(!(up||moving)) channel.setAnim("idle");
         
     }
     
@@ -182,6 +191,15 @@ public class Player implements AnimEventListener{
     
     private boolean moving=false;
     private Vector3f target;
+
+    public Vector3f getTarget() {
+        return target;
+    }
+
+    public void setTarget(Vector3f target) {
+        this.target = target;
+       // moving =true;
+    }
     
     public void moveTo(Vector3f to)
     {
@@ -204,15 +222,7 @@ public class Player implements AnimEventListener{
         camDir.set(Variables.getCam().getDirection()).multLocal(0.6f);
         camLeft.set(Variables.getCam().getLeft()).multLocal(0.4f);
          walkDirection.set(0, 0, 0);
-        if(moving && i1<50)
-        { i1++;
-            if(target.x==playerModel.getLocalTranslation().x) moving=false;
-        walkDirection.addLocal(target.x,target.y,target.z);
-        player.setWalkDirection(walkDirection);
-        player.setViewDirection(walkDirection);
-            System.out.println("is moving "+target.x+" "+camDir.y+" "+target.z);
-        }
-        else{
+      
        
        
        if (left) {
@@ -242,10 +252,16 @@ public class Player implements AnimEventListener{
        player.setViewDirection(new Vector3f(lastWalkDirection.x, 0, lastWalkDirection.z));
        else
        {
-           System.err.println("walkDirection= "+walkDirection.toString());
+           
+           //System.err.println("walkDirection= "+walkDirection.toString());
        player.setViewDirection(new Vector3f(walkDirection.x, 0, walkDirection.z)); 
        lastWalkDirection=new Vector3f(walkDirection.x,walkDirection.y,walkDirection.z);
        }
+       
+       if(moving){player.setViewDirection(target);
+       player.setWalkDirection(target);
+       }
+       
       //  System.err.println("walkdirection= "+walkDirection.toString());
  // playerModel.rotate(5, 0, 0);
  //player.setViewDirection(walkDirection);
@@ -256,16 +272,30 @@ public class Player implements AnimEventListener{
         player.getPhysicsLocation().x, player.getPhysicsLocation().y-10,
         player.getPhysicsLocation().z-10));
       */
-    }
+       
+        CollisionResults results = new CollisionResults();
+     if(Variables.getMoveCursor()!=null && Variables.getMoveCursor().getNodeGostCursor()!=null)
+  playerModel.collideWith(Variables.getMoveCursor().getNodeGostCursor().getWorldBound(), results);
+ 
+  // Use the results
+  if (results.size() > 0) {
+     System.err.println("Collision detected ");
+     CollisionResult closest  = results.getClosestCollision();
+    System.out.println("What was hit? " + closest.getGeometry().getName() );
+    System.out.println("Where was it hit? " + closest.getContactPoint() );
+    System.out.println("Distance? " + closest.getDistance() );
+     endMoving();
+  }   
     }
  /*  
    * @author Ludovic Kepka, <b> shionn@gmail.com</b>, 2009-2011
    * updated for the v.2014 by Hamza ABED  @2014
  */
+   
    public void moveTo(float x, float z) {
 		//this.moving = Moving.target;
 		//moveAnimation();
-
+ moving=true;
 		Vector3f o = playerModel.getLocalTranslation();
 
 		// check je crois que c'est inutile
@@ -295,6 +325,8 @@ public class Player implements AnimEventListener{
 //this is about rotation
                 
                 playerModel.setLocalRotation(q);
+                target=q.getRotationColumn(2);
+                
                 /*
 		if (characterNode != null) {
 			characterNode.setLocalRotation(q);
@@ -302,5 +334,45 @@ public class Player implements AnimEventListener{
 		}
                 */
 	}
+ 
+ 
+ protected boolean testCollision() {
+		
+     GhostControl ghost = new GhostControl(
+     new BoxCollisionShape(new Vector3f(1,1,1)));  // a box-shaped ghost
+     Node node = new Node("ghost-controlled thing");
+     node.addControl(ghost);  
+
+     Variables.getLaGame().getRootNode().attachChild(node);
+     Variables.getLaGame().getPhysicsSpace().add(ghost);
+     
+     
+     
+     
+		return false;
+	}
+
+    public void collision(PhysicsCollisionEvent event) {
+    
+    CollisionResults results = new CollisionResults();
+    if (event.getNodeA().getName().equals("ghostC") ) 
+    System.out.println("collision name : ghostC");
+    else
+        if ( event.getNodeB().getName().equals("ghostC") ) 
+    System.out.println("collision name : ghostC");
+    
+    if(Variables.getMoveCursor().getNodeGostCursor()!=null)
+        try{
+    playerModel.getWorldBound().collideWith(Variables.getMoveCursor().getShapeCursor(), results);
+        }catch(Exception ex)
+    {
+       System.out.println("\n exception while collide with");
+    }
+    
+  if (results.size() > 0) {
+      System.err.println("\n this is collision \n");
+    }
+    }
+ 
  
 }

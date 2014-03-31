@@ -8,6 +8,9 @@ import client.LaGame;
 import client.hud3D.MoveCursor;
 import client.map.character.Player;
 import client.network.SimpleClientConnector;
+import com.jme3.bullet.collision.shapes.BoxCollisionShape;
+import com.jme3.bullet.control.GhostControl;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -19,8 +22,18 @@ import de.lessvoid.nifty.controls.Console;
  */
 public class Variables {
     
+    
+    
+
+    
+    
+    
+    
+   
+   
+    
     public static LaGame laGame;
-    public static MoveCursor moveCursor=new MoveCursor();
+    public static MoveCursor moveCursor;
 
     public static MoveCursor getMoveCursor() {
         return moveCursor;

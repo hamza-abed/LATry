@@ -1,4 +1,5 @@
 package client;
+import client.hud3D.MoveCursor;
 import client.input.MainGameListener;
 import client.map.character.Player;
 import client.network.SimpleClientConnector;
@@ -9,6 +10,7 @@ import com.jme3.animation.AnimEventListener;
 import com.jme3.animation.LoopMode;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.CharacterControl;
@@ -431,6 +433,7 @@ System.out.println("child attached !!");
    {
         
        Variables.setLaGame(this);
+       Variables.setMoveCursor(new MoveCursor());
     NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(
             assetManager, inputManager, audioRenderer, guiViewPort);
     Nifty nifty = niftyDisplay.getNifty();
@@ -453,6 +456,10 @@ System.out.println("child attached !!");
    {
        System.out.println("hello this is me");
    }
+
+    public PhysicsSpace getPhysicsSpace() {
+      return bulletAppState.getPhysicsSpace();
+    }
    
    
    

@@ -36,7 +36,7 @@ Variables.getMoveCursor().afficherFlecheDestination();
     }
 
     public void onAnalog(String name, float value, float tpf) {
-       System.out.println("this is analog from mouse listener "+name);
+       //System.out.println("this is analog from mouse listener "+name);
        if(!name.equals("LClick"))
         player.freeMovePlayer(name);
     }
