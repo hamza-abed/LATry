@@ -165,7 +165,7 @@ public class Player implements AnimEventListener {
     } else if (binding.equals("Right")) {
       right= true;
       
-    } else if (binding.equals("Up")) {
+    } else if (binding.equals("Up") || moving) {
       up = true;
       verifyUpAnalog1++;
    // sinbadPlayer.rotateUpTo(new Vector3f(player.getViewDirection().x,cam.getRotation().getY(),sinbadPlayer.getLocalRotation().getZ()));
@@ -211,6 +211,7 @@ public class Player implements AnimEventListener {
     public void endMoving()
     {
         moving=false;
+        channel.setAnim("idle");
     }
   
    int i1=0;
@@ -296,7 +297,12 @@ public class Player implements AnimEventListener {
 		//this.moving = Moving.target;
 		//moveAnimation();
  moving=true;
-		Vector3f o = playerModel.getLocalTranslation();
+ 
+ 
+  channel.setAnim("walk",0.5f);
+  channel.setLoopMode(LoopMode.Loop);
+  
+  Vector3f o = playerModel.getLocalTranslation();
 
 		// check je crois que c'est inutile
 		// Rep : oui c'est utile pour le calcul de déplacement
