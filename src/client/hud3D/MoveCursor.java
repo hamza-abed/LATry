@@ -160,7 +160,7 @@ public Geometry getShapeCursor()
 {
     return g;
 }
-private void removeArrow()
+public void removeArrow()
 {    if(Variables.getLaGame().getRootNode().getChild("gostC")!=null)
     Variables.getLaGame().getRootNode().detachChild(Variables.getLaGame().getRootNode().getChild("gostC"));
 //Variables.getConsole().output("this is removeArrow from MoveCursor Class");
