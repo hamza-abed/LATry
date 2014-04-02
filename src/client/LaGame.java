@@ -27,6 +27,7 @@ import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Matrix4f;
@@ -39,11 +40,14 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.debug.Arrow;
+import com.jme3.scene.shape.Box;
+import com.jme3.scene.shape.Cylinder;
 import com.jme3.scene.shape.Quad;
 import com.jme3.system.AppSettings;
 import com.jme3.terrain.Terrain;
@@ -53,6 +57,7 @@ import com.jme3.terrain.heightmap.ImageBasedHeightMap;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture.WrapMode;
 import com.jme3.texture.Texture2D;
+import com.jme3.ui.Picture;
 import com.jme3.water.SimpleWaterProcessor;
 import com.jme3.water.WaterFilter;
 import com.sun.sgs.client.ClientChannel;
@@ -83,7 +88,9 @@ public class LaGame extends SimpleApplication {
 
     
   private  MainGameListener gameListener;
-  
+  private final float RADIUS=9f;
+  private static final float A = .35f;
+  private static final ColorRGBA DISK_COLOR = new ColorRGBA(0, 0.9f, 0.9f, A);// j'ai changé 0.9f à 0
   private Vector3f lightDirection=new Vector3f(-4,-1,5);
   private Spatial sceneModel;
   private BulletAppState bulletAppState;
@@ -169,8 +176,57 @@ System.out.println("child attached !!");
        initSimpleWater();initPPcWater();       
       
  
-    }
+      /*
+       * some tries About Boussole
+       */ 
+        
+    /** 1.1) Add ALPHA map (for red-blue-green coded splat textures) */
+   
+      	Cylinder disk = new Cylinder(5,32,225,0.1f,true);
+       // Box box =new Box(100, 100, 100);
+        
+                
+ Geometry laserBeam = new Geometry("laserbeam", disk);
+ Material matlaser = new Material(assetManager,   "Common/MatDefs/Misc/Unshaded.j3md");
+     matlaser.setTexture("ColorMap", assetManager.loadTexture(
+     //   "Textures/Terrain/splat/grass.jpg"));//
+     "Textures/boussole/boussole1.png"));
+     
+                matlaser.setColor("Color", ColorRGBA.Orange);
+                matlaser.setColor("GlowColor", ColorRGBA.Red);
+                
+                
+  //  matlaser.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+   // laserBeam.setQueueBucket(Bucket.Transparent);
+    
+    laserBeam.setMaterial(matlaser);
+    //disk.get
+      //  disk.getRotation().fromAngleAxis(FastMath.HALF_PI, Vector3f.UNIT_X);
+		//disk.setDefaultColor(DISK_COLOR); 
+                //disk
+       
+       
+ Picture pic = new Picture("HUD Picture");
+pic.setImage(assetManager, "Textures/boussole/boussole1.png", true);
+pic.setWidth(450);
+pic.setHeight(450);
+pic.setPosition(-225, -225);
+boussole=new Node("boussole");
+boussole.setLocalScale(0.25f);
+boussole.move(910, 600, 0);
+//boussole.attachChild(pic);
+//boussole.attachChild(laserBeam);
 
+//pic.getWorldBound().getCenter()
+
+//pic.setPosition(boussole.getWorldBound().getCenter().getX()-pic.getWorldBound().getCenter().getX(),
+  //      boussole.getWorldBound().getCenter().getY()-pic.getWorldBound().getCenter().getY());
+//guiNode.attachChild(boussole);
+//guiNode.getChild("boussole").setLocalTranslation(650, 500, 0);
+
+       
+    }
+Node boussole;
     public BulletAppState getBulletAppState() {
         return bulletAppState;
     }
@@ -235,7 +291,8 @@ System.out.println("child attached !!");
         // cam.setLocation(new Vector3f(0, 10, 0) );
         // if(!up) channel.setAnim("idle");
          
-      
+      boussole.setLocalRotation(new Quaternion(boussole.getLocalRotation().getX(),boussole.getLocalRotation().getY(),
+              cam.getRotation().getZ(),boussole.getLocalRotation().getW() ));
         joueur.update();
         joueur.getPlayerModel().removeFromParent();
                 joueur.getPlayerModel().setLocalTranslation(new Vector3f(
