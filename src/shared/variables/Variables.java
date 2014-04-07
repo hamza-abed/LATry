@@ -42,7 +42,7 @@ public class Variables {
     public static void setMoveCursor(MoveCursor moveCursor) {
         Variables.moveCursor = moveCursor;
     }
-    public static de.lessvoid.nifty.controls.Console console;
+    private static de.lessvoid.nifty.controls.Console console;
     private static SimpleClientConnector clientConnecteur;
     private static  Player mainPlayer;
     private static Spatial sceneModel;
@@ -73,8 +73,14 @@ public class Variables {
         Variables.console = console;
     }
 
+    private static boolean clientConnectorSetted=false;
+
+    public static boolean isClientConnectorSetted() {
+        return clientConnectorSetted;
+    }
     public static void setClientConnecteur(SimpleClientConnector clientConnecteur) {
         Variables.clientConnecteur = clientConnecteur;
+        clientConnectorSetted=true;
     }
 
     public static Console getConsole() {

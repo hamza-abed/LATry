@@ -24,14 +24,14 @@ import  de.lessvoid.nifty.controls.Console;
 /**
  *
  */
-public class MyStartScreen extends AbstractAppState implements ScreenController {
+public class NGUI_LA extends AbstractAppState implements ScreenController {
 
   private Nifty nifty;
   private Application app;
   private Screen screen;
   private boolean firstTime=true;
   /** custom methods */
-  public MyStartScreen() {
+  public NGUI_LA() {
       //screen= this
    
       
@@ -41,8 +41,10 @@ String nextScreen;
   public void startGame(String nextScreen) {
       
       System.out.println("this is start game");
-     Variables.console=nifty.getScreen("chatbar").
-             findNiftyControl("textfield2",Console.class);
+     Variables.setConsole(nifty.getScreen("chatbar").
+      findNiftyControl("textfield2",Console.class));
+    
+     
     
        //textfield2
       if(nifty==null)System.out.println("\n\n null");   
@@ -67,7 +69,7 @@ String nextScreen;
           Thread.sleep(3000);
          
       } catch (InterruptedException ex) {
-          Logger.getLogger(MyStartScreen.class.getName()).log(Level.SEVERE, null, ex);
+          Logger.getLogger(NGUI_LA.class.getName()).log(Level.SEVERE, null, ex);
       }
      nifty.removeScreen(nextScreen);
   }
@@ -126,13 +128,13 @@ String nextScreen;
          + "clicked at [" + event.getCommandLine());
       
      
-      Variables.console.output(">J'ai recu sa", Color.BLACK);
+      Variables.getConsole().output(">J'ai recu sa", Color.BLACK);
      
 }
   
   public void disablePanel()
   {
-        Variables.console.disable();
+        Variables.getConsole().disable();
   }
   
   

@@ -34,6 +34,10 @@ public class SimpleClientConnector implements SimpleClientListener{
     }
     
     private Properties props;
+
+    public Properties getProps() {
+        return props;
+    }
     /** The version of the serialized form of this class. */
     private static final long serialVersionUID = 1L;
 
@@ -92,7 +96,7 @@ public class SimpleClientConnector implements SimpleClientListener{
    * @param status the status message to set
    */
   protected void setStatus(String status) {
-      Variables.console.output("> " + status);
+      Variables.getConsole().output("> " + status);
       
   }
 
@@ -139,7 +143,7 @@ public class SimpleClientConnector implements SimpleClientListener{
         	     * to pop up a login dialog to get these fields from the player.
         	     */
         	    public PasswordAuthentication getPasswordAuthentication() {
-        	    	 Variables.console.output("Password authentification called");
+        	    	 Variables.getConsole().output("Password authentification called");
         	    	
         	    	return new PasswordAuthentication(this.login, this.pass.toCharArray());
         	    }
@@ -151,10 +155,10 @@ public class SimpleClientConnector implements SimpleClientListener{
         	     */
         	    public void loggedIn() {
         	       
-        	      Variables.console.output("Logged in");
+        	      Variables.getConsole().output("Logged in");
         	      
         	        getPingPongTask().start();
-        	      Variables.console.output("ping pong task has just started !");
+        	      Variables.getConsole().output("ping pong task has just started !");
         	    }
 
         	    /**
@@ -173,7 +177,7 @@ public class SimpleClientConnector implements SimpleClientListener{
         	     */
         	    public void disconnected(boolean graceful, String reason) {
         	      
-        	       Variables.console.output("Disconnected: " + reason);
+        	       Variables.getConsole().output("Disconnected: " + reason);
         	    }
         	    /**
         	     * {@inheritDoc}

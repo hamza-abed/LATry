@@ -1,6 +1,11 @@
 package client;
+import client.chat.ChatSystem;
+import client.editor.ServerEditor;
+import client.hud.boussole.Boussole;
 import client.hud3D.MoveCursor;
 import client.input.MainGameListener;
+import client.interfaces.network.Sharable;
+import client.map.World;
 import client.map.character.Player;
 import client.network.SimpleClientConnector;
 import client.task.PingPongTask;
@@ -72,9 +77,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.PasswordAuthentication;
 import java.nio.ByteBuffer;
 import java.nio.channels.UnresolvedAddressException;
+import java.util.HashMap;
 import java.util.Properties;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadPoolExecutor;
 import shared.constants.PckCode;
 import shared.pck.Pck;
 import shared.variables.Variables;
@@ -101,6 +109,10 @@ public class LaGame extends SimpleApplication {
   protected SimpleClient simpleClient;
   
   private Player joueur;
+  /**
+	 * moteur de chat
+	 */
+	private ChatSystem chatSystem;
 
   
   
@@ -131,6 +143,7 @@ public class LaGame extends SimpleApplication {
          * on se connecte que lorsque c'est essentiel,
          * alors sa sera utile pour se connecter dans le main
          */
+        
         this.actionListener = new ActionListener() { 
 public void onAction(String name, boolean keyPressed, float tpf) {
 if (name.equals("addObject")) {
@@ -148,6 +161,7 @@ System.out.println("child attached !!");
 }; 
 }
 
+    Boussole boussole1;
  
     @Override
     public void simpleInitApp() {
@@ -180,7 +194,7 @@ System.out.println("child attached !!");
        * some tries About Boussole
        */ 
         
-    /** 1.1) Add ALPHA map (for red-blue-green coded splat textures) */
+      /** 1.1) Add ALPHA map (for red-blue-green coded splat textures) */
    
       	Cylinder disk = new Cylinder(5,32,225,0.1f,true);
        // Box box =new Box(100, 100, 100);
@@ -206,22 +220,24 @@ System.out.println("child attached !!");
                 //disk
        
        
- Picture pic = new Picture("HUD Picture");
+Picture pic = new Picture("HUD Picture");
 pic.setImage(assetManager, "Textures/boussole/boussole1.png", true);
 pic.setWidth(450);
 pic.setHeight(450);
-pic.setPosition(-225, -225);
+//pic.setPosition(-225, -225);
+pic.setPosition(100, 100);
 boussole=new Node("boussole");
 boussole.setLocalScale(0.25f);
 boussole.move(910, 600, 0);
 //boussole.attachChild(pic);
-//boussole.attachChild(laserBeam);
+boussole.attachChild(laserBeam);
 
 //pic.getWorldBound().getCenter()
 
 //pic.setPosition(boussole.getWorldBound().getCenter().getX()-pic.getWorldBound().getCenter().getX(),
   //      boussole.getWorldBound().getCenter().getY()-pic.getWorldBound().getCenter().getY());
-//guiNode.attachChild(boussole);
+//guiNode.attachChild(boussole1);
+//guiNode.attachChild(pic);
 //guiNode.getChild("boussole").setLocalTranslation(650, 500, 0);
 
        
@@ -507,6 +523,12 @@ Node boussole;
     
     //nifty.fromXml("Interface/tutorial/screen2.xml", "hud");
     
+    /*
+     * eassai de Boussole
+     */
+  //  boussole1=new  Boussole();
+    
+    //guiNode.attachChild(boussole1);
    
    }
    public void saySomething()
@@ -520,8 +542,176 @@ Node boussole;
    
    
    
+  public ChatSystem getChatSystem() {
+		if (chatSystem == null) {
+			chatSystem = new ChatSystem(this);
+		}
+		return chatSystem;
+	} 
    
-   
-   
+ /**
+	 * Demande de REQUEST au serveur
+	 * 
+	 * @param map
+	 */
+	public void updateFromServer(Sharable sharable) {
+		//logger.info("Update de " + sharable.getKey());
+		getChatSystem().debug(
+				"? " + sharable.getKey() + " (" + sharable.getVersionCode()
+				+ ")");
+		Pck pck = new Pck(PckCode.UPDATE);
+		pck.putString(sharable.getKey());
+		pck.putInt(sharable.getVersionCode());
+		//send(pck); c'est au SimpleClient 
+                
+	}
+       private ServerEditor serverEditor; 
+        public ServerEditor getServerEditor() {
+		if (serverEditor == null) {
+			serverEditor = new ServerEditor(this);
+		}
+		return serverEditor;
+	}
+        
+        /**
+	 * Demande au serveur
+	 * 
+	 * @param sharable
+	 * @param callback
+	 */
+        private HashMap<String, LinkedBlockingQueue<Runnable>> callbackWaitingUpdateAnswer =
+		new HashMap<String, LinkedBlockingQueue<Runnable>>();
+        
+        
+        
+        /**
+	 * Demande au serveur
+	 * 
+	 * @param script
+	 * @param scriptTask
+	 */
+        private World world;
+	public void updateFromServerAndWait(String key, Runnable callback) {
+		updateFromServerAndWait(world.getSharable(key), callback);
+	}
+
+        
+        public void updateFromServerAndWait(Sharable s, Runnable callback) {
+		String key = s.getKey();
+		if (!callbackWaitingUpdateAnswer.containsKey(key))
+			callbackWaitingUpdateAnswer.put(key, new LinkedBlockingQueue<Runnable>());
+		try {
+			callbackWaitingUpdateAnswer.get(key).put(callback);
+			getChatSystem().debug("pause de " + callback);
+			updateFromServer(s);
+		} catch (InterruptedException e) {
+			//logger.warning("impossible de mettre en pause le callback");
+                        Variables.getConsole().output("impossible de mettre en pause le callback");
+		}
+
+	}
+        
+        /**
+	 * Demande au serveur
+	 * 
+	 * @param sharable
+	 * @param callback
+	 */
+	public void updateFromServerAndWait(Sharable s) {
+		//final Thread waiter = new Thread();
+		//waiter.interrupt();
+		final Object sync = new Object();
+
+		synchronized (sync) {
+			updateFromServerAndWait(s, new Runnable() {
+				@Override
+				public void run() {
+					synchronized (sync) {
+						sync.notifyAll();
+					}
+				}
+			});
+			try {
+				sync.wait();
+			} catch (InterruptedException e) {
+				//logger.warning(e.getLocalizedMessage());
+                             Variables.getConsole().output(e.getLocalizedMessage());
+			}
+		}
+                
+	}
+        /**
+	 * gestionnaire de tache
+	 * 
+	 * @return
+	 */
+        private ThreadPoolExecutor executor;
+	public ThreadPoolExecutor getTaskExecutor() {
+		if (executor == null) {
+			executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(Integer.parseInt(
+                                Variables.getClientConnecteur().getProps()
+                                .getProperty("la.max.parallel.task", "8")));
+			/*getSchedulerTaskExecutor().scheduleAtFixedRate(new Runnable() {
+				@Override
+				public void run() {
+					logger.info("state : "+executor.getActiveCount()+":"+executor.getQueue().size());
+				}
+			}, 1, 1, TimeUnit.SECONDS);//*/
+		}
+		//logger.info("state : "+executor.getActiveCount()+":"+executor.getQueue().size());
+		return executor;
+	}
+        
+        /**
+	 * gestionnaire de tache
+	 * 
+	 * @return
+	 */
+        /**
+	 * service de programmation de task
+	 */
+	private ScheduledThreadPoolExecutor scheduledExecutor;
+	public ScheduledThreadPoolExecutor getSchedulerTaskExecutor() {
+		if (scheduledExecutor == null) {
+			scheduledExecutor = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(
+				Integer.parseInt( Variables.getClientConnecteur().getProps()
+                                .getProperty("la.scheduled.task", "10")));
+			
+			
+			
+
+		}
+		return scheduledExecutor;
+	}
+  
+        /**
+	 * renvoie l'object permettant d'envoyé des traces
+	 * @return
+	 */
+        private LaTraces traces;
+	public LaTraces getTraces() {
+		if (traces == null) 
+			traces = new LaTraces(this);
+		return traces;
+	}
+
+        /**
+	 * Notify sur le server les modification
+	 * 
+	 * @param move
+	 */
+	public void commitOnServer(Sharable sharable) {
+		//logger.info("Commit de " + sharable.getKey());
+                Variables.getConsole().output("Commit de " + sharable.getKey());
+		getChatSystem().debug(
+				"< " + sharable.getKey() + " (" + sharable.getVersionCode()
+				+ ")");
+		Pck pck = new Pck(PckCode.COMMIT);
+		pck.putString(sharable.getKey());
+		pck.putInt(sharable.getVersionCode());
+		sharable.addData(pck);
+		//send(pck);
+                Variables.getClientConnecteur().send(pck);
+	}
 
 }
