@@ -26,7 +26,7 @@
         </effect>
   </style>
   
-  <screen id="start" controller="client.MyStartScreen">
+  <screen id="start" controller="client.NGUI_LA">
     <layer childLayout="absolute" id="layer2">
       <image filename="Interface/imgs/img1.png" height="100%" id="image0" width="100%" x="0" y="0"/>
     </layer>
@@ -47,13 +47,13 @@
       </panel>
     </layer>
   </screen>
-  <screen id="hud" controller="client.MyStartScreen">
+  <screen id="hud" controller="client.NGUI_LA">
     <layer childLayout="absolute" id="layer2">
       <image filename="Interface/imgs/img1.png" height="100%" id="image0" width="100%" x="0" y="0"/>
     </layer>
 </screen>
 
-<screen id="chatbar" controller="client.MyStartScreen">
+<screen id="chatbar" controller="client.NGUI_LA">
     <layer childLayout="absolute" id="layer1"  >
       <panel  childLayout="horizontal" height="35%" id="panel0" style="nifty-panel-simple" width="400px" x="2px" y="70%" backgroundImage="Interface/imgs/bgp.png" alpha="30%">
        
@@ -102,7 +102,7 @@
     </layer>
  </screen>
  
- <screen id="chatbarHidden" controller="client.MyStartScreen">
+ <screen id="chatbarHidden" controller="client.NGUI_LA">
     <layer childLayout="absolute" id="layer11"  >
       <panel childLayout="horizontal" height="35%" id="panelChatBarHidden" style="nifty-panel-simple" width="30px" x="2px" y="70%" backgroundImage="Interface/imgs/bgp.png" alpha="30%">
           <effect>

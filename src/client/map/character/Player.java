@@ -300,12 +300,6 @@ public class Player implements AnimEventListener {
 
         Vector3f o = playerModel.getLocalTranslation();
 
-        // check je crois que c'est inutile
-        // Rep : oui c'est utile pour le calcul de déplacement
-        //this.x = x;
-        //this.z = z;
-        // fin check
-
         Vector3f t = new Vector3f(x, o.y, z);
         t.subtractLocal(o).normalizeLocal();
 

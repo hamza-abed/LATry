@@ -6,6 +6,7 @@ package shared.variables;
 
 import client.LaGame;
 import client.hud3D.MoveCursor;
+import client.map.World;
 import client.map.character.Player;
 import client.network.SimpleClientConnector;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
@@ -31,10 +32,12 @@ public class Variables {
     
    
    
+  
     
-    public static LaGame laGame;
+    private static LaGame laGame;
     public static MoveCursor moveCursor;
-
+    private static World world;
+    
     public static MoveCursor getMoveCursor() {
         return moveCursor;
     }
@@ -49,6 +52,14 @@ public class Variables {
 
     public static Spatial getSceneModel() {
         return sceneModel;
+    }
+
+    public static World getWorld() {
+        return world;
+    }
+
+    public static void setWorld(World world) {
+        Variables.world = world;
     }
 
     public static void setSceneModel(Spatial sceneModel) {
@@ -98,6 +109,7 @@ public class Variables {
     public static void setLaGame(LaGame main)
     {
         Variables.laGame=main;
+        world=new World(laGame);
     }
     
 }
