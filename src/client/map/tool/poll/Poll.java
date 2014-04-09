@@ -55,6 +55,7 @@ import shared.utils.xml.XMLUtils;
 import client.LaTraces;
 
 import com.sun.jersey.api.client.Client;
+import shared.variables.Variables;
 
 /**
  * Sondage avec ces question et ces réponse  
@@ -138,7 +139,9 @@ public class Poll {
 	public void sendAnswerToTraces(final LaTraces traces) {
 		for (PollQuestion question : questions) 
 			question.sendToTrace(traces, belbin);
-		traces.getGame().getSchedulerTaskExecutor().schedule(new Runnable() {
+                Variables.getClientConnecteur().getSchedulerTaskExecutor().schedule(new Runnable() {
+		//traces.getGame().getSchedulerTaskExecutor().schedule(new Runnable() {
+                    
 			@Override
 			public void run() {
 				traces.sendPollLastTrace(url, belbin);

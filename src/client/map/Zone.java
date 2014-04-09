@@ -51,6 +51,7 @@ import client.interfaces.network.SharableGroup;
 
 import com.sun.sgs.client.ClientChannel;
 import com.sun.sgs.client.ClientChannelListener;
+import shared.variables.Variables;
 
 /**
  * Les zones sont des lieux d'echange d'information
@@ -147,7 +148,8 @@ public class Zone implements ClientChannelListener, SharableGroup {
 			world.receivePlayerDisconnect(message);
 			break;
 		case PckCode.CHAT:
-			world.getGame().getChatSystem().receivedChatMessage(message);
+			//world.getGame().
+                    Variables.getClientConnecteur().getChatSystem().receivedChatMessage(message);
 			break;
 		default:
 			logger.warning("code packet incconnu : " + c);
@@ -244,7 +246,8 @@ public class Zone implements ClientChannelListener, SharableGroup {
 	 */
 	public void setChannel(ClientChannel channel) {
 		this.channel = channel;
-		world.getGame().updateFromServer(this);
+		//world.getGame().
+                Variables.getClientConnecteur().updateFromServer(this);
 		logger.fine("rejoins la " + this);
 		for (final Sharable s : sharables) {
 			if (s instanceof Graphic)

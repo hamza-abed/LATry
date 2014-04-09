@@ -1,3 +1,43 @@
+/**
+ * Copyright 2010 http://learning-adventure.fr
+ * Tous droits réservés
+ * 
+ * 
+ * ----------------------------------------------------------------------------
+ * Ce fichier fait partie de LA-Client.
+ *
+ * LA-Client est un logiciel libre ; vous pouvez le redistribuer ou le modifier 
+ * suivant les termes de la GNU General Public License telle que publiée par
+ * la Free Software Foundation ; soit la version 3 de la licence, soit 
+ * (à votre gré) toute version ultérieure.
+ * 
+ * LA-Client est distribué dans l'espoir qu'il sera utile, 
+ * mais SANS AUCUNE GARANTIE ; pas même la garantie implicite de 
+ * COMMERCIABILISABILITÉ ni d'ADÉQUATION à UN OBJECTIF PARTICULIER. 
+ * Consultez la GNU General Public License pour plus de détails.
+ * 
+ * Vous devez avoir reçu une copie de la GNU General Public License 
+ * en même temps que LA-Client ; si ce n'est pas le cas, 
+ * consultez <http://www.gnu.org/licenses>.
+ * ----------------------------------------------------------------------------
+ * This file is part of LA-Client.
+ *
+ * LA-Client is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LA-Client is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with LA-Client.  If not, see <http://www.gnu.org/licenses/>.
+ * ----------------------------------------------------------------------------
+ */
+
+
 package client;
 
 import client.chat.ChatSystem;
@@ -26,26 +66,20 @@ import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
-import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
-import com.jme3.renderer.queue.RenderQueue.Bucket;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.shape.Box;
-import com.jme3.scene.shape.Cylinder;
 import com.jme3.system.AppSettings;
 import com.jme3.terrain.geomipmap.TerrainQuad;
 import com.jme3.terrain.heightmap.AbstractHeightMap;
 import com.jme3.terrain.heightmap.ImageBasedHeightMap;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture.WrapMode;
-import com.jme3.ui.Picture;
 import com.sun.sgs.client.simple.SimpleClient;
 import de.lessvoid.nifty.Nifty;
 import java.util.HashMap;
@@ -53,7 +87,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
-import org.lwjgl.util.glu.Disk;
 import shared.constants.PckCode;
 import shared.pck.Pck;
 import shared.variables.Variables;
@@ -65,10 +98,13 @@ import shared.variables.Variables;
  */
 public class LaGame extends SimpleApplication {
 
+    
+    
     private MainGameListener gameListener;
     private final float RADIUS = 9f;
     private static final float A = .35f;
     private static final ColorRGBA DISK_COLOR = new ColorRGBA(0, 0.9f, 0.9f, A);// j'ai changé 0.9f à 0
+    private WaterPlan waterPlan;
     private Spatial sceneModel;
     private BulletAppState bulletAppState;
     private RigidBodyControl landscape;
@@ -81,7 +117,7 @@ public class LaGame extends SimpleApplication {
     /**
      * moteur de chat
      */
-    private ChatSystem chatSystem;
+    
 
     public static void main(String[] args) {
         /*
@@ -247,7 +283,7 @@ Quaternion q=new Quaternion();
         rootNode.addLight(dl);
     }
     
-    WaterPlan waterPlan;
+    
     private void initScene() {
         sceneModel = assetManager.loadModel("Scenes/scene1.j3o");
         rootNode.attachChild(sceneModel);
@@ -264,8 +300,8 @@ Quaternion q=new Quaternion();
 
         Variables.setSceneModel(sceneModel);
         
-       waterPlan=new WaterPlan(sceneModel);
-       waterPlan.setWaterOnTheGame();
+        waterPlan=new WaterPlan(sceneModel);
+        waterPlan.setWaterOnTheGame();
     }
 
     @Override
@@ -375,178 +411,13 @@ Quaternion q=new Quaternion();
         return bulletAppState.getPhysicsSpace();
     }
 
-    public ChatSystem getChatSystem() {
-        if (chatSystem == null) {
-            chatSystem = new ChatSystem(this);
-        }
-        return chatSystem;
-    }
+  
 
-    /**
-     * Demande de REQUEST au serveur
-     *
-     * @param map
-     */
-    public void updateFromServer(Sharable sharable) {
-        //logger.info("Update de " + sharable.getKey());
-        getChatSystem().debug(
-                "? " + sharable.getKey() + " (" + sharable.getVersionCode()
-                + ")");
-        Pck pck = new Pck(PckCode.UPDATE);
-        pck.putString(sharable.getKey());
-        pck.putInt(sharable.getVersionCode());
-        //send(pck); c'est au SimpleClient 
+   
+    
+  
 
-    }
-    private ServerEditor serverEditor;
-
-    public ServerEditor getServerEditor() {
-        if (serverEditor == null) {
-            serverEditor = new ServerEditor(this);
-        }
-        return serverEditor;
-    }
-    /**
-     * Demande au serveur
-     *
-     * @param sharable
-     * @param callback
-     */
-    private HashMap<String, LinkedBlockingQueue<Runnable>> callbackWaitingUpdateAnswer =
-            new HashMap<String, LinkedBlockingQueue<Runnable>>();
-    /**
-     * Demande au serveur
-     *
-     * @param script
-     * @param scriptTask
-     */
-    private World world;
-
-    public void updateFromServerAndWait(String key, Runnable callback) {
-        updateFromServerAndWait(world.getSharable(key), callback);
-    }
-
-    public void updateFromServerAndWait(Sharable s, Runnable callback) {
-        String key = s.getKey();
-        if (!callbackWaitingUpdateAnswer.containsKey(key)) {
-            callbackWaitingUpdateAnswer.put(key, new LinkedBlockingQueue<Runnable>());
-        }
-        try {
-            callbackWaitingUpdateAnswer.get(key).put(callback);
-            getChatSystem().debug("pause de " + callback);
-            updateFromServer(s);
-        } catch (InterruptedException e) {
-            //logger.warning("impossible de mettre en pause le callback");
-            Variables.getConsole().output("impossible de mettre en pause le callback");
-        }
-
-    }
-
-    /**
-     * Demande au serveur
-     *
-     * @param sharable
-     * @param callback
-     */
-    public void updateFromServerAndWait(Sharable s) {
-        //final Thread waiter = new Thread();
-        //waiter.interrupt();
-        final Object sync = new Object();
-
-        synchronized (sync) {
-            updateFromServerAndWait(s, new Runnable() {
-                @Override
-                public void run() {
-                    synchronized (sync) {
-                        sync.notifyAll();
-                    }
-                }
-            });
-            try {
-                sync.wait();
-            } catch (InterruptedException e) {
-                //logger.warning(e.getLocalizedMessage());
-                Variables.getConsole().output(e.getLocalizedMessage());
-            }
-        }
-
-    }
-    /**
-     * gestionnaire de tache
-     *
-     * @return
-     */
-    private ThreadPoolExecutor executor;
-
-    public ThreadPoolExecutor getTaskExecutor() {
-        if (executor == null) {
-            executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(Integer.parseInt(
-                    Variables.getClientConnecteur().getProps()
-                    .getProperty("la.max.parallel.task", "8")));
-            /*getSchedulerTaskExecutor().scheduleAtFixedRate(new Runnable() {
-             @Override
-             public void run() {
-             logger.info("state : "+executor.getActiveCount()+":"+executor.getQueue().size());
-             }
-             }, 1, 1, TimeUnit.SECONDS);//*/
-        }
-        //logger.info("state : "+executor.getActiveCount()+":"+executor.getQueue().size());
-        return executor;
-    }
-    /**
-     * gestionnaire de tache
-     *
-     * @return
-     */
-    /**
-     * service de programmation de task
-     */
-    private ScheduledThreadPoolExecutor scheduledExecutor;
-
-    public ScheduledThreadPoolExecutor getSchedulerTaskExecutor() {
-        if (scheduledExecutor == null) {
-            scheduledExecutor = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(
-                    Integer.parseInt(Variables.getClientConnecteur().getProps()
-                    .getProperty("la.scheduled.task", "10")));
-
-
-
-
-        }
-        return scheduledExecutor;
-    }
-    /**
-     * renvoie l'object permettant d'envoyé des traces
-     *
-     * @return
-     */
-    private LaTraces traces;
-
-    public LaTraces getTraces() {
-        if (traces == null) {
-            traces = new LaTraces(this);
-        }
-        return traces;
-    }
-
-    /**
-     * Notify sur le server les modification
-     *
-     * @param move
-     */
-    public void commitOnServer(Sharable sharable) {
-        //logger.info("Commit de " + sharable.getKey());
-        Variables.getConsole().output("Commit de " + sharable.getKey());
-        getChatSystem().debug(
-                "< " + sharable.getKey() + " (" + sharable.getVersionCode()
-                + ")");
-        Pck pck = new Pck(PckCode.COMMIT);
-        pck.putString(sharable.getKey());
-        pck.putInt(sharable.getVersionCode());
-        sharable.addData(pck);
-        //send(pck);
-        Variables.getClientConnecteur().send(pck);
-    }
+    
     public Spatial getSceneModel() {
         return sceneModel;
     }

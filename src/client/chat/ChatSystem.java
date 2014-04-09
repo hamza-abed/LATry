@@ -302,36 +302,51 @@ public class ChatSystem {
 			help("help", LaConstants.COMMAND_ADD);
 		else {
 			if (args[1].equals("object"))
-				game.getServerEditor().createAndCall(LaComponent.object, null);
+				//game.
+                            Variables.getClientConnecteur().getServerEditor().createAndCall(LaComponent.object, null);
 			else if (args[1].equals("light"))
-				game.getServerEditor().createAndCall(LaComponent.light, null);
+				//game.
+                            Variables.getClientConnecteur().getServerEditor().createAndCall(LaComponent.light, null);
 			else if (args[1].equals("particul"))
-				game.getServerEditor().createAndCall(LaComponent.particul, null);
+				//game.
+                            Variables.getClientConnecteur().getServerEditor().createAndCall(LaComponent.particul, null);
 			else if (args[1].equals("tool"))
-				game.getServerEditor().createAndCall(LaComponent.tool, null);
+				//game.
+                            Variables.getClientConnecteur().getServerEditor().createAndCall(LaComponent.tool, null);
 			else if (args[1].equals("npc"))
-				game.getServerEditor().createAndCall(LaComponent.npc, null);
+				//game.
+                            Variables.getClientConnecteur().getServerEditor().createAndCall(LaComponent.npc, null);
 			else if (args[1].equals("item"))
-				game.getServerEditor().createAndCall(LaComponent.item, null);
+				//game.
+                            Variables.getClientConnecteur().getServerEditor().createAndCall(LaComponent.item, null);
 			else if (args[1].equals("skill"))
-				game.getServerEditor().createAndCall(LaComponent.skill, null);
+				//game.
+                            Variables.getClientConnecteur().getServerEditor().createAndCall(LaComponent.skill, null);
 			else if (args[1].equals("slide"))
-				game.getServerEditor().createAndCall(LaComponent.slides, null);
+				//game.
+                            Variables.getClientConnecteur().getServerEditor().createAndCall(LaComponent.slides, null);
 			else if (args[1].equals("building"))
-				game.getServerEditor().createAndCall(LaComponent.building, null);
+				//game.
+                            Variables.getClientConnecteur().getServerEditor().createAndCall(LaComponent.building, null);
 			else if (args[1].equals("script"))
-				game.getServerEditor().createAndCall(LaComponent.script, null);
+				//game.
+                            Variables.getClientConnecteur().getServerEditor().createAndCall(LaComponent.script, null);
 			else if (args[1].equals("dialog"))
-				game.getServerEditor().createAndCall(LaComponent.dialog, null);
+				//game.
+                            Variables.getClientConnecteur().getServerEditor().createAndCall(LaComponent.dialog, null);
 			else if (args[1].equals("lgf"))
-				game.getServerEditor().createAndCall(LaComponent.lgf, null);
+				//game.
+                            Variables.getClientConnecteur().getServerEditor().createAndCall(LaComponent.lgf, null);
 			else if (args[1].equals("region"))
-				game.getServerEditor().createAndCall(LaComponent.region, null);
+				//game.
+                            Variables.getClientConnecteur().getServerEditor().createAndCall(LaComponent.region, null);
 			else if (args[1].equals("task"))
-				game.getServerEditor().createAndCall(LaComponent.task, null);
+				//game.
+                            Variables.getClientConnecteur().getServerEditor().createAndCall(LaComponent.task, null);
 			else if (args[1].equals("table")) {
 				logger.info("appel sur servereditor pour creation de la table");
-				game.getServerEditor().createAndCall(LaComponent.table, null);
+				//game.
+                             Variables.getClientConnecteur().getServerEditor().createAndCall(LaComponent.table, null);
 				}
 
 			else
@@ -377,7 +392,8 @@ public class ChatSystem {
 		if (args.length != 2)
 			help("help", "edit");
 		else try { 
-			if (!game.getServerEditor().edit(args[1]))
+			if (!//game.
+                                Variables.getClientConnecteur().getServerEditor().edit(args[1]))
 				debug(args[1]+" not found or not editable");
 		} catch (Exception e) {
 			debug(e.getMessage());

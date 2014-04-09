@@ -110,7 +110,8 @@ public class AnnotationCreator {
 	 * 
 	 */
 	public void create() {
-		game.getServerEditor().createAndCall(LaComponent.object, new CreatorCallBack() {
+		//game.
+            Variables.getClientConnecteur().getServerEditor().createAndCall(LaComponent.object, new CreatorCallBack() {
 			@Override
 			public void created(String key) {
 				Sharable obj = Variables.getWorld().getSharable(key);

@@ -66,6 +66,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import shared.variables.Variables;
 //import com.jme.renderer.ColorRGBA;
 
 /**
@@ -147,18 +148,24 @@ public abstract class PlayableCharacter extends AbstractCharacter {
 	public PlayableCharacter(World world, String login) {
 		super(world);
 		this.login = login;
-		world.getGame().updateFromServer(this);
+		//world.getGame().
+                Variables.getClientConnecteur().updateFromServer(this);
 		this.tokens = new PlayerTokens(this);
 		this.items = new PlayerItems(this);
 		this.tasks = new PlayerTasks(this);
 		this.targets = new PlayerTargets(this);
 		this.skills = new PlayerSkills(this);
 		this.um = new UserModel(this);
-		world.getGame().updateFromServer(this.tokens);
-		world.getGame().updateFromServer(this.items);
-		world.getGame().updateFromServer(this.tasks);
-		world.getGame().updateFromServer(this.targets);
-		world.getGame().updateFromServer(this.skills);
+		//world.getGame().
+                Variables.getClientConnecteur().updateFromServer(this.tokens);
+		//world.getGame().
+                Variables.getClientConnecteur().updateFromServer(this.items);
+		//world.getGame().
+                Variables.getClientConnecteur().updateFromServer(this.tasks);
+		//world.getGame().
+                Variables.getClientConnecteur().updateFromServer(this.targets);
+		//world.getGame().
+                Variables.getClientConnecteur().updateFromServer(this.skills);
 	}
 
 	/* ********************************************************** *
@@ -1012,7 +1019,8 @@ public abstract class PlayableCharacter extends AbstractCharacter {
 	@ScriptableMethod
 	public void systemMessage(String message) {
 		if (isPlayer())
-			getWorld().getGame().getChatSystem().system(message);
+			//getWorld().getGame().
+                    Variables.getClientConnecteur().getChatSystem().system(message);
 	}
 
 	/**

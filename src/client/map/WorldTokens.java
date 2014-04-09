@@ -50,6 +50,7 @@ import shared.pck.Pck;
 import client.editor.FieldEditType;
 import client.editor.annotation.Editable;
 import client.interfaces.network.SharableReflexEditable;
+import shared.variables.Variables;
 
 /**
  * Enssemble des token du monde, IE partager entre tous le monde.
@@ -165,7 +166,8 @@ public class WorldTokens implements SharableReflexEditable,Runnable {
 	private synchronized void commit() {
 		if (!commiting) {
 			commiting = true;
-			world.getGame().getSchedulerTaskExecutor().schedule(this, LaConstants.WAIT_COMMITING_TIME, TimeUnit.MILLISECONDS);
+			//world.getGame().
+                        Variables.getClientConnecteur().getSchedulerTaskExecutor().schedule(this, LaConstants.WAIT_COMMITING_TIME, TimeUnit.MILLISECONDS);
 		}
 	}
 	/* (non-Javadoc)
@@ -173,7 +175,8 @@ public class WorldTokens implements SharableReflexEditable,Runnable {
 	 */
 	@Override
 	public synchronized void run() {
-		world.getGame().commitOnServer(this);
+		//world.getGame().
+            Variables.getClientConnecteur().commitOnServer(this);
 		toCommit.clear();
 		commiting = false;
 	}
@@ -251,7 +254,8 @@ public class WorldTokens implements SharableReflexEditable,Runnable {
 	 * @param value
 	 */
 	public synchronized void addToken(String cat, String token, String value) {
-		world.getGame().getTraces().sendSetToken("world",cat,token,value);
+		//world.getGame().
+            Variables.getClientConnecteur().getTraces().sendSetToken("world",cat,token,value);
 		toCommit.put(cat+":"+token, value);
 		//tokens.put(cat + ":" + token, value);
 		//tokenChange(cat,token,value);
@@ -265,7 +269,8 @@ public class WorldTokens implements SharableReflexEditable,Runnable {
 	 * @param token
 	 */
 	public synchronized void delToken(String cat, String token) {
-		world.getGame().getTraces().sendDelToken("world",cat,token);
+		//world.getGame().
+            Variables.getClientConnecteur().getTraces().sendDelToken("world",cat,token);
 
 		toCommit.put(cat+":"+token, null);
 		//tokens.remove(cat + ":" + token);

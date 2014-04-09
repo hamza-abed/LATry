@@ -187,7 +187,8 @@ public class Group implements SharableReflexEditable, ClientChannelListener {
 	@ScriptableMethod(description="change le nom d'affichage du groupe")
 	public void setName(String name) {
 		this.name = name;
-		world.getGame().commitOnServer(this);
+		//world.getGame().
+                Variables.getClientConnecteur().commitOnServer(this);
 	}
 
 	/**
@@ -314,7 +315,8 @@ public class Group implements SharableReflexEditable, ClientChannelListener {
 		
 		case PckCode.CHAT:
 			//if (world.getPlayer().getMainGroup() == this)
-				world.getGame().getChatSystem().receivedChatMessage(message); 
+				//world.getGame().
+                    Variables.getClientConnecteur().getChatSystem().receivedChatMessage(message); 
 			break;
 			
 		case PckCode.COMMIT:
@@ -362,7 +364,8 @@ public class Group implements SharableReflexEditable, ClientChannelListener {
 		this.channel = channel;
 		if (tokens == null) 
 			this.tokens = new GroupTokens(this);
-		getWorld().getGame().updateFromServer(this.tokens);
+		//getWorld().getGame().
+                Variables.getClientConnecteur().updateFromServer(this.tokens);
 	}
 
 	/**
@@ -383,7 +386,8 @@ public class Group implements SharableReflexEditable, ClientChannelListener {
 	public GroupTokens getTokens() {
 		if (tokens == null) {
 			tokens = new GroupTokens(this);
-			getWorld().getGame().updateFromServer(tokens);
+			//getWorld().getGame().
+                        Variables.getClientConnecteur().updateFromServer(tokens);
 		}
 		return tokens;
 	}

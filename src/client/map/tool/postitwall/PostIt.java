@@ -47,6 +47,7 @@ import client.HttpResourceLocator;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture;
+import shared.variables.Variables;
 /*
 import com.jme.bounding.OrientedBoundingBox;
 import com.jme.image.Texture;
@@ -103,7 +104,8 @@ public class PostIt extends Node {
 	 * Recharge le contenu graphique du post it
 	 */
 	public void reload() {
-		wall.getTool().getWorld().getGame().getTaskExecutor().execute(
+		//wall.getTool().getWorld().getGame().
+             Variables.getClientConnecteur().getTaskExecutor().execute(
 				new Runnable() {
 					public void run() {
 						reloadInThread();

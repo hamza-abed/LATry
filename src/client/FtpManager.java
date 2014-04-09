@@ -58,6 +58,7 @@ import shared.utils.xml.XMLUtils;
 import client.map.World;
 //import client.map.tool.feather.FeatherEngine;
 import client.map.tool.poll.Poll;
+import shared.variables.Variables;
 //import client.map.tool.feather.FeatherEngine;
 //import client.map.tool.poll.Poll;
 
@@ -127,7 +128,8 @@ public class FtpManager {
 	 * Envoie les réponse d'un sondage
 	 */
 	public void sendPollAnswer(Poll poll) {
-		world.getGame().getTaskExecutor().execute(new SendPollAnswer(poll,this.useSSH, this.folder));
+		//world.getGame().
+            Variables.getClientConnecteur().getTaskExecutor().execute(new SendPollAnswer(poll,this.useSSH, this.folder));
 	}
 
 	/**
@@ -200,7 +202,8 @@ public class FtpManager {
 				e.printStackTrace();
 			}
 			try {
-				poll.sendAnswerToTraces(world.getGame().getTraces());
+				poll.sendAnswerToTraces(//world.getGame().
+                                        Variables.getClientConnecteur().getTraces());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

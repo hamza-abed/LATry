@@ -57,6 +57,7 @@ import client.interfaces.network.SharableReflexEditable;
 import client.map.tool.Tool;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import shared.variables.Variables;
 //import client.map.object.MapTable;
 
 //import com.jme.math.Vector3f;
@@ -107,7 +108,8 @@ public class AnnotationEditor {
 	 * 
 	 */
 	public void commit() {
-		game.commitOnServer(obj);
+		//game.
+            Variables.getClientConnecteur().commitOnServer(obj);
 		if (obj instanceof Tool) {
 			toolInitialDatas.addAll(((Tool)obj).getDataKeys());
 			((Tool)obj).sendChangeOnServer(toolInitialDatas);
@@ -126,7 +128,8 @@ public class AnnotationEditor {
 	 * 
 	 */
 	public void reset() {
-		game.updateFromServer(obj);
+		//game.
+            Variables.getClientConnecteur().updateFromServer(obj);
 	}
 	
 	/* ********************************************************** *

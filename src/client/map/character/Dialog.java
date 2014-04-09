@@ -54,6 +54,7 @@ import client.editor.models.DialogEditModel;
 //import client.editor.models.DialogEditModel;
 import client.interfaces.network.SharableEditable;
 import client.map.World;
+import shared.variables.Variables;
 
 /**
  * Dialog d'un pnj
@@ -171,7 +172,8 @@ public class Dialog implements SharableEditable, Runnable {
 	public void display() {
 		logger.info("demande d'affichage du dialog : "+this);
 		if (!world.isUpdate(this)) {
-			world.getGame().updateFromServerAndWait(this, this);
+			//world.getGame().
+                    Variables.getClientConnecteur().updateFromServerAndWait(this, this);
 			logger.info("le dialog n'est pas ajour on et en attente ");
 		}
 		else

@@ -4,6 +4,11 @@
  */
 package client.network;
 
+import client.LaTraces;
+import client.chat.ChatSystem;
+import client.editor.ServerEditor;
+import client.interfaces.network.Sharable;
+import client.map.World;
 import client.task.PingPongTask;
 import com.sun.sgs.client.ClientChannel;
 import com.sun.sgs.client.ClientChannelListener;
@@ -14,9 +19,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.PasswordAuthentication;
 import java.nio.ByteBuffer;
 import java.nio.channels.UnresolvedAddressException;
+import java.util.HashMap;
 import java.util.Properties;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import shared.constants.PckCode;
 import shared.pck.Pck;
 import shared.variables.Variables;
@@ -60,10 +69,10 @@ public class SimpleClientConnector implements SimpleClientListener{
     /** The {@link SimpleClient} instance for this client. */
     protected SimpleClient simpleClient;
 
-    
-    
+    private ChatSystem chatSystem;
+      private World world;
 
-    
+    private LaTraces traces;
     
     /**
    * Initiates asynchronous login to the RDS server specified by
@@ -346,7 +355,169 @@ public class SimpleClientConnector implements SimpleClientListener{
 					pingPongTask = new PingPongTask(this);
 				return pingPongTask;
 			}
+                        
+                        
+                        
+                        
+                        /*
+                         * 
+                         * connecting server
+                         */
+                        
+                        
+                        
+                         /**
+     * Demande de REQUEST au serveur
+     *
+     * @param map
+     */
+    public void updateFromServer(Sharable sharable) {
+        //logger.info("Update de " + sharable.getKey());
+        getChatSystem().debug(
+                "? " + sharable.getKey() + " (" + sharable.getVersionCode()
+                + ")");
+        Pck pck = new Pck(PckCode.UPDATE);
+        pck.putString(sharable.getKey());
+        pck.putInt(sharable.getVersionCode());
+        //send(pck); c'est au SimpleClient 
 
+    }
+      public ChatSystem getChatSystem() {
+        if (chatSystem == null) {
+            chatSystem = new ChatSystem(Variables.getLaGame());
+        }
+        return chatSystem;
+    }
+
+      public void updateFromServerAndWait(String key, Runnable callback) {
+        updateFromServerAndWait(world.getSharable(key), callback);
+    }
+
+    public void updateFromServerAndWait(Sharable s, Runnable callback) {
+        String key = s.getKey();
+        if (!callbackWaitingUpdateAnswer.containsKey(key)) {
+            callbackWaitingUpdateAnswer.put(key, new LinkedBlockingQueue<Runnable>());
+        }
+        try {
+            callbackWaitingUpdateAnswer.get(key).put(callback);
+            getChatSystem().debug("pause de " + callback);
+            updateFromServer(s);
+        } catch (InterruptedException e) {
+            //logger.warning("impossible de mettre en pause le callback");
+            Variables.getConsole().output("impossible de mettre en pause le callback");
+        }
+
+    }
+
+    /**
+     * Demande au serveur
+     *
+     * @param sharable
+     * @param callback
+     */
+    public void updateFromServerAndWait(Sharable s) {
+        //final Thread waiter = new Thread();
+        //waiter.interrupt();
+        final Object sync = new Object();
+
+        synchronized (sync) {
+            updateFromServerAndWait(s, new Runnable() {
+                @Override
+                public void run() {
+                    synchronized (sync) {
+                        sync.notifyAll();
+                    }
+                }
+            });
+            try {
+                sync.wait();
+            } catch (InterruptedException e) {
+                //logger.warning(e.getLocalizedMessage());
+                Variables.getConsole().output(e.getLocalizedMessage());
+            }
+        }
+
+    }
+    /**
+     * gestionnaire de tache
+     *
+     * @return
+     */
+    private ThreadPoolExecutor executor;
+
+    public ThreadPoolExecutor getTaskExecutor() {
+        if (executor == null) {
+            executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(Integer.parseInt(
+                    Variables.getClientConnecteur().getProps()
+                    .getProperty("la.max.parallel.task", "8")));
+            getSchedulerTaskExecutor().scheduleAtFixedRate(new Runnable() {
+             @Override
+             public void run() {
+            // logger.info("state : "+executor.getActiveCount()+":"+executor.getQueue().size());
+             Variables.getConsole().output("state : "+executor.getActiveCount()+":"+executor.getQueue().size());
+             }
+             }, 1, 1, TimeUnit.SECONDS);
+        }
+        //logger.info("state : "+executor.getActiveCount()+":"+executor.getQueue().size());
+        return executor;
+    }
+    /**
+     * gestionnaire de tache
+     *
+     * @return
+     */
+    /**
+     * service de programmation de task
+     */
+    private ServerEditor serverEditor;
+
+    public ServerEditor getServerEditor() {
+        if (serverEditor == null) {
+            serverEditor = new ServerEditor(Variables.getLaGame());
+        }
+        return serverEditor;
+    }
+    /**
+     * Demande au serveur
+     *
+     * @param sharable
+     * @param callback
+     */
+    private HashMap<String, LinkedBlockingQueue<Runnable>> callbackWaitingUpdateAnswer =
+            new HashMap<String, LinkedBlockingQueue<Runnable>>();
+    
+    /**
+     * renvoie l'object permettant d'envoyé des traces
+     *
+     * @return
+     */
+    
+
+    public LaTraces getTraces() {
+        if (traces == null) {
+            traces = new LaTraces(Variables.getLaGame());
+        }
+        return traces;
+    }
+
+    /**
+     * Notify sur le server les modification
+     *
+     * @param move
+     */
+    public void commitOnServer(Sharable sharable) {
+        //logger.info("Commit de " + sharable.getKey());
+        Variables.getConsole().output("Commit de " + sharable.getKey());
+        getChatSystem().debug(
+                "< " + sharable.getKey() + " (" + sharable.getVersionCode()
+                + ")");
+        Pck pck = new Pck(PckCode.COMMIT);
+        pck.putString(sharable.getKey());
+        pck.putInt(sharable.getVersionCode());
+        sharable.addData(pck);
+        //send(pck);
+        Variables.getClientConnecteur().send(pck);
+    }
 			 
 			
         	}

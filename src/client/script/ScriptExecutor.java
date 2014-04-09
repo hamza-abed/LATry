@@ -61,6 +61,7 @@ import shared.constants.ScriptConstants;
 import shared.enums.LaComponent;
 import shared.pck.Pck;
 import client.map.World;
+import shared.variables.Variables;
 
 /**
  * Moteur d'execution de script
@@ -147,7 +148,8 @@ public class ScriptExecutor extends SimpleScriptContext {
 					Script script = world.getScriptBuildIfAbsent(scriptKey);
 					
 					if (!world.isUpdate(script))
-						world.getGame().updateFromServerAndWait(script);
+						//world.getGame().
+                                             Variables.getClientConnecteur().updateFromServerAndWait(script);
 					return Boolean.TRUE.equals(executeOnLocal(script, null));
 				}
 			}).get();
@@ -207,7 +209,8 @@ public class ScriptExecutor extends SimpleScriptContext {
 		}
 		queue.add(scriptKey);
 		Script script = world.getScriptBuildIfAbsent(scriptKey);
-		world.getGame().getTaskExecutor().execute(
+		//world.getGame().
+                 Variables.getClientConnecteur().getTaskExecutor().execute(
 				new ScriptTask(script, params));
 	}
 
@@ -222,7 +225,8 @@ public class ScriptExecutor extends SimpleScriptContext {
 			HashMap<String, Object> params) {
 		logger.entering("ScriptExecutor", "executeOnLocal");
 		logger.fine("execution local du script : " + script);
-		world.getGame().getChatSystem().debug(script.getKey() + " execute");
+		//world.getGame().
+                 Variables.getClientConnecteur().getChatSystem().debug(script.getKey() + " execute");
 		this.queue.remove(script.getKey());
 		try {
 			ScriptContext context = getEngine().getContext();
@@ -357,7 +361,8 @@ public class ScriptExecutor extends SimpleScriptContext {
 			// test si e script est incconnu
 			if (!world.isUpdate(script)) {
 				logger.info("requete de " + script.getKey()	+ " sur le serveur");
-				world.getGame().updateFromServerAndWait(script, this);
+				//world.getGame().
+                                 Variables.getClientConnecteur().updateFromServerAndWait(script, this);
 				return ;
 			}
 
@@ -370,7 +375,8 @@ public class ScriptExecutor extends SimpleScriptContext {
 				key = keys.poll();
 			if (key != null) {
 				logger.info("requete de " + key + " sur le serveur");
-				world.getGame().updateFromServerAndWait(key, this);
+				//world.getGame().
+                                 Variables.getClientConnecteur().updateFromServerAndWait(key, this);
 				return ;
 			}
 			executeOnLocal(script, params);

@@ -613,7 +613,8 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
 			Sharable obj = getSharable(Pck.readString(message));
 			int incomingVersionCode = message.getInt();
 			if (obj.getVersionCode() != incomingVersionCode)
-				game.updateFromServer(obj);
+				//game.
+                            Variables.getClientConnecteur().updateFromServer(obj);
 			sharables.add(obj);
 		}
 
@@ -674,7 +675,8 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
 		short code = message.getShort();
 		switch (code) {
 		case PckCode.COMMIT: receiveCommitPck(message);	break;
-		case PckCode.CHAT: getGame().getChatSystem().receivedChatMessage(message); break;
+		case PckCode.CHAT: //getGame().
+                    Variables.getClientConnecteur().getChatSystem().receivedChatMessage(message); break;
 		case PckCode.DELETE_OBJECT: dropObject(Pck.readString(message)); break;
 		case PckCode.PLAYER_DISCONNECT: receivePlayerDisconnect(message); break;
 
@@ -1727,7 +1729,8 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
 	public GameData createGameData() throws InterruptedException {
 		final String[] out = new String[1]; 
 		synchronized (out) {
-			game.getServerEditor().createAndCall(LaComponent.gamedata, new CreatorCallBack() {
+			//game.
+                    Variables.getClientConnecteur().getServerEditor().createAndCall(LaComponent.gamedata, new CreatorCallBack() {
 				@Override
 				public void created(String key) {
 					synchronized (out) {

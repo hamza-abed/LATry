@@ -101,7 +101,8 @@ public class SoundSystem {
 	"le troisieme est le volume du son entre 0 et 1")
 	public void play(final String file, final boolean looping, final float volume) {
 		if (!enable) return; 
-		game.getTaskExecutor().execute(new Runnable() {
+		//game.
+                Variables.getClientConnecteur().getTaskExecutor().execute(new Runnable() {
 			@Override
 			public void run() {
 				AudioTrack sound = getSound(file);
@@ -122,7 +123,8 @@ public class SoundSystem {
 	public void playLocal(final String file,final boolean looping, final float x, final float y,final float z,
 			final float minVolume, final float maxVolume, final float maxDistance) {
 		if (!enable) return; 	
-		game.getTaskExecutor().execute(new Runnable() {
+		//game.
+                Variables.getClientConnecteur().getTaskExecutor().execute(new Runnable() {
 			@Override
 			public void run() {
 				AudioTrack sound = getSound(file);
