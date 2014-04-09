@@ -76,14 +76,8 @@ public class LaGame extends SimpleApplication {
     protected SimpleClient simpleClient; //Répresente toutes communication avec le serveur
     private Player joueur; // Le joueur actuel avec son modèle graphique
     private Quaternion qPlan=new Quaternion();
-
-    public Spatial getSceneModel() {
-        return sceneModel;
-    }
-
-    public void setSceneModel(Spatial sceneModel) {
-        this.sceneModel = sceneModel;
-    }
+    private  Boussole boussole;
+    
     /**
      * moteur de chat
      */
@@ -130,7 +124,7 @@ public class LaGame extends SimpleApplication {
             }
         };
     }
-    Boussole boussole1;
+   
 
     @Override
     public void simpleInitApp() {
@@ -155,33 +149,8 @@ public class LaGame extends SimpleApplication {
 
 
         bulletAppState.getPhysicsSpace().enableDebug(assetManager);
-        //  afficherTexte("Version d'essai");
-
-
-
-        /*
-         * some tries About Boussole
-         */
-
-
+        }
     
-    Box box = new Box(new Vector3f(0, 0, 0), 90, 90, 5);
-cube = new Geometry("box1", box);
-Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-//mat1.setColor("Color", ColorRGBA.Blue);
-mat1.setTexture("ColorMap",assetManager.loadTexture("Textures/boussole/boussole1.png"));
-mat1.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-cube.setMaterial(mat1);
-cube.move(850,660,2);
-guiNode.attachChild(cube);
-
-   
-
-
-
-    }
-    Geometry cube;
-    Node boussole;
 private static final float INCLINAISON = FastMath.HALF_PI;
     public BulletAppState getBulletAppState() {
         return bulletAppState;
@@ -228,21 +197,9 @@ Quaternion q=new Quaternion();
          
     @Override
     public void simpleUpdate(float tpf) {
-        
-        
        
-
-		//q.fromAngleNormalAxis(cam.getRotation().getY(), Vector3f.UNIT_Y);
-	cube.setLocalRotation(new Quaternion(cube.getLocalRotation().getX(),cube.getLocalRotation().getY(),
-               cam.getRotation().getZ(),cam.getRotation().getW()));
-
-        //TODO: add update code
-        // cam.setLocation(new Vector3f(0, 10, 0) );
-        // if(!up) channel.setAnim("idle");
-
-   /*     boussole.setLocalRotation(new Quaternion(boussole.getLocalRotation().getX(), boussole.getLocalRotation().getY(),
-                cam.getRotation().getZ(), boussole.getLocalRotation().getW()));
-                */
+        boussole.update();
+        
         joueur.update();
         joueur.getPlayerModel().removeFromParent();
         joueur.getPlayerModel().setLocalTranslation(new Vector3f(
@@ -401,11 +358,13 @@ Quaternion q=new Quaternion();
 
         Variables.setLaGame(this);
         Variables.setMoveCursor(new MoveCursor());
+        boussole=new Boussole();
         NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(
                 assetManager, inputManager, audioRenderer, guiViewPort);
         Nifty nifty = niftyDisplay.getNifty();
         guiViewPort.addProcessor(niftyDisplay);
         nifty.fromXml("Interface/int.xml", "start");
+        
     }
 
     public void saySomething() {
@@ -587,5 +546,12 @@ Quaternion q=new Quaternion();
         sharable.addData(pck);
         //send(pck);
         Variables.getClientConnecteur().send(pck);
+    }
+    public Spatial getSceneModel() {
+        return sceneModel;
+    }
+
+    public void setSceneModel(Spatial sceneModel) {
+        this.sceneModel = sceneModel;
     }
 }
