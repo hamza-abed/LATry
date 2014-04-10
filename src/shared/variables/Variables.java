@@ -99,6 +99,7 @@ public class Variables {
     }
 
     public static SimpleClientConnector getClientConnecteur() {
+        if(clientConnecteur==null) clientConnecteur=new SimpleClientConnector();
         return clientConnecteur;
     }
     public static LaGame getLaGame()

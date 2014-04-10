@@ -73,7 +73,23 @@ public class SimpleClientConnector implements SimpleClientListener{
       private World world;
 
     private LaTraces traces;
-    
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPass() {
+        return pass;
+    }
+
+    public void setPass(String pass) {
+        this.pass = pass;
+    }
+    private String login,pass;
     /**
    * Initiates asynchronous login to the RDS server specified by
    * the host and port properties.
@@ -105,7 +121,10 @@ public class SimpleClientConnector implements SimpleClientListener{
    * @param status the status message to set
    */
   protected void setStatus(String status) {
+      if(Variables.getConsole()!=null)
       Variables.getConsole().output("> " + status);
+      else
+          System.out.println("> " + status);
       
   }
 
@@ -152,7 +171,8 @@ public class SimpleClientConnector implements SimpleClientListener{
         	     * to pop up a login dialog to get these fields from the player.
         	     */
         	    public PasswordAuthentication getPasswordAuthentication() {
-        	    	 Variables.getConsole().output("Password authentification called");
+        	    	// Variables.getConsole().output("Password authentification called");
+                         setStatus("Password authentification called");
         	    	
         	    	return new PasswordAuthentication(this.login, this.pass.toCharArray());
         	    }
@@ -164,10 +184,12 @@ public class SimpleClientConnector implements SimpleClientListener{
         	     */
         	    public void loggedIn() {
         	       
-        	      Variables.getConsole().output("Logged in");
+        	     // Variables.getConsole().output("Logged in");
+                        setStatus("Logged in");
         	      
         	        getPingPongTask().start();
-        	      Variables.getConsole().output("ping pong task has just started !");
+        	   //   Variables.getConsole().output("ping pong task has just started !");
+                      setStatus("ping pong task has just started !");
         	    }
 
         	    /**
@@ -242,13 +264,20 @@ public class SimpleClientConnector implements SimpleClientListener{
 					break;
 					}
 				}
-				
-				
-		//	private SimpleClient client;
-			private String login,pass;
+
+    //	private SimpleClient client;
+    public boolean isConnected() {
+        return Connected;
+    }
+
+    public void setConnectionStatus(boolean ConnectionStatus) {
+        this.Connected = ConnectionStatus;
+    }
+			
 				
 			//	private String rmi;
 				//private String ressourceHttp;
+                                private boolean Connected=false;
 			public void connect() {
 				Properties properties = new Properties();
 				properties.put("host", System.getProperty("server.0.host", "127.0.0.1"));
@@ -269,6 +298,7 @@ public class SimpleClientConnector implements SimpleClientListener{
 					 setStatus("connection au server");
 					
 					 simpleClient.login(properties);
+                                         Connected=true;
 				} catch (IOException e) {
 					setStatus("warning : IOException : Probablement un probleme avec la connexion au serveur.");
 				} catch (UnresolvedAddressException e) {
@@ -373,6 +403,10 @@ public class SimpleClientConnector implements SimpleClientListener{
      */
     public void updateFromServer(Sharable sharable) {
         //logger.info("Update de " + sharable.getKey());
+        if(sharable==null) System.out.println("sharable is null");
+        if(!Connected) connect();
+       // Variables.getConsole().output("Update de " + sharable.getKey());
+        setStatus("Update de " + sharable.getKey());
         getChatSystem().debug(
                 "? " + sharable.getKey() + " (" + sharable.getVersionCode()
                 + ")");

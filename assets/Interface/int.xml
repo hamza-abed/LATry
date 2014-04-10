@@ -27,9 +27,9 @@
   </style>
   
   <screen id="start" controller="client.NGUI_LA">
-    <layer childLayout="absolute" id="layer2">
-      <image filename="Interface/imgs/img1.png" height="100%" id="image0" width="100%" x="0" y="0"/>
-    </layer>
+   <!-- <layer childLayout="absolute" id="layer2">
+      <image filename="Interface/imgs/img1.png" height="100%" id="image0" width="100%" x="0" y="0"/> 
+    </layer> -->
     <layer childLayout="absolute" id="layer3">
       <panel childLayout="absolute" height="30%" id="panel0" style="nifty-panel-simple" backgroundImage="Interface/imgs/bgp.png" width="50%" x="25%" y="35%" alpha="30%">
            <effect>

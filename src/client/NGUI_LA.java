@@ -60,6 +60,9 @@ String nextScreen;
       m.saySomething();
      //System.out.println("class = ");
    nifty.gotoScreen("chatbar");
+   
+   
+   Variables.getLaGame().initGameWold();
    }
 
   

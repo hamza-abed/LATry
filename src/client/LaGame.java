@@ -106,6 +106,7 @@ public class LaGame extends SimpleApplication {
     private static final ColorRGBA DISK_COLOR = new ColorRGBA(0, 0.9f, 0.9f, A);// j'ai changé 0.9f à 0
     private WaterPlan waterPlan;
     private Spatial sceneModel;
+    private Spatial sceneModel1;
     private BulletAppState bulletAppState;
     private RigidBodyControl landscape;
     private static LaGame app;
@@ -160,7 +161,7 @@ public class LaGame extends SimpleApplication {
             }
         };
     }
-   
+   private boolean isStartScreen=true;
 
     @Override
     public void simpleInitApp() {
@@ -176,15 +177,21 @@ public class LaGame extends SimpleApplication {
 
 
         initLight();
+        initStartingScene();
+       
+        initStartingCamera();
+        /*
+         * 
+         *
+         * 
         initScene();
 
         initPlayer();
         gameListener = new MainGameListener(sceneModel);
         initCamera();
         setUpKeys();
-
-
         bulletAppState.getPhysicsSpace().enableDebug(assetManager);
+        */
         }
     
 private static final float INCLINAISON = FastMath.HALF_PI;
@@ -206,10 +213,28 @@ private static final float INCLINAISON = FastMath.HALF_PI;
         //***** DISABLING THE FLYING CAMERA  ******///
         flyCam.setEnabled(false);
         chaseCam = new ChaseCamera(cam, joueur.getPlayerModel(), inputManager);
+        
+         //chaseCam.setDefaultDistance(350);
+        chaseCam.setEnabled(true);
+    }
+    
+    
+    private void initStartingCamera() {
+        viewPort.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
+        flyCam.setMoveSpeed(150);
+        // cam.setLocation(lightDirection);
+        // channel.reset(true); // this stop the animation
+
+        //***** DISABLING THE FLYING CAMERA  ******///
+        flyCam.setEnabled(false);
+        //chaseCam = new ChaseCamera(cam, joueur.getPlayerModel(), inputManager);
+         chaseCam = new ChaseCamera(cam, sceneModel1, inputManager);
+         chaseCam.setDefaultDistance(350);
+         chaseCam.setEnabled(paused);
     }
 
     private void initPlayer() {
-        joueur = new Player();
+        joueur = new Player(new World(this),"demo");
 
         // walkDirection=joueur.getWalkDirection();
         joueur.attachToScene();
@@ -233,16 +258,17 @@ Quaternion q=new Quaternion();
          
     @Override
     public void simpleUpdate(float tpf) {
-       
-        boussole.update();
+       if(!isStartScreen)
+       { boussole.update();
         
         joueur.update();
-        joueur.getPlayerModel().removeFromParent();
+        //joueur.getPlayerModel().removeFromParent();
         joueur.getPlayerModel().setLocalTranslation(new Vector3f(
                 joueur.getPlayer().getPhysicsLocation().x, joueur.getPlayer().getPhysicsLocation().y - 2.5f,
                 joueur.getPlayer().getPhysicsLocation().z));
-        joueur.attachToScene();
+       // joueur.attachToScene();
         //walkDirection.set(0, 0, 0);
+       }
 
     }
 
@@ -284,13 +310,57 @@ Quaternion q=new Quaternion();
     }
     
     
-    private void initScene() {
-        sceneModel = assetManager.loadModel("Scenes/scene1.j3o");
-        rootNode.attachChild(sceneModel);
-        sceneModel.setLocalTranslation(0, 2, 0);
+    
+    
+   
+    
+     private void initStartingScene() {
+       // sceneModel = assetManager.loadModel("Scenes/scene1.j3o");
+         sceneModel1 = assetManager.loadModel("Scenes/starting.j3o");
+        rootNode.attachChild(sceneModel1);
+        sceneModel1.setName("sceneModel1");
+     //   sceneModel.setLocalTranslation(0, 2, 0);
+        
+           sceneModel1.setLocalTranslation(0, 2, 0);
         //initTerrain();
         //initSimpleWater();
         //initPPcWater();
+    /*    CollisionShape sceneShape =
+                CollisionShapeFactory.createMeshShape((Node) sceneModel);
+        landscape = new RigidBodyControl(sceneShape, 0);
+        sceneModel.addControl(landscape);  //define the scene as a rigid body
+
+        bulletAppState.getPhysicsSpace().add(landscape);
+
+        Variables.setSceneModel(sceneModel);
+        */
+        waterPlan=new WaterPlan(sceneModel1);
+        waterPlan.setWaterOnTheGame();
+       // waterPlan.setSimpleWaterOnTheGame();
+    }
+    
+    
+    
+    
+    
+    
+    
+    private void initSceneGame() {
+   
+        
+        rootNode.detachAllChildren();
+        sceneModel1.updateGeometricState();
+        //rootNode.updateGeometricState();
+      //  rootNode.detachChildNamed("water"); 
+       //rootNode.detachChild(sceneModel1);
+        sceneModel = assetManager.loadModel("Scenes/scene1.j3o");
+       // sceneModel.updateGeometricState();
+        sceneModel.setName("Scene of the main game");
+         //sceneModel = assetManager.loadModel("Scenes/starting.j3o");
+          rootNode.attachChild(sceneModel);
+          sceneModel.setLocalTranslation(0, 2, 0);
+        
+        
         CollisionShape sceneShape =
                 CollisionShapeFactory.createMeshShape((Node) sceneModel);
         landscape = new RigidBodyControl(sceneShape, 0);
@@ -301,7 +371,9 @@ Quaternion q=new Quaternion();
         Variables.setSceneModel(sceneModel);
         
         waterPlan=new WaterPlan(sceneModel);
-        waterPlan.setWaterOnTheGame();
+        
+     //   waterPlan.setWaterOnTheGame();
+       // waterPlan.setSimpleWaterOnTheGame();
     }
 
     @Override
@@ -309,9 +381,6 @@ Quaternion q=new Quaternion();
         //TODO: add render code
     }
 
-    public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
-        //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     private TerrainQuad terrain;
     Material mat_terrain;
 
@@ -390,6 +459,20 @@ Quaternion q=new Quaternion();
         sceneModel = terrain;
     }
 
+    
+    public void initGameWold()
+    {
+        initSceneGame();
+
+        initPlayer();
+        gameListener = new MainGameListener(sceneModel);
+        initCamera();
+        setUpKeys();
+
+
+        bulletAppState.getPhysicsSpace().enableDebug(assetManager);
+        isStartScreen=false;
+    }
     public void initNiftyGUI() {
 
         Variables.setLaGame(this);

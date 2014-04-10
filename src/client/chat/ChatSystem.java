@@ -508,7 +508,8 @@ public class ChatSystem {
             /*c'est equivalent de ..
              * Hamza ABED
              */
-            Variables.getConsole().output(text);
+         //   Variables.getConsole().output(text);
+            System.out.println(text);
 	}
 
 	/**

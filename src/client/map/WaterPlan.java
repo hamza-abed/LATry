@@ -39,6 +39,10 @@ public class WaterPlan {
     public WaterPlan(Spatial sceneModel){
     this.sceneModel=sceneModel;
     }
+    
+     public WaterPlan(){
+    
+    }
     /// ABOUT WATER
    public void initSimpleWater(){ 
        
@@ -59,6 +63,27 @@ public class WaterPlan {
     water.setMaterial(waterProcessor.getMaterial()); 
     Variables.getLaGame().getRootNode().attachChild(water); } 
    
+   
+   public void initSimpleWaterOfBegining()
+   {
+       SimpleWaterProcessor waterProcessor = new SimpleWaterProcessor(Variables.getLaGame().getAssetManager());
+       
+    //waterProcessor.setReflectionScene(sceneModel); 
+    Vector3f waterLocation=new Vector3f(0,-6,0); 
+    waterProcessor.setPlane(new Plane(Vector3f.UNIT_Y, waterLocation.dot(Vector3f.UNIT_Y)));
+    Variables.getLaGame().getViewPort().addProcessor(waterProcessor); waterProcessor.setWaterDepth(10); // transparency of water 
+    waterProcessor.setDistortionScale(0.07f); // strength of waves 
+    waterProcessor.setWaveSpeed(0.05f); // speed of waves Quad 
+    quad = new Quad(800,800); 
+    quad.scaleTextureCoordinates(new Vector2f(6f,6f)); 
+    Geometry water=new Geometry("water", quad); 
+    water.setLocalRotation(new Quaternion().fromAngleAxis(FastMath.HALF_PI, Vector3f.UNIT_X)); 
+    water.setLocalTranslation(-400, 0.32f, 400); 
+    water.setShadowMode(RenderQueue.ShadowMode.Receive); 
+    water.setMaterial(waterProcessor.getMaterial()); 
+    Variables.getLaGame().getRootNode().attachChild(water);
+   }
+   
    public void initPPcWater(){ 
        FilterPostProcessor fpp = new FilterPostProcessor(Variables.getLaGame().getAssetManager()); 
        water = new WaterFilter(Variables.getLaGame().getRootNode(), lightDirection); 
@@ -78,5 +103,12 @@ public void setWaterOnTheGame()
 {
 initSimpleWater();
 initPPcWater();
+}
+
+
+public void setSimpleWaterOnTheGame()
+{
+ initSimpleWaterOfBegining();
+ initPPcWater();
 }
 }

@@ -4,6 +4,7 @@
  */
 package client.map.character;
 
+import client.map.World;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.AnimEventListener;
@@ -29,7 +30,7 @@ import shared.variables.Variables;
  *
  * @author admin
  */
-public class Player implements AnimEventListener {
+public class Player extends PlayableCharacter implements AnimEventListener {
 
     private AnimChannel channel;
     private boolean left = false, right = false, up = false, down = false;
@@ -80,7 +81,8 @@ public class Player implements AnimEventListener {
     }
     private Vector3f walkDirection = new Vector3f();
 
-    public Player() {
+    public Player(World world, String login) {
+        super(world, login);
         initPlayer();
         //  Variables.getLaGame().getPhysicsSpace().addCollisionListener(this);
     }
@@ -329,6 +331,16 @@ public class Player implements AnimEventListener {
          onHead.setLocalRotation(q2);
          }
          */
+    }
+
+    @Override
+    protected boolean canMoveAt(Vector3f newPos) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    protected boolean testCollision(Vector3f newPos, Vector3f dir) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     

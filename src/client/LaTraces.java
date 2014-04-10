@@ -49,6 +49,7 @@ import client.map.character.NonPlayableCharacter;
 import client.map.character.PlayableCharacter;
 import client.map.character.stats.Item;
 import client.map.character.stats.Task;
+import shared.variables.Variables;
 /*
 import client.map.object.BasicMapObject;
 import client.map.object.MapTable;
@@ -118,7 +119,7 @@ public class LaTraces {
 	 * @author philippe
 	 */
         
-        /*
+       /*
 	public void sendActiveObjectAction(MapTable obj) {
 		send("type","object-action",
 				"login",game.getWorld().getPlayer().getLogin(),
@@ -126,8 +127,8 @@ public class LaTraces {
 				"action",obj.getAction(),
 				"client-time",Long.toString(System.currentTimeMillis()));
 	}
-	*/
 	
+	*/
 
 
 	/**
@@ -149,29 +150,30 @@ public class LaTraces {
 	 * @param dialog
 	 * @param choice
 	 */
-        /*
+        
 	public void sendActiveDialogChoice(Dialog dialog, String choiceAction) {
 		send("type","dialog-choice-activ",
-				"login",game.getWorld().getPlayer().getLogin(),
+				"login", Variables.getClientConnecteur().getLogin(),
 				"dialog", dialog.getKey(),
 				"choice-action", choiceAction,
 				"client-time",Long.toString(System.currentTimeMillis()));
 	}
-        */
+        
 
 	/**
 	 * Envoie une trace d'activation de choix de dialog
 	 * @param dialog
 	 */
         
-        /*
+       
 	public void sendActiveDialog(Dialog dialog) {
 		send("type","dialog-activ",
-				"login",game.getWorld().getPlayer().getLogin(),
+				"login",//game.getWorld().getPlayer().
+                                Variables.getClientConnecteur().getLogin(),
 				"dialog", dialog.getKey(),
 				"client-time",Long.toString(System.currentTimeMillis()));
 	}
-        */
+       
 
 	/*
 	 * ENVOIE RELATIF AU TACHES
