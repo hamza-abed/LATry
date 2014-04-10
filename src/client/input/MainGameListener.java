@@ -4,7 +4,6 @@
  */
 package client.input;
 
-import client.hud3D.MoveCursor;
 import client.map.character.Player;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;

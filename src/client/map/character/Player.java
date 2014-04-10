@@ -9,21 +9,14 @@ import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.AnimEventListener;
 import com.jme3.animation.LoopMode;
-import com.jme3.app.state.AbstractAppState;
-import com.jme3.bounding.BoundingBox;
-import com.jme3.bullet.collision.PhysicsCollisionEvent;
-import com.jme3.bullet.collision.PhysicsCollisionListener;
-import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
-import com.jme3.bullet.control.GhostControl;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import com.jme3.scene.shape.Box;
 import shared.variables.Variables;
 
 /**
@@ -278,11 +271,11 @@ public class Player extends PlayableCharacter implements AnimEventListener {
 
         // Use the results
         if (results.size() > 0) {
-            System.err.println("Collision detected ");
+          //  System.err.println("Collision detected ");
             CollisionResult closest = results.getClosestCollision();
-            System.out.println("What was hit? " + closest.getGeometry().getName());
+            /*System.out.println("What was hit? " + closest.getGeometry().getName());
             System.out.println("Where was it hit? " + closest.getContactPoint());
-            System.out.println("Distance? " + closest.getDistance());
+            System.out.println("Distance? " + closest.getDistance());*/
             endMoving();
         }
     }

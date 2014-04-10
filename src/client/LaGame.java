@@ -40,17 +40,12 @@
 
 package client;
 
-import client.chat.ChatSystem;
-import client.editor.ServerEditor;
 import client.hud.boussole.Boussole;
 import client.hud3D.MoveCursor;
 import client.input.MainGameListener;
-import client.interfaces.network.Sharable;
 import client.map.WaterPlan;
 import client.map.World;
 import client.map.character.Player;
-import com.jme3.animation.AnimChannel;
-import com.jme3.animation.AnimControl;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
@@ -82,13 +77,6 @@ import com.jme3.texture.Texture;
 import com.jme3.texture.Texture.WrapMode;
 import com.sun.sgs.client.simple.SimpleClient;
 import de.lessvoid.nifty.Nifty;
-import java.util.HashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadPoolExecutor;
-import shared.constants.PckCode;
-import shared.pck.Pck;
 import shared.variables.Variables;
 
 /**
@@ -205,6 +193,7 @@ private static final float INCLINAISON = FastMath.HALF_PI;
     ChaseCamera chaseCam;
 
     private void initCamera() {
+      //  Variables.getConsole().output("initCamera()"); 
         viewPort.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
         flyCam.setMoveSpeed(150);
         // cam.setLocation(lightDirection);
@@ -216,6 +205,7 @@ private static final float INCLINAISON = FastMath.HALF_PI;
         
          //chaseCam.setDefaultDistance(350);
         chaseCam.setEnabled(true);
+        Variables.getConsole().output("end of initCamera()"); 
     }
     
     
@@ -227,18 +217,30 @@ private static final float INCLINAISON = FastMath.HALF_PI;
 
         //***** DISABLING THE FLYING CAMERA  ******///
         flyCam.setEnabled(false);
+        
+         Spatial fireCamp = assetManager.loadModel("Models/campfire/campfire.j3o");
+                    rootNode.attachChild(fireCamp);
+                    fireCamp.setLocalTranslation(50,20,0);
         //chaseCam = new ChaseCamera(cam, joueur.getPlayerModel(), inputManager);
-         chaseCam = new ChaseCamera(cam, sceneModel1, inputManager);
-         chaseCam.setDefaultDistance(350);
+         chaseCam = new ChaseCamera(cam, fireCamp, inputManager);
+         chaseCam.setDefaultDistance(500);
+         chaseCam.setLookAtOffset(sceneModel1.getLocalTranslation());
+         //chaseCam.set
          chaseCam.setEnabled(paused);
+         
+                   // fireCamp.setLocalTranslation(chaseCam.getLookAtOffset());
+         
     }
 
     private void initPlayer() {
+       
+    //    Variables.getConsole().output("initPlayer()");
         joueur = new Player(new World(this),"demo");
 
         // walkDirection=joueur.getWalkDirection();
         joueur.attachToScene();
         Variables.setMainPlayer(joueur);
+      //  Variables.getConsole().output("end initPlayer()");
 
 
     }
@@ -259,7 +261,9 @@ Quaternion q=new Quaternion();
     @Override
     public void simpleUpdate(float tpf) {
        if(!isStartScreen)
-       { boussole.update();
+       {
+           Variables.getConsole().output("updating");
+           boussole.update();
         
         joueur.update();
         //joueur.getPlayerModel().removeFromParent();
@@ -268,7 +272,11 @@ Quaternion q=new Quaternion();
                 joueur.getPlayer().getPhysicsLocation().z));
        // joueur.attachToScene();
         //walkDirection.set(0, 0, 0);
-       }
+        if(!chaseCam.isEnabled())
+        chaseCam.setEnabled(true);
+       
+       }else
+         if( Variables.getConsole()!=null)  Variables.getConsole().output("is not updating");
 
     }
 
@@ -321,7 +329,7 @@ Quaternion q=new Quaternion();
         sceneModel1.setName("sceneModel1");
      //   sceneModel.setLocalTranslation(0, 2, 0);
         
-           sceneModel1.setLocalTranslation(0, 2, 0);
+        sceneModel1.setLocalTranslation(0, -170, 0);
         //initTerrain();
         //initSimpleWater();
         //initPPcWater();
@@ -347,7 +355,7 @@ Quaternion q=new Quaternion();
     
     private void initSceneGame() {
    
-        
+         Variables.getConsole().output("initSceneGame()"); 
         rootNode.detachAllChildren();
         sceneModel1.updateGeometricState();
         //rootNode.updateGeometricState();
@@ -374,6 +382,7 @@ Quaternion q=new Quaternion();
         
      //   waterPlan.setWaterOnTheGame();
        // waterPlan.setSimpleWaterOnTheGame();
+         Variables.getConsole().output("end initSceneGame()"); 
     }
 
     @Override
@@ -462,16 +471,20 @@ Quaternion q=new Quaternion();
     
     public void initGameWold()
     {
+       
         initSceneGame();
-
         initPlayer();
         gameListener = new MainGameListener(sceneModel);
+
         initCamera();
-        setUpKeys();
+       
 
 
         bulletAppState.getPhysicsSpace().enableDebug(assetManager);
-        isStartScreen=false;
+        
+         setUpKeys();
+          isStartScreen=false;
+         
     }
     public void initNiftyGUI() {
 

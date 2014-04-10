@@ -5,16 +5,12 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
-import de.lessvoid.nifty.controls.ChatTextSendEvent;
 import de.lessvoid.nifty.controls.ConsoleExecuteCommandEvent;
-import de.lessvoid.nifty.controls.TextFieldChangedEvent;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.events.NiftyMousePrimaryClickedEvent;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
-import de.lessvoid.nifty.tools.SizeValue;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,7 +36,7 @@ public class NGUI_LA extends AbstractAppState implements ScreenController {
 String nextScreen;
   public void startGame(String nextScreen) {
       
-      System.out.println("this is start game");
+     // System.out.println("this is start game");
      Variables.setConsole(nifty.getScreen("chatbar").
       findNiftyControl("textfield2",Console.class));
     
@@ -57,9 +53,9 @@ String nextScreen;
        if(app==null) System.out.println("app= null");
        LaGame m= Variables.getLaGame();
        //m = th
-      m.saySomething();
+      // m.saySomething();
      //System.out.println("class = ");
-   nifty.gotoScreen("chatbar");
+       nifty.gotoScreen("chatbar");
    
    
    Variables.getLaGame().initGameWold();

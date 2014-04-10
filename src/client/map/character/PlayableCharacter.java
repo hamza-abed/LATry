@@ -149,7 +149,7 @@ public abstract class PlayableCharacter extends AbstractCharacter {
 		super(world);
 		this.login = login;
 		//world.getGame().
-               Variables.getClientConnecteur().updateFromServer(this);
+              // Variables.getClientConnecteur().updateFromServer(this);
 		this.tokens = new PlayerTokens(this);
 		this.items = new PlayerItems(this);
 		this.tasks = new PlayerTasks(this);

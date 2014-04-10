@@ -152,7 +152,7 @@ private Node putShape(Mesh shape, ColorRGBA color,Vector3f pt){
   nodeGostCursor.addControl(ghostCursor);
   //Variables.getLaGame().getPhysicsSpace().add(bx);
   //ghostCursor.setPhysicsLocation(pt);
-  System.out.println("control cursor location = "+ghostCursor.getPhysicsLocation().toString());
+ // System.out.println("control cursor location = "+ghostCursor.getPhysicsLocation().toString());
  return nodeGostCursor;
 }
 
