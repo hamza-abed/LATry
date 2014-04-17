@@ -1,19 +1,50 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Copyright 2010 http://learning-adventure.fr
+ * Tous droits réservés
+ * 
+ * 
+ * ----------------------------------------------------------------------------
+ * Ce fichier fait partie de LA-Client.
+ *
+ * LA-Client est un logiciel libre ; vous pouvez le redistribuer ou le modifier 
+ * suivant les termes de la GNU General Public License telle que publiée par
+ * la Free Software Foundation ; soit la version 3 de la licence, soit 
+ * (à votre gré) toute version ultérieure.
+ * 
+ * LA-Client est distribué dans l'espoir qu'il sera utile, 
+ * mais SANS AUCUNE GARANTIE ; pas même la garantie implicite de 
+ * COMMERCIABILISABILITÉ ni d'ADÉQUATION à UN OBJECTIF PARTICULIER. 
+ * Consultez la GNU General Public License pour plus de détails.
+ * 
+ * Vous devez avoir reçu une copie de la GNU General Public License 
+ * en même temps que LA-Client ; si ce n'est pas le cas, 
+ * consultez <http://www.gnu.org/licenses>.
+ * ----------------------------------------------------------------------------
+ * This file is part of LA-Client.
+ *
+ * LA-Client is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LA-Client is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with LA-Client.  If not, see <http://www.gnu.org/licenses/>.
+ * ----------------------------------------------------------------------------
  */
+
 package client.hud3D;
 
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
-import com.jme3.bullet.collision.PhysicsCollisionListener;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.control.GhostControl;
-import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.collision.CollisionResults;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Ray;
-import com.jme3.math.Vector2f;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
@@ -45,70 +76,25 @@ public class MoveCursor{
         this.targetAttended = targetAttended;
     }
     private Arrow arrow;
-   
+   Vector3f point;
     public void afficherFlecheDestination(Vector3f pt)
     {
                 
 ///This is about arrow
 arrow = new Arrow(new Vector3f(0,3,0));
+
 arrow.setLineWidth(10); // make arrow thicker
-// arrêt du joueur selon la collision avec l'indicateur
+removeArrow();
 
- // 1. Reset results list.
-/*
-CollisionResults results = new CollisionResults();
-Vector2f click2d = Variables.getLaGame().getInputManager().getCursorPosition();
-Vector3f click3d = Variables.getCam().getWorldCoordinates(
-    new Vector2f(click2d.x, click2d.y), 0f).clone();
-Vector3f dir = Variables.getCam().getWorldCoordinates(
-    new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d).normalizeLocal();
-Ray ray = new Ray(click3d, dir);
-
-Variables.getLaGame().getRootNode().collideWith(ray, results);
-* 
-*/
-//Variables.getSceneModel().collideWith(ray, results);
-
-
-
-//        CollisionResults results = new CollisionResults();
-        // 2. Aim the ray from cam loc to cam direction.
-  //      Ray ray = new Ray(cam.getLocation(), cam.getDirection());
-        // 3. Collect intersections between Ray and Shootables in results list.
-    //    Variables.getSceneModel().collideWith(ray, results);
-        // 4. Print the results
-       // System.out.println("----- Collisions? " + results.size() + "-----");
-  /*      Vector3f pt=null;
-        Variables.getConsole().clear();
-        for (int i = 0; i < results.size(); i++) {
-          // For each hit, we know distance, impact point, name of geometry.
-          float dist = results.getCollision(i).getDistance();
-          pt = results.getCollision(i).getContactPoint();
-         String hit="";
-         Node collided=results.getCollision(i).getGeometry().getParent();
-         Node previousCollided=collided;
-         while(!collided.getName().equals("Root Node"))
-         {
-         previousCollided=collided;
-         collided=collided.getParent();
-                
-         }
-          
-          Variables.getConsole().output("collision avec "+previousCollided.getName());
-        }
-      */
-        removeArrow();
-        //Vector3f camDir=new Vector3f();
-       // camDir.set(Variables.getCam().getDirection()).multLocal(0.6f);
-        if(pt!=null)
+if(pt!=null)
         {
             putShape(arrow, ColorRGBA.Green,pt).setLocalTranslation(new Vector3f(pt.x, pt.y,pt.z));
             Variables.getMainPlayer().moveTo(pt.getX(), pt.getZ()); // utilisation de la méthode de Ludovic Kepka
             
         }
-        //rootNode.detachChild(sceneModel);
 
-///
+
+
     }
    
     private Node nodeGostCursor;
@@ -129,13 +115,9 @@ Variables.getLaGame().getRootNode().collideWith(ray, results);
      Geometry g=null;
 private Node putShape(Mesh shape, ColorRGBA color,Vector3f pt){
     
-   
- 
-  
-  
    if(ghostCursor==null)
    {
-        Material mat = new Material(Variables.getLaGame().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+  Material mat = new Material(Variables.getLaGame().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
   mat.getAdditionalRenderState().setWireframe(true);
   mat.setColor("Color", color);
   
@@ -155,9 +137,9 @@ private Node putShape(Mesh shape, ColorRGBA color,Vector3f pt){
   //targetAttended=false;
   g.addControl(ghostCursor);
   nodeGostCursor.addControl(ghostCursor);
-  //Variables.getLaGame().getPhysicsSpace().add(bx);
-  //ghostCursor.setPhysicsLocation(pt);
- // System.out.println("control cursor location = "+ghostCursor.getPhysicsLocation().toString());
+  //nodeGostCursor.setLocalRotation(new Quaternion(0, 0 , 180, 180));
+  
+  
  return nodeGostCursor;
 }
 

@@ -25,7 +25,8 @@ public class MainGameListener implements ActionListener, AnalogListener{
 
     Spatial sceneModel;
     Player player;
-   
+    boolean leftClickForScene=false;
+    Node previousCollided=null; //l'objet récement cliqué 
     public MainGameListener(Spatial sceneModel)
     {
         super();
@@ -35,7 +36,7 @@ public class MainGameListener implements ActionListener, AnalogListener{
     public void onAction(String name, boolean isPressed, float tpf) {
        if(name.equals("LClick"))
 {
-leftClick();
+isLeftClickForScene();
 
 }
     }
@@ -44,14 +45,67 @@ leftClick();
        //System.out.println("this is analog from mouse listener "+name);
        if(!name.equals("LClick"))
         player.freeMovePlayer(name);
+       else // Dans le cas oui en tient un clic sur le bouton gauche de la sourie
+       {
+           if(!leftClickForScene) // si ce n'est pas un click pour la scène
+               //alors il s'agit de glisser un objet
+           {
+
+ draggingNode(previousCollided);
+           
+           }
+       }
     }
+  
+   
     
-  private void leftClick()
+    
+  private void draggingNode(Node object)  
   {
-      
-      
-      
-      CollisionResults results = new CollisionResults();
+CollisionResults results = new CollisionResults();
+Vector2f click2d = Variables.getLaGame().getInputManager().getCursorPosition();
+Vector3f click3d = Variables.getCam().getWorldCoordinates(
+    new Vector2f(click2d.x, click2d.y), 0f).clone();
+Vector3f dir = Variables.getCam().getWorldCoordinates(
+    new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d).normalizeLocal();
+Ray ray = new Ray(click3d, dir);
+
+Variables.getSceneModel().collideWith(ray, results);
+
+
+
+Vector3f pt=null;
+  
+Variables.getConsole().clear();
+        for (int i = 0; i < results.size(); i++) {
+          // For each hit, we know distance, impact point, name of geometry.
+         // float dist = results.getCollision(i).getDistance();
+          pt = results.getCollision(i).getContactPoint();
+         
+                
+        }
+        
+        
+        object.setLocalTranslation(pt);
+  }
+   
+    
+    
+    /*
+     * Cette méthode à pour fonction de s'assurer que l'action de clic 
+     * est orienté pour le terrain(scene) ou bien pour un autre objet afin de 
+     * le sélectionner
+     */
+   boolean isClicking=false;
+   boolean isDragging=false;
+          
+  private boolean isLeftClickForScene()
+  {  
+      if(!isClicking && !isDragging)
+      {
+          isClicking=true;
+ leftClickForScene=false;   
+CollisionResults results = new CollisionResults();
 Vector2f click2d = Variables.getLaGame().getInputManager().getCursorPosition();
 Vector3f click3d = Variables.getCam().getWorldCoordinates(
     new Vector2f(click2d.x, click2d.y), 0f).clone();
@@ -72,7 +126,7 @@ Variables.getConsole().clear();
           pt = results.getCollision(i).getContactPoint();
          String hit="";
          Node collided=results.getCollision(i).getGeometry().getParent();
-         Node previousCollided=collided;
+         previousCollided=collided;
          while(!collided.getName().equals("Root Node"))
          {
          previousCollided=collided;
@@ -83,9 +137,16 @@ Variables.getConsole().clear();
           Variables.getConsole().output("collision avec "+previousCollided.getName());
           /////////// Decision  \\\\\
           if(previousCollided.getName().equals("Scene of the main game"))
-          Variables.getMoveCursor().afficherFlecheDestination(pt); 
-          break;
+          { Variables.getMoveCursor().afficherFlecheDestination(pt); 
+          leftClickForScene=true;
+         
+          
+          }
+           break; /// c'est un seul itération
         }
+        isClicking=false;
+      }
+        return leftClickForScene;
   }
     
 }

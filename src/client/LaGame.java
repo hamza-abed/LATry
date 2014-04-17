@@ -263,7 +263,8 @@ private static final float INCLINAISON = FastMath.HALF_PI;
          //chaseCam.set
          chaseCam.setEnabled(paused);
          
-                   // fireCamp.setLocalTranslation(chaseCam.getLookAtOffset());
+        
+        // Material m=fireCamp.get
          
     }
 
