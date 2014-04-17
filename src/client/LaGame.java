@@ -52,6 +52,7 @@ import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
+import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.KeyInput;
@@ -64,9 +65,12 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Ray;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
@@ -139,14 +143,45 @@ public class LaGame extends SimpleApplication {
                 if (name.equals("addObject")) {
 //Node fireCamp=(Node) assetManager.loadModel("Models/Oto/Oto.mesh.xml");
                     Spatial fireCamp = assetManager.loadModel("Models/campfire/campfire.j3o");
+                    fireCamp.setName("fireCamp");
                     rootNode.attachChild(fireCamp);
 
                     fireCamp.setLocalTranslation(new Vector3f(joueur.getPlayer().getPhysicsLocation().x + 30, joueur.getPlayer().getPhysicsLocation().y, joueur.getPlayer().getPhysicsLocation().z));
                     System.out.println("child attached !!");
+                    
+                    //Geometry fire=new Geometry("fireCamp")
+                     CollisionShape collisionC =
+                CollisionShapeFactory.createMeshShape((Node) fireCamp);
+       RigidBodyControl fireC = new RigidBodyControl(collisionC, 0);
+        fireCamp.addControl(fireC);  //define the scene as a rigid body
+        
+        bulletAppState.getPhysicsSpace().add(fireC);
 
-                }
+                    
+                    
+      /////////////////////////////////////////////////////////
+        
+        
+         CollisionResults results = new CollisionResults();
+        // Convert screen click to 3d position
+        Vector2f click2d = inputManager.getCursorPosition();
+        Vector3f click3d = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 0f).clone();
+        Vector3f dir = cam.getWorldCoordinates(new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d).normalizeLocal();
+        // Aim the ray from the clicked spot forwards.
+        Ray ray = new Ray(click3d, dir);
+        // Collect intersections between ray and all nodes in results list.
+        fireCamp.collideWith(ray, results);
+        // (Print the results so we see what is going on:)
+        for (int i = 0; i < results.size(); i++) {
+          // (For each “hit”, we know distance, impact point, geometry.)
+          float dist = results.getCollision(i).getDistance();
+          Vector3f pt = results.getCollision(i).getContactPoint();
+          String target = results.getCollision(i).getGeometry().getName();
+          System.err.println("Selection #" + i + ": " + target + " at " + pt + ", " + dist + " WU away.");
+        }
 
             }
+            }  
         };
     }
    private boolean isStartScreen=true;
@@ -234,13 +269,13 @@ private static final float INCLINAISON = FastMath.HALF_PI;
 
     private void initPlayer() {
        
-    //    Variables.getConsole().output("initPlayer()");
+    
         joueur = new Player(new World(this),"demo");
 
-        // walkDirection=joueur.getWalkDirection();
+     //   joueur = new Player();
         joueur.attachToScene();
         Variables.setMainPlayer(joueur);
-      //  Variables.getConsole().output("end initPlayer()");
+      
 
 
     }
@@ -256,14 +291,14 @@ private static final float INCLINAISON = FastMath.HALF_PI;
         return helloText;
     }
     private ActionListener actionListener;
-Quaternion q=new Quaternion();
+    Quaternion q=new Quaternion();
          
     @Override
     public void simpleUpdate(float tpf) {
        if(!isStartScreen)
        {
-           Variables.getConsole().output("updating");
-           boussole.update();
+           //Variables.getConsole().output("updating");
+        boussole.update();
         
         joueur.update();
         //joueur.getPlayerModel().removeFromParent();
@@ -333,7 +368,7 @@ Quaternion q=new Quaternion();
         //initTerrain();
         //initSimpleWater();
         //initPPcWater();
-    /*    CollisionShape sceneShape =
+        /*    CollisionShape sceneShape =
                 CollisionShapeFactory.createMeshShape((Node) sceneModel);
         landscape = new RigidBodyControl(sceneShape, 0);
         sceneModel.addControl(landscape);  //define the scene as a rigid body
@@ -354,13 +389,12 @@ Quaternion q=new Quaternion();
     
     
     private void initSceneGame() {
-   
-         Variables.getConsole().output("initSceneGame()"); 
+          //  Variables.getConsole().output("initSceneGame()"); 
         rootNode.detachAllChildren();
         sceneModel1.updateGeometricState();
         //rootNode.updateGeometricState();
-      //  rootNode.detachChildNamed("water"); 
-       //rootNode.detachChild(sceneModel1);
+        //  rootNode.detachChildNamed("water"); 
+        //rootNode.detachChild(sceneModel1);
         sceneModel = assetManager.loadModel("Scenes/scene1.j3o");
        // sceneModel.updateGeometricState();
         sceneModel.setName("Scene of the main game");
@@ -382,7 +416,7 @@ Quaternion q=new Quaternion();
         
      //   waterPlan.setWaterOnTheGame();
        // waterPlan.setSimpleWaterOnTheGame();
-         Variables.getConsole().output("end initSceneGame()"); 
+      //   Variables.getConsole().output("end initSceneGame()"); 
     }
 
     @Override
@@ -478,12 +512,12 @@ Quaternion q=new Quaternion();
 
         initCamera();
        
-
+        isStartScreen=false;
 
         bulletAppState.getPhysicsSpace().enableDebug(assetManager);
-        
+       
          setUpKeys();
-          isStartScreen=false;
+       //   isStartScreen=false;
          
     }
     public void initNiftyGUI() {

@@ -46,7 +46,7 @@ public class MoveCursor{
     }
     private Arrow arrow;
    
-    public void afficherFlecheDestination()
+    public void afficherFlecheDestination(Vector3f pt)
     {
                 
 ///This is about arrow
@@ -55,6 +55,7 @@ arrow.setLineWidth(10); // make arrow thicker
 // arrêt du joueur selon la collision avec l'indicateur
 
  // 1. Reset results list.
+/*
 CollisionResults results = new CollisionResults();
 Vector2f click2d = Variables.getLaGame().getInputManager().getCursorPosition();
 Vector3f click3d = Variables.getCam().getWorldCoordinates(
@@ -62,7 +63,11 @@ Vector3f click3d = Variables.getCam().getWorldCoordinates(
 Vector3f dir = Variables.getCam().getWorldCoordinates(
     new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d).normalizeLocal();
 Ray ray = new Ray(click3d, dir);
-Variables.getSceneModel().collideWith(ray, results);
+
+Variables.getLaGame().getRootNode().collideWith(ray, results);
+* 
+*/
+//Variables.getSceneModel().collideWith(ray, results);
 
 
 
@@ -70,36 +75,36 @@ Variables.getSceneModel().collideWith(ray, results);
         // 2. Aim the ray from cam loc to cam direction.
   //      Ray ray = new Ray(cam.getLocation(), cam.getDirection());
         // 3. Collect intersections between Ray and Shootables in results list.
-        Variables.getSceneModel().collideWith(ray, results);
+    //    Variables.getSceneModel().collideWith(ray, results);
         // 4. Print the results
        // System.out.println("----- Collisions? " + results.size() + "-----");
-        Vector3f pt=null;
+  /*      Vector3f pt=null;
+        Variables.getConsole().clear();
         for (int i = 0; i < results.size(); i++) {
           // For each hit, we know distance, impact point, name of geometry.
           float dist = results.getCollision(i).getDistance();
           pt = results.getCollision(i).getContactPoint();
-          String hit = results.getCollision(i).getGeometry().getName();
-        
+         String hit="";
+         Node collided=results.getCollision(i).getGeometry().getParent();
+         Node previousCollided=collided;
+         while(!collided.getName().equals("Root Node"))
+         {
+         previousCollided=collided;
+         collided=collided.getParent();
+                
+         }
+          
+          Variables.getConsole().output("collision avec "+previousCollided.getName());
         }
-      
+      */
         removeArrow();
-       // Vector3f camDir=new Vector3f();
-      //  camDir.set(Variables.getCam().getDirection()).multLocal(0.6f);
+        //Vector3f camDir=new Vector3f();
+       // camDir.set(Variables.getCam().getDirection()).multLocal(0.6f);
         if(pt!=null)
         {
             putShape(arrow, ColorRGBA.Green,pt).setLocalTranslation(new Vector3f(pt.x, pt.y,pt.z));
-           // putShape(arrow, ColorRGBA.Green).setLocalTranslation(new Vector3f(camDir.x+5,camDir.y-5,camDir.z+2));
-          //  System.out.println("pt= "+pt.toString());
             Variables.getMainPlayer().moveTo(pt.getX(), pt.getZ()); // utilisation de la méthode de Ludovic Kepka
             
-     //   Variables.getMainPlayer().moveTo(pt.normalize());
-            
-    //*** pour la collision avec la flèche
-    
-    // initiateGostCursor(pt);
-    
-     
-      //  System.out.println("this is after move to");
         }
         //rootNode.detachChild(sceneModel);
 

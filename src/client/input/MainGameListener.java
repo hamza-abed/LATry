@@ -5,8 +5,13 @@
 package client.input;
 
 import client.map.character.Player;
+import com.jme3.collision.CollisionResults;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
+import com.jme3.math.Ray;
+import com.jme3.math.Vector2f;
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import shared.variables.Variables;
 
@@ -30,7 +35,8 @@ public class MainGameListener implements ActionListener, AnalogListener{
     public void onAction(String name, boolean isPressed, float tpf) {
        if(name.equals("LClick"))
 {
-Variables.getMoveCursor().afficherFlecheDestination();
+leftClick();
+
 }
     }
 
@@ -39,5 +45,47 @@ Variables.getMoveCursor().afficherFlecheDestination();
        if(!name.equals("LClick"))
         player.freeMovePlayer(name);
     }
+    
+  private void leftClick()
+  {
+      
+      
+      
+      CollisionResults results = new CollisionResults();
+Vector2f click2d = Variables.getLaGame().getInputManager().getCursorPosition();
+Vector3f click3d = Variables.getCam().getWorldCoordinates(
+    new Vector2f(click2d.x, click2d.y), 0f).clone();
+Vector3f dir = Variables.getCam().getWorldCoordinates(
+    new Vector2f(click2d.x, click2d.y), 1f).subtractLocal(click3d).normalizeLocal();
+Ray ray = new Ray(click3d, dir);
+
+Variables.getLaGame().getRootNode().collideWith(ray, results);
+
+
+
+Vector3f pt=null;
+  
+Variables.getConsole().clear();
+        for (int i = 0; i < results.size(); i++) {
+          // For each hit, we know distance, impact point, name of geometry.
+          float dist = results.getCollision(i).getDistance();
+          pt = results.getCollision(i).getContactPoint();
+         String hit="";
+         Node collided=results.getCollision(i).getGeometry().getParent();
+         Node previousCollided=collided;
+         while(!collided.getName().equals("Root Node"))
+         {
+         previousCollided=collided;
+         collided=collided.getParent();
+                
+         }
+          
+          Variables.getConsole().output("collision avec "+previousCollided.getName());
+          /////////// Decision  \\\\\
+          if(previousCollided.getName().equals("Scene of the main game"))
+          Variables.getMoveCursor().afficherFlecheDestination(pt); 
+          break;
+        }
+  }
     
 }

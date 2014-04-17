@@ -141,7 +141,7 @@ public class AnnotationEditor {
 	 */
 	@SuppressWarnings("all")
 	private void callMethod(Class<?> clazz, String method) {
-		try {
+	/*	try {
 			
 			Method m = clazz.getDeclaredMethod(method, null);
 			logger.info(" ---> appel sur classe : "+clazz.getSimpleName().toString() + " methode :"+method);
@@ -161,6 +161,7 @@ public class AnnotationEditor {
 		} catch (InvocationTargetException e) {
 			logger.warning("InvocationTargetException : Je le savais !");
 		}
+                */
 	}
 	
 	/* ********************************************************** *

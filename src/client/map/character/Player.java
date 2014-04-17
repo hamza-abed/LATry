@@ -23,7 +23,8 @@ import shared.variables.Variables;
  *
  * @author admin
  */
-public class Player extends PlayableCharacter implements AnimEventListener {
+public class Player //extends PlayableCharacter 
+implements AnimEventListener {
 
     private AnimChannel channel;
     private boolean left = false, right = false, up = false, down = false;
@@ -75,9 +76,14 @@ public class Player extends PlayableCharacter implements AnimEventListener {
     private Vector3f walkDirection = new Vector3f();
 
     public Player(World world, String login) {
-        super(world, login);
-        initPlayer();
+     //   super(world, login);
+               initPlayer();
         //  Variables.getLaGame().getPhysicsSpace().addCollisionListener(this);
+    }
+    
+    public Player()
+    {
+        initPlayer();
     }
     private CapsuleCollisionShape capsuleShape;
 
@@ -325,7 +331,7 @@ public class Player extends PlayableCharacter implements AnimEventListener {
          }
          */
     }
-
+/*
     @Override
     protected boolean canMoveAt(Vector3f newPos) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -335,6 +341,6 @@ public class Player extends PlayableCharacter implements AnimEventListener {
     protected boolean testCollision(Vector3f newPos, Vector3f dir) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+    */
     
 }

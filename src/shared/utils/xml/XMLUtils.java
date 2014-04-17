@@ -166,11 +166,11 @@ public class XMLUtils {
 		logger.fine("Configuration du flux XML de sortie");
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
-		//transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		//transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-		//transformer.setOutputProperty(OutputKeys.ENCODING, XML_ENCODING);
-		//transformer.setOutputProperty(XML_INDENT, XML_INDENT_VALUE);
-		//transformer.setOutputProperty(OutputKeys.VERSION, XML_VERSION);
+		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+		transformer.setOutputProperty(OutputKeys.ENCODING, XML_ENCODING);
+		transformer.setOutputProperty(XML_INDENT, XML_INDENT_VALUE);
+		transformer.setOutputProperty(OutputKeys.VERSION, XML_VERSION);
 
 		logger.fine("transphormation du document dans flux XML");
 		transformer.transform(new DOMSource(doc), result);
