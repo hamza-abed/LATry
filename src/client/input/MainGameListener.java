@@ -59,9 +59,16 @@ isLeftClickForScene();
   
    
     
-    
-  private void draggingNode(Node object)  
+    /*
+     * après on doit faire appel à cette méthode à partir
+     * d'une classe spécifique "Object" par exemple.
+     */
+  private void draggingNode(Node object)
   {
+      
+      
+      //On doit tout d'abord fixer la vue de la camera 
+      
 CollisionResults results = new CollisionResults();
 Vector2f click2d = Variables.getLaGame().getInputManager().getCursorPosition();
 Vector3f click3d = Variables.getCam().getWorldCoordinates(

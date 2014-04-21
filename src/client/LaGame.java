@@ -56,8 +56,10 @@ import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.KeyInput;
+import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
@@ -79,6 +81,7 @@ import com.jme3.terrain.heightmap.AbstractHeightMap;
 import com.jme3.terrain.heightmap.ImageBasedHeightMap;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture.WrapMode;
+import com.sun.jersey.core.spi.scanning.uri.VfsSchemeScanner;
 import com.sun.sgs.client.simple.SimpleClient;
 import de.lessvoid.nifty.Nifty;
 import shared.variables.Variables;
@@ -195,7 +198,7 @@ public class LaGame extends SimpleApplication {
         stateManager.attach(bulletAppState); //qu'on va travailler avec des physics
         //le bulletAppState est un variable utilisé dans tout le jeux
         //pour ajouter des palyers
-
+        
         initNiftyGUI();
 
 
@@ -241,6 +244,16 @@ private static final float INCLINAISON = FastMath.HALF_PI;
          //chaseCam.setDefaultDistance(350);
         chaseCam.setEnabled(true);
         Variables.getConsole().output("end of initCamera()"); 
+        
+        
+inputManager.deleteMapping("CHASECAM_Left");
+inputManager.deleteMapping("CHASECAM_Right");
+inputManager.deleteMapping("CHASECAM_Up");
+inputManager.deleteMapping("CHASECAM_Down");
+inputManager.deleteMapping("CHASECAM_ZoomIn");
+inputManager.deleteMapping("CHASECAM_ZoomOut");
+
+inputManager.setCursorVisible( true );
     }
     
     
@@ -291,6 +304,8 @@ private static final float INCLINAISON = FastMath.HALF_PI;
         guiNode.attachChild(helloText);
         return helloText;
     }
+    
+    
     private ActionListener actionListener;
     Quaternion q=new Quaternion();
          
@@ -321,13 +336,17 @@ private static final float INCLINAISON = FastMath.HALF_PI;
      * physics-controlled walking and jumping:
      */
     private void setUpKeys() {
+    
         inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_LEFT));
         inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_RIGHT));
         inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_UP));
         inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_DOWN));
         inputManager.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
-        inputManager.addMapping("addObject", new KeyTrigger(KeyInput.KEY_X));
-
+        inputManager.addMapping("addObject", new KeyTrigger(KeyInput.KEY_A));
+        
+      //  inputManager.deleteTrigger("toggleRotate", new MouseButtonTrigger(0));
+        
+    
         inputManager.addMapping("LClick", new MouseButtonTrigger(0));         // Left-button click
         inputManager.addMapping("RClick", new MouseButtonTrigger(1));         // Right-button click
         inputManager.addListener(gameListener, "Left");
@@ -530,7 +549,7 @@ private static final float INCLINAISON = FastMath.HALF_PI;
                 assetManager, inputManager, audioRenderer, guiViewPort);
         Nifty nifty = niftyDisplay.getNifty();
         guiViewPort.addProcessor(niftyDisplay);
-        nifty.fromXml("Interface/int.xml", "start");
+        nifty.fromXml("Interface/MainInterface.xml", "start");
         
     }
 

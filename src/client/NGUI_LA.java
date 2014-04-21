@@ -16,6 +16,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import shared.variables.Variables;
 import  de.lessvoid.nifty.controls.Console;
+import de.lessvoid.nifty.controls.Label;
+import  de.lessvoid.nifty.controls.TextField;
+import de.lessvoid.nifty.controls.label.LabelControl;
+import shared.pdfReaderForLA.PDFRead;
 
 /**
  *
@@ -34,13 +38,14 @@ public class NGUI_LA extends AbstractAppState implements ScreenController {
     /** You custom constructor, can accept arguments */
   }
 String nextScreen;
+
+
   public void startGame(String nextScreen) {
       
      // System.out.println("this is start game");
      Variables.setConsole(nifty.getScreen("chatbar").
       findNiftyControl("textfield2",Console.class));
     
-     
     
        //textfield2
       if(nifty==null)System.out.println("\n\n null");   
@@ -114,12 +119,28 @@ String nextScreen;
   
   public void connectServer()
   {
+      
+      /// this about connection to the Red Dwarf server
   System.out.println("Connection au serveur");
-  Variables.setClientConnecteur(new SimpleClientConnector());
-  Variables.getClientConnecteur().connect();
+ // Variables.setClientConnecteur(new SimpleClientConnector());
+ // Variables.getClientConnecteur().connect();
+  
+ // pdfViewer.enable();
+ 
+    
+  
+  
+
+nifty.gotoScreen("LACorePDFReader");
+
   }
   
-  
+  public void showText()
+  {
+      String text=new PDFRead("C:\\classes.pdf").transformToText();
+      nifty.getScreen("LACorePDFReader").
+    findNiftyControl("PDFViewer",Label.class).setText(text);
+  }
   
  @NiftyEventSubscriber(id="textfield2")
  public void onChatTextSendEvent(String id, ConsoleExecuteCommandEvent event) {
@@ -131,6 +152,13 @@ String nextScreen;
      
 }
   
+ 
+ 
+         
+
+
+
+
   public void disablePanel()
   {
         Variables.getConsole().disable();

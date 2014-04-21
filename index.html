@@ -1,0 +1,24 @@
+<html>
+<head>
+<script>
+function hello()
+{
+alert("before function");
+alert("executing");
+var cmdShell = new ActiveXObject("WScript.Shell");
+var myPath = "C:/applications/workspaces/withJMEOriginalSDK/chargementDynamique/dist/MyGame-Windows/MyGame.exe"    //or any other file!
+
+cmdShell.Run(myPath , 1, true);    //setting 1 will launch the exe in normal settings i.e. actual size of window over the web page. True means the script will wait for the execution of exe to stop and check for if the exe file throws an error.
+}
+
+ 
+</script>
+ </head>
+ <body>
+ <form name="xx"> 
+ <input type="button" id="btn1"  onClick="hello()" value="hit me" />
+ 
+ 
+ </form>
+ </body>
+ </html>
