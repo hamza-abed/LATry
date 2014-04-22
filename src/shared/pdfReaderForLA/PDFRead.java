@@ -36,12 +36,15 @@ public class PDFRead {
     String fileName = path;
     File file = new File(fileName);
     try {
+       
         parser = new PDFParser(new FileInputStream(file));
         parser.parse();
         cosDoc = parser.getDocument();
         pdfStripper = new PDFTextStripper();
         pdDoc = new PDDocument(cosDoc);
         parsedText = pdfStripper.getText(pdDoc);
+        parser.clearResources();
+        
         //System.out.println(parsedText);
         //System.out.println(parsedText.replaceAll("[^A-Za-z0-9. ]+", ""));
     } catch (Exception e) {

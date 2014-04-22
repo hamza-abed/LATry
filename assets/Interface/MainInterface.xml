@@ -38,22 +38,36 @@
 	          <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" inherit="true"/>
 	          <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" inherit="true"/>
 	   </effect>
-        <control font="aurulent-sans-16.fnt" height="46px" id="label0" name="label" text="This is a serious learning adventure game" width="100%" x="0px" y="35"/>
-        <control childLayout="center" height="33px" id="button0" label="Continue" name="button" x="30%" y="101">
+        <control font="Interface/Fonts/Mangal.fnt" height="46px" id="label0" name="label" text="Learning Adventure" width="100%" x="0px" y="5%"/>
+        
+        <!--
+        A FORM FOR CONNECTION
+        -->
+        <!-- LOGIN -->
+        <control font="aurulent-sans-16.fnt" height="50px" id="label0" name="label" text="Utilisateur" width="100px" x="15%" y="23%"/>
+        <control id="txtf_login" name="textfield" width="50%" x="35%" y="30%"/>
+      
+        <!-- PASSWORD -->
+        <control font="aurulent-sans-16.fnt" height="50px" id="label3" name="label" text="Mot de Passe" width="100px" x="15%" y="38%"/>
+        <control id="txtf_pass" name="textfield" width="50%" x="35%" y="45%" passwordChar="*"/>
+        
+        <!-- SERVER SELECTION -->
+        <control font="aurulent-sans-16.fnt" height="50px" id="label31" name="label" text="Serveur" width="100px" x="15%" y="52%"/>
+        <control type="dropDown" id="myListBox"  selectionMode="Single" x="35%" y="60%" width="50%"/>
+        <!--
+        END OF THE FORM
+        -->
+        <control childLayout="center" height="33px" id="button0" label="Continue" name="button" x="30%" y="80%">
             <interact onClick="startGame(hud)" />
         </control>
        
-        <control childLayout="center" height="32px" id="button1" label="Quit" name="button" x="50%" y="101">
+        <control childLayout="center" height="32px" id="button1" label="Quit" name="button" x="50%" y="80%">
             <interact onClick="quitGame()"/>
         </control>
       </panel>
     </layer>
   </screen>
-  <screen id="hud" controller="client.NGUI_LA">
-    <layer childLayout="absolute" id="layer2">
-      <image filename="Interface/imgs/img1.png" height="100%" id="image0" width="100%" x="0" y="0"/>
-    </layer>
-</screen>
+  
 
 <screen id="chatbar" controller="client.NGUI_LA">
     <layer childLayout="absolute" id="layer1"  >
@@ -123,31 +137,34 @@
  <screen id="LACorePDFReader" controller="client.NGUI_LA">
      <layer childLayout="absolute" id="layer3">
         
- <panel childLayout="vertical" align="center" valign="center" width="50%" x="25%" y="25%" height="50%" padding="10" backgroundImage="Interface/imgs/bgp.png">
+ <panel childLayout="vertical" align="center" valign="center" width="50%" x="25%" y="25%" height="50%" padding="10" >
     
-     
+     <control id="input" name="textField" />
      <control height="30px" id="connect" label="show" name="button" x="0px" y="0px" focusable="false">
             <interact onClick="showText()"/>
-       </control> 
+     </control> 
       <effect>
 	          <onStartScreen name="move" timeType="exp" factor="3.5" direction="left" mode="in" length="500" inherit="true"/>
 	          <onHide name="move" timeType="exp" factor="3.5" direction="left" mode="out" length="370" inherit="true"/>
       </effect>
         
-      <control id="scrollbarPanelId" name="scrollPanel" horizontal="true" height="100%" width="100%" wrap="true">
+      <control id="scrollbarPanelId" name="scrollText" horizontal="true" height="100%" width="100%" wrap="true"> 
           <!-- first child is the content, the area to scroll around -->
           
-      <panel childLayout="vertical" height="1000%" id="panel2" style="nifty-panel-simple" width="100%" x="0px" y="0px" backgroundImage="Interface/imgs/white.png">
+     
 
          
            
-      <control font="Interface/Fonts/Orbitron.fnt" height="100%" id="PDFViewer" name="label" 
+      <control id="PDFViewer" name="label"  font="Interface/Fonts/Mangal.fnt" height="100%" 
                  text="ss" width="100%" x="14px" y="20" wrap="true"/>
           
          
+       
         
-      </panel>
-      </control>
+   <!--     <text text="hello" id="PDFViewer"
+font="Interface/Fonts/Mangal.fnt" width="80%" height="100%" wrap="true" /> -->
+      
+     </control> 
       
  </panel>
          

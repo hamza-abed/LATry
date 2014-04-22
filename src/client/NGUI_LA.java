@@ -17,7 +17,9 @@ import java.util.logging.Logger;
 import shared.variables.Variables;
 import  de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.Label;
+
 import  de.lessvoid.nifty.controls.TextField;
+import  de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.label.LabelControl;
 import shared.pdfReaderForLA.PDFRead;
 
@@ -42,7 +44,7 @@ String nextScreen;
 
   public void startGame(String nextScreen) {
       
-     // System.out.println("this is start game");
+      System.out.println("this is start game");
      Variables.setConsole(nifty.getScreen("chatbar").
       findNiftyControl("textfield2",Console.class));
     
@@ -88,11 +90,30 @@ String nextScreen;
 
   /** Nifty GUI ScreenControl methods */
   public void bind(Nifty nifty, Screen screen) {
+      
+     
     this.nifty = nifty;
     this.screen = screen;
+   
   }
-
+ public void fillListBox() {
+    DropDown dropDown = nifty.getCurrentScreen().findNiftyControl("myListBox", DropDown.class);
+    if(dropDown!=null)
+    {
+    dropDown.addItem("a");
+    dropDown.addItem("b");
+    dropDown.addItem("c");
+    }
+    else System.out.println("it s null");
+  }
   public void onStartScreen() {
+      if(nifty.getCurrentScreen().getScreenId().equals("start"))
+      {
+         // nifty.getCurrentScreen().findNiftyControl("txtf_login", TextField.class).setText("hello");
+          System.out.println("this is start ");
+          fillListBox();
+      }
+      
   }
 
   public void onEndScreen() {
@@ -101,19 +122,17 @@ String nextScreen;
   /** jME3 AppState methods */
   @Override
   public void initialize(AppStateManager stateManager, Application app) {
-    this.app = app;
+  //  this.app = app;
+      super.initialize(stateManager, app);
   }
 
  
   
+  
+  
   @Override
   public void update(float tpf) {
-    if (screen.getScreenId().equals("hud")) {
-      Element niftyElement = nifty.getCurrentScreen().findElementByName("score");
-      // Display the time-per-frame -- this field could also display the score etc...
-      niftyElement.getRenderer(TextRenderer.class).setText((int)(tpf*100000) + ""); 
-     
-    }
+   
   System.out.println("this is nifty update");
   }
   
@@ -126,11 +145,6 @@ String nextScreen;
  // Variables.getClientConnecteur().connect();
   
  // pdfViewer.enable();
- 
-    
-  
-  
-
 nifty.gotoScreen("LACorePDFReader");
 
   }
@@ -139,7 +153,8 @@ nifty.gotoScreen("LACorePDFReader");
   {
       String text=new PDFRead("C:\\classes.pdf").transformToText();
       nifty.getScreen("LACorePDFReader").
-    findNiftyControl("PDFViewer",Label.class).setText(text);
+      //findElementByName("PDFViewer").getRenderer(TextRenderer.class).setText(text);
+    findNiftyControl("PDFViewer",Label.class).setText("hello");
   }
   
  @NiftyEventSubscriber(id="textfield2")

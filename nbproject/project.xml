@@ -10,9 +10,6 @@
                 <dependency dependsOn="jnlp" target="-post-jar"/>
                 <dependency dependsOn="jnlp" target="jar"/>
             </extension>
-            <extension file="linuxlauncher-impl.xml" id="linuxlauncher">
-                <dependency dependsOn="-linux-launcher" target="jar"/>
-            </extension>
         </buildExtensions>
         <data xmlns="http://www.netbeans.org/ns/j2se-project/3">
             <name>LA-Client</name>
