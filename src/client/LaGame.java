@@ -410,6 +410,7 @@ inputManager.setCursorVisible( true );
     
     private void initSceneGame() {
           //  Variables.getConsole().output("initSceneGame()"); 
+        boussole=new Boussole();
         rootNode.detachAllChildren();
         sceneModel1.updateGeometricState();
         //rootNode.updateGeometricState();
@@ -544,7 +545,7 @@ inputManager.setCursorVisible( true );
 
         Variables.setLaGame(this);
         Variables.setMoveCursor(new MoveCursor());
-        boussole=new Boussole();
+        
         NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(
                 assetManager, inputManager, audioRenderer, guiViewPort);
         Nifty nifty = niftyDisplay.getNifty();

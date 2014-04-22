@@ -89,11 +89,7 @@
 <control id="edit_tabs" name="tabGroup" width="100%" focusable="false"> 
    
     <control id="tab_local" name="tab" caption="Local" focusable="false">
-        <text text="Tab Locale" font="Interface/Fonts/Mangal.fnt" />
-    </control>
-
-    <control id="tab_groupe" name="tab" caption="Groupe" focusable="false">
-       <panel childLayout="vertical" height="100%" id="panel_grp" style="nifty-panel-simple" width="100%" x="0%" y="0%" backgroundImage="Interface/imgs/bgp.png">
+         <panel childLayout="vertical" height="100%" id="panel_grp" style="nifty-panel-simple" width="100%" x="0%" y="0%" backgroundImage="Interface/imgs/bgp.png">
         <control height="75%" lines="10" id="textfield2" name="nifty-console" width="100%" x="0" y="0px" focusable="false">
           
         </control>        
@@ -101,6 +97,10 @@
             <interact onClick="connectServer()"/>
         </control>
        </panel>
+    </control>
+
+    <control id="tab_groupe" name="tab" caption="Groupe" focusable="false">
+      
     </control>
     <control id="tab_guide" name="tab" caption="Guide" focusable="false" />
     <control id="tab_monde" name="tab" caption="Monde" focusable="false" />

@@ -5,6 +5,7 @@
 package client.network;
 
 import client.LaTraces;
+import client.RessourceManager;
 import client.chat.ChatSystem;
 import client.editor.ServerEditor;
 import client.interfaces.network.Sharable;
@@ -40,7 +41,15 @@ public class SimpleClientConnector implements SimpleClientListener{
     public SimpleClientConnector()
     {
         Variables.setClientConnecteur(this);
+        this.login=login; this.pass=pass;
+        
+        this.ressources = new RessourceManager();
+		
+		// récupération des propriétés de configuration
+        this.props = ressources.getProps();		
     }
+    
+    private RessourceManager ressources;
     
     private Properties props;
 
@@ -273,24 +282,27 @@ public class SimpleClientConnector implements SimpleClientListener{
     public void setConnectionStatus(boolean ConnectionStatus) {
         this.Connected = ConnectionStatus;
     }
-			
+	
 				
 			//	private String rmi;
 				//private String ressourceHttp;
                                 private boolean Connected=false;
-			public void connect() {
-				Properties properties = new Properties();
-				properties.put("host", System.getProperty("server.0.host", "127.0.0.1"));
+			        public void connect(String login, String pass) {
+                                    this.login=login;
+                                    this.pass=pass;
+                                    System.out.println("this is connect login="+login+"  pass="+pass);
+				Properties properties = new Properties(); //http://134.214.147.28/
+                                properties.put("host", System.getProperty("server.0.host", "134.214.147.28"));
+				//properties.put("host", System.getProperty("server.0.host", "127.0.0.1"));
 				 setStatus("first prop setted");
-				properties.put("port", System.getProperty("server.0.port", "10510"));
+				properties.put("port", System.getProperty("server.0.port", "10513"));
 				setStatus("second prop setted");
 			//	rmi = props.getProperty("server."+num+".rmi", null);
 				//ressourceHttp= props.getProperty("server."+num+".http.resources", null);
 				
 			//	initRessourcesHttp();
 
-				this.login = "demo";
-				this.pass = "demo";
+				
 //				this.rmiEditorAdress = props.getProperty("server."+num+".editorhost", "rmi://127.0.0.1/");
 //				TODO
 				this.simpleClient = new SimpleClient(this);
@@ -404,7 +416,7 @@ public class SimpleClientConnector implements SimpleClientListener{
     public void updateFromServer(Sharable sharable) {
         //logger.info("Update de " + sharable.getKey());
         if(sharable==null) System.out.println("sharable is null");
-        if(!Connected) connect();
+        if(!Connected) connect(login,pass);
        // Variables.getConsole().output("Update de " + sharable.getKey());
         setStatus("Update de " + sharable.getKey());
         getChatSystem().debug(

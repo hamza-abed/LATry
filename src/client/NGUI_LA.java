@@ -22,6 +22,7 @@ import  de.lessvoid.nifty.controls.TextField;
 import  de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.label.LabelControl;
 import shared.pdfReaderForLA.PDFRead;
+import shared.utils.PropertyReader;
 
 /**
  *
@@ -64,8 +65,9 @@ String nextScreen;
      //System.out.println("class = ");
        nifty.gotoScreen("chatbar");
    
-   
+   connectServer();
    Variables.getLaGame().initGameWold();
+   
    }
 
   
@@ -97,12 +99,14 @@ String nextScreen;
    
   }
  public void fillListBox() {
+    
+    
     DropDown dropDown = nifty.getCurrentScreen().findNiftyControl("myListBox", DropDown.class);
     if(dropDown!=null)
     {
-    dropDown.addItem("a");
-    dropDown.addItem("b");
-    dropDown.addItem("c");
+    client=new SimpleClientConnector();
+    for (int i=0;i<PropertyReader.getInt(client.getProps(),"server.count", 1);i++) 
+     dropDown.addItem(client.getProps().getProperty("server."+i+".name", "Server inconnu : "+i));
     }
     else System.out.println("it s null");
   }
@@ -135,17 +139,20 @@ String nextScreen;
    
   System.out.println("this is nifty update");
   }
-  
+  SimpleClientConnector client;
   public void connectServer()
   {
       
       /// this about connection to the Red Dwarf server
-  System.out.println("Connection au serveur");
- // Variables.setClientConnecteur(new SimpleClientConnector());
- // Variables.getClientConnecteur().connect();
+      
+  String login=nifty.getCurrentScreen().findNiftyControl("txtf_login", TextField.class).getText();
+  String pass=nifty.getCurrentScreen().findNiftyControl("txtf_pass", TextField.class).getText();
+  System.out.println("Connection au serveur  -- login="+login+"  pass="+pass);
+  
+  client.connect(login, pass);
   
  // pdfViewer.enable();
-nifty.gotoScreen("LACorePDFReader");
+ //nifty.gotoScreen("LACorePDFReader");
 
   }
   
