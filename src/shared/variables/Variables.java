@@ -16,7 +16,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import de.lessvoid.nifty.controls.Console;
-
+import de.lessvoid.nifty.controls.Label;
 /**
  *
  * @author admin
@@ -33,7 +33,17 @@ public class Variables {
    
    
   
-    
+    private static Label connectionStatusLabel;
+
+    public static Label getConnectionStatusLabel() {
+        return connectionStatusLabel;
+    }
+
+    public static void setConnectionStatusLabel(Label connectionStatusLabel) {
+        Variables.connectionStatusLabel = connectionStatusLabel;
+    }
+
+   
     private static LaGame laGame;
     public static MoveCursor moveCursor;
     private static World world;

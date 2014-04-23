@@ -15,6 +15,7 @@ import com.sun.sgs.client.ClientChannel;
 import com.sun.sgs.client.ClientChannelListener;
 import com.sun.sgs.client.simple.SimpleClient;
 import com.sun.sgs.client.simple.SimpleClientListener;
+import de.lessvoid.nifty.tools.Color;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.PasswordAuthentication;
@@ -27,6 +28,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 import shared.constants.PckCode;
 import shared.pck.Pck;
 import shared.variables.Variables;
@@ -52,7 +54,7 @@ public class SimpleClientConnector implements SimpleClientListener{
     private RessourceManager ressources;
     
     private Properties props;
-
+    private static final Logger logger = Logger.getLogger("RessourceManager");
     public Properties getProps() {
         return props;
     }
@@ -112,6 +114,7 @@ public class SimpleClientConnector implements SimpleClientListener{
       
       
       try {
+          logger.info("---------> methode login trying to login");
     	  setStatus("try to login");
           Properties connectProps = new Properties();
           connectProps.put("host", host);
@@ -192,13 +195,14 @@ public class SimpleClientConnector implements SimpleClientListener{
         	     * Enables input and updates the status message on successful login.
         	     */
         	    public void loggedIn() {
-        	       
+        	      
+                        Connected=true;
         	     // Variables.getConsole().output("Logged in");
                         setStatus("Logged in");
         	      
         	        getPingPongTask().start();
         	   //   Variables.getConsole().output("ping pong task has just started !");
-                      setStatus("ping pong task has just started !");
+                        setStatus("ping pong task has just started !");
         	    }
 
         	    /**
@@ -207,6 +211,8 @@ public class SimpleClientConnector implements SimpleClientListener{
         	     * Updates the status message on failed login.
         	     */
         	    public void loginFailed(String reason) {
+                        
+                        logger.info("Login failed: " + reason);
         	        setStatus("Login failed: " + reason);
         	    }
 
@@ -216,8 +222,10 @@ public class SimpleClientConnector implements SimpleClientListener{
         	     * Disables input and updates the status message on disconnect.
         	     */
         	    public void disconnected(boolean graceful, String reason) {
+        	      logger.info("->Disconnected: " + reason);
         	      
-        	       Variables.getConsole().output("Disconnected: " + reason);
+                       Variables.getConnectionStatusLabel().setText(reason);
+                        Variables.getConnectionStatusLabel().setColor(new Color(1, 0, 0, 1));
         	    }
         	    /**
         	     * {@inheritDoc}
@@ -274,7 +282,8 @@ public class SimpleClientConnector implements SimpleClientListener{
 					}
 				}
 
-    //	private SimpleClient client;
+    
+    private boolean Connected=false;
     public boolean isConnected() {
         return Connected;
     }
@@ -286,16 +295,17 @@ public class SimpleClientConnector implements SimpleClientListener{
 				
 			//	private String rmi;
 				//private String ressourceHttp;
-                                private boolean Connected=false;
-			        public void connect(String login, String pass) {
+                                
+			        public void connect(String login, String pass, int num) {
                                     this.login=login;
                                     this.pass=pass;
                                     System.out.println("this is connect login="+login+"  pass="+pass);
 				Properties properties = new Properties(); //http://134.214.147.28/
-                                properties.put("host", System.getProperty("server.0.host", "134.214.147.28"));
+                                
+                                properties.put("host", System.getProperty("server."+num+".host", getProps().getProperty("server."+num+".host")));
 				//properties.put("host", System.getProperty("server.0.host", "127.0.0.1"));
 				 setStatus("first prop setted");
-				properties.put("port", System.getProperty("server.0.port", "10513"));
+				properties.put("port", System.getProperty("server."+num+".port", getProps().getProperty("server."+num+".port")));
 				setStatus("second prop setted");
 			//	rmi = props.getProperty("server."+num+".rmi", null);
 				//ressourceHttp= props.getProperty("server."+num+".http.resources", null);
@@ -307,10 +317,11 @@ public class SimpleClientConnector implements SimpleClientListener{
 //				TODO
 				this.simpleClient = new SimpleClient(this);
 				try {
+                                    Variables.getConnectionStatusLabel().setText("Demande de connection au serveur");
+                                    Variables.getConnectionStatusLabel().setColor(new Color(0.3f, 0.7f, 0, 1));
 					 setStatus("connection au server");
-					
 					 simpleClient.login(properties);
-                                         Connected=true;
+                                        
 				} catch (IOException e) {
 					setStatus("warning : IOException : Probablement un probleme avec la connexion au serveur.");
 				} catch (UnresolvedAddressException e) {
@@ -372,7 +383,7 @@ public class SimpleClientConnector implements SimpleClientListener{
 			 * 
 			 * @return
 			 */
-			/**
+			/**loggedIn
 			 * service de programmation de task
 			 */
 			private ScheduledThreadPoolExecutor scheduledExecutor;
@@ -416,8 +427,7 @@ public class SimpleClientConnector implements SimpleClientListener{
     public void updateFromServer(Sharable sharable) {
         //logger.info("Update de " + sharable.getKey());
         if(sharable==null) System.out.println("sharable is null");
-        if(!Connected) connect(login,pass);
-       // Variables.getConsole().output("Update de " + sharable.getKey());
+        
         setStatus("Update de " + sharable.getKey());
         getChatSystem().debug(
                 "? " + sharable.getKey() + " (" + sharable.getVersionCode()

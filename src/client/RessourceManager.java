@@ -114,7 +114,7 @@ public class RessourceManager {
 	 */
 	public void setProps() {
 		
-		logger.fine("*** Chargement de la configuration client ***");
+		logger.info("*** Chargement de la configuration client ***");
 		try {
 			
 			this.props = new Properties(); 
@@ -283,13 +283,13 @@ public class RessourceManager {
 		//							get(ClientResponse.class);
 			
 		ClientResponse r = service.accept(MediaType.TEXT_PLAIN).get(ClientResponse.class);
-			//System.out.println(r.getEntity(String.class));
+	        //System.out.println(r.getEntity(String.class));
 			
 		logger.info(" --> lancement requete ressource REST : OK");	
 			
 			
 		String result = r.getEntity(String.class);
-		//	logger.info("  ---> resulta requete "+result);
+		//logger.info("  ---> resulta requete "+result);
 			
 			try {
 				Reader myprop = new StringReader(result);

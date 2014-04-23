@@ -45,16 +45,32 @@ String nextScreen;
 
   public void startGame(String nextScreen) {
       
+      /*
+       * Verification de la connection
+       */
+      if(Variables.getConnectionStatusLabel()==null)
+          Variables.setConnectionStatusLabel(nifty.getScreen("start").findNiftyControl("connectionStatus",Label.class));
+      
+       connectServer();
+   if(!client.isConnected())
+   
+   { 
+       System.out.println("Impossible de se connecter!!");
+   }
+   else
+   {Variables.getLaGame().initGameWold();
+   
+      
       System.out.println("this is start game");
-     Variables.setConsole(nifty.getScreen("chatbar").
+      Variables.setConsole(nifty.getScreen("chatbar").
       findNiftyControl("textfield2",Console.class));
     
     
        //textfield2
       if(nifty==null)System.out.println("\n\n null");   
       
-  //  nifty.gotoScreen(nextScreen);  // switch to another screen
-   this.nextScreen=nextScreen;
+    //  nifty.gotoScreen(nextScreen);  // switch to another screen
+      this.nextScreen=nextScreen;
   // displaySplashScreen();
    //nifty.removeScreen(nextScreen);
   
@@ -64,23 +80,13 @@ String nextScreen;
       // m.saySomething();
      //System.out.println("class = ");
        nifty.gotoScreen("chatbar");
-   
-   connectServer();
-   Variables.getLaGame().initGameWold();
+   }
+  
    
    }
 
   
-  public void displaySplashScreen()
-  {
-       try {
-          Thread.sleep(3000);
-         
-      } catch (InterruptedException ex) {
-          Logger.getLogger(NGUI_LA.class.getName()).log(Level.SEVERE, null, ex);
-      }
-     nifty.removeScreen(nextScreen);
-  }
+ 
   
   public void quitGame() {
     app.stop();
@@ -98,19 +104,30 @@ String nextScreen;
     this.screen = screen;
    
   }
+  
+  
+  /*
+   * Cette méthode remplit la listBox pour 
+   * la sélection d'un serveur
+   */
  public void fillListBox() {
     
     
-    DropDown dropDown = nifty.getCurrentScreen().findNiftyControl("myListBox", DropDown.class);
+    DropDown dropDown = nifty.getCurrentScreen().findNiftyControl("selectServer", DropDown.class);
     if(dropDown!=null)
-    {
+    {/*
+     * Une fois la classe SimpleClientConnector est instancié 
+     * elle est automatiquement affecté dans la calsse statique Variables
+     */
     client=new SimpleClientConnector();
     for (int i=0;i<PropertyReader.getInt(client.getProps(),"server.count", 1);i++) 
      dropDown.addItem(client.getProps().getProperty("server."+i+".name", "Server inconnu : "+i));
     }
     else System.out.println("it s null");
   }
-  public void onStartScreen() {
+  
+ 
+ public void onStartScreen() {
       if(nifty.getCurrentScreen().getScreenId().equals("start"))
       {
          // nifty.getCurrentScreen().findNiftyControl("txtf_login", TextField.class).setText("hello");
@@ -139,7 +156,9 @@ String nextScreen;
    
   System.out.println("this is nifty update");
   }
+  
   SimpleClientConnector client;
+   
   public void connectServer()
   {
       
@@ -147,9 +166,14 @@ String nextScreen;
       
   String login=nifty.getCurrentScreen().findNiftyControl("txtf_login", TextField.class).getText();
   String pass=nifty.getCurrentScreen().findNiftyControl("txtf_pass", TextField.class).getText();
-  System.out.println("Connection au serveur  -- login="+login+"  pass="+pass);
   
-  client.connect(login, pass);
+  
+  int index=nifty.getCurrentScreen().findNiftyControl("selectServer", DropDown.class).getSelectedIndex();
+  System.out.println("Connection au serveur  -- login="+login+"  pass="+pass+" index="+index);
+  
+  if(index==-1)index=0; 
+  
+  client.connect(login, pass,index);
   
  // pdfViewer.enable();
  //nifty.gotoScreen("LACorePDFReader");

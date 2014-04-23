@@ -53,7 +53,10 @@
         
         <!-- SERVER SELECTION -->
         <control font="aurulent-sans-16.fnt" height="50px" id="label31" name="label" text="Serveur" width="100px" x="15%" y="52%"/>
-        <control type="dropDown" id="myListBox"  selectionMode="Single" x="35%" y="60%" width="50%"/>
+        <control type="dropDown" id="selectServer"  selectionMode="Single" x="35%" y="60%" width="50%"/>
+        <!-- A SIMPLE FIELD FOR CONNECTION STATUS -->
+        <control font="aurulent-sans-16.fnt" height="50px" id="connectionStatus" name="label" text="non connecté" width="100%" x="0%" y="63%"/>
+        
         <!--
         END OF THE FORM
         -->
