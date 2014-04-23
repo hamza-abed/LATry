@@ -1,8 +1,48 @@
+/**
+ * Copyright 2010 http://learning-adventure.fr
+ * Tous droits réservés
+ * 
+ * 
+ * ----------------------------------------------------------------------------
+ * Ce fichier fait partie de LA-Client.
+ *
+ * LA-Client est un logiciel libre ; vous pouvez le redistribuer ou le modifier 
+ * suivant les termes de la GNU General Public License telle que publiée par
+ * la Free Software Foundation ; soit la version 3 de la licence, soit 
+ * (à votre gré) toute version ultérieure.
+ * 
+ * LA-Client est distribué dans l'espoir qu'il sera utile, 
+ * mais SANS AUCUNE GARANTIE ; pas même la garantie implicite de 
+ * COMMERCIABILISABILITÉ ni d'ADÉQUATION à UN OBJECTIF PARTICULIER. 
+ * Consultez la GNU General Public License pour plus de détails.
+ * 
+ * Vous devez avoir reçu une copie de la GNU General Public License 
+ * en même temps que LA-Client ; si ce n'est pas le cas, 
+ * consultez <http://www.gnu.org/licenses>.
+ * ----------------------------------------------------------------------------
+ * This file is part of LA-Client.
+ *
+ * LA-Client is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LA-Client is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with LA-Client.  If not, see <http://www.gnu.org/licenses/>.
+ * ----------------------------------------------------------------------------
+ */
+
 package client;
 import client.network.SimpleClientConnector;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
+import com.sun.pdfview.PDFFile;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.ConsoleExecuteCommandEvent;
@@ -21,11 +61,21 @@ import de.lessvoid.nifty.controls.Label;
 import  de.lessvoid.nifty.controls.TextField;
 import  de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.label.LabelControl;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.RandomAccessFile;
+import java.net.URL;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import shared.pdfReaderForLA.PDFRead;
 import shared.utils.PropertyReader;
 
 /**
- *
+ * Cette classe se chage d'afficher l'interface graphique du jeu,
+ * faire une liaison forte entre le code java et l'interface GUI 
+ * en se basant esssentiellement sur les librairies de Nifty GUI
+ * 
+ * @author Hamza ABED 2014 hamza.abed.professionel@gmail.com
  */
 public class NGUI_LA extends AbstractAppState implements ScreenController {
 
@@ -58,28 +108,25 @@ String nextScreen;
        System.out.println("Impossible de se connecter!!");
    }
    else
-   {Variables.getLaGame().initGameWold();
-   
-      
+   {       
+        
       System.out.println("this is start game");
       Variables.setConsole(nifty.getScreen("chatbar").
       findNiftyControl("textfield2",Console.class));
     
     
        //textfield2
-      if(nifty==null)System.out.println("\n\n null");   
+      if(nifty==null)System.out.println("\n\n nifty =null");   
       
     //  nifty.gotoScreen(nextScreen);  // switch to another screen
       this.nextScreen=nextScreen;
   // displaySplashScreen();
    //nifty.removeScreen(nextScreen);
   
-       if(app==null) System.out.println("app= null");
-       LaGame m= Variables.getLaGame();
-       //m = th
-      // m.saySomething();
-     //System.out.println("class = ");
+       //if(app==null) System.out.println("app= null");
+      
        nifty.gotoScreen("chatbar");
+       Variables.getLaGame().initGameWold();
    }
   
    
@@ -175,6 +222,8 @@ String nextScreen;
   
   client.connect(login, pass,index);
   
+ 
+  
  // pdfViewer.enable();
  //nifty.gotoScreen("LACorePDFReader");
 
@@ -197,12 +246,6 @@ String nextScreen;
       Variables.getConsole().output(">J'ai recu sa", Color.BLACK);
      
 }
-  
- 
- 
-         
-
-
 
 
   public void disablePanel()
@@ -243,4 +286,57 @@ String nextScreen;
    // nifty.getClipboard().
       
   }
+  
+ /*
+  * Ceci pour ouvrir des liens sur
+  * un navigateur web
+  * (des videos)
+  */
+  
+  
+  public static void openWebpage(String urlString) {
+    try {
+        Desktop.getDesktop().browse(new URL(urlString).toURI());
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+  
+  
+        /*********                                                  **********
+         ***** Cette partie est conçus pour tester l'ouverture d'un pdf **********
+         *********                                                  **********
+        */
+  
+  
+  
+         
+         /**
+	 * Charge le fichier PDF, le télécharge s'il n'est pas en local
+	 */
+  private static final Logger logger = Logger.getLogger("NGUI_LA");
+  PDFFile pdffile;
+	private void openPDF(File f) {
+		//logger.entering(ViewerEngine.class.getName(), "openPDF");
+
+		if (pdffile == null)
+			try {
+				// load the pdf from a byte buffer
+				RandomAccessFile raf = new RandomAccessFile(f, "r");
+				logger.log(Level.INFO, "ouverture PDF{0}", f.getPath());
+				FileChannel channel = raf.getChannel();
+				ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0,
+						channel.size());
+				pdffile = new PDFFile(buf);
+				// ajout pp
+				raf.close();
+			} catch (Exception e) {
+				/*new PopupWindow("Visualisateur",
+						"Erreur lors de l'ouverture de " + f.getName(), "OK",
+						false, PopupIcon.warning); */
+			}
+
+			logger.exiting(NGUI_LA.class.getName(), "openPDF");
+	}
+  
 }

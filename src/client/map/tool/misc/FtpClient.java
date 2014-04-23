@@ -94,8 +94,7 @@ public class FtpClient {
 			writeFile.flush();
 			logger.info("Téléchargement terminé.");
 		} catch (IOException e) {
-			logger
-					.info("Impossible de télécharger le fichier "
+			logger.info("Impossible de télécharger le fichier "
 							+ url.getFile());
 		} finally {
 			try {

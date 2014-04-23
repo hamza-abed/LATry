@@ -4,6 +4,7 @@
  */
 package client.network;
 
+import client.HttpResourceLocator;
 import client.LaTraces;
 import client.RessourceManager;
 import client.chat.ChatSystem;
@@ -285,8 +286,25 @@ public class SimpleClientConnector implements SimpleClientListener{
     
     private boolean Connected=false;
     public boolean isConnected() {
-        return Connected;
+        //return Connected;
+        return true;
+        /*
+         * return true just pour le test de l'accées
+         */
     }
+    
+    
+    /**
+	 * initialise les ressources Http pour le serveur sélectionné
+	 * @author philippe pernelle
+	 */
+	private void initRessourcesHttp() {
+		//if (this.ressourceHttp !=null) 
+		//ResourceLocatorTool.addResourceLocator(HttpResourceLocator.RESOURCE, new HttpResourceLocator(this.ressourceHttp));
+		/*
+                 * Le RessourceLocatorToll n'existe plus en JME3
+                 */
+	}
 
     public void setConnectionStatus(boolean ConnectionStatus) {
         this.Connected = ConnectionStatus;
@@ -294,7 +312,7 @@ public class SimpleClientConnector implements SimpleClientListener{
 	
 				
 			//	private String rmi;
-				//private String ressourceHttp;
+			//	private String ressourceHttp;
                                 
 			        public void connect(String login, String pass, int num) {
                                     this.login=login;
@@ -308,7 +326,7 @@ public class SimpleClientConnector implements SimpleClientListener{
 				properties.put("port", System.getProperty("server."+num+".port", getProps().getProperty("server."+num+".port")));
 				setStatus("second prop setted");
 			//	rmi = props.getProperty("server."+num+".rmi", null);
-				//ressourceHttp= props.getProperty("server."+num+".http.resources", null);
+			//	ressourceHttp= props.getProperty("server."+num+".http.resources", null);
 				
 			//	initRessourcesHttp();
 
