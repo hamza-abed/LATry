@@ -102,13 +102,24 @@ String nextScreen;
           Variables.setConnectionStatusLabel(nifty.getScreen("start").findNiftyControl("connectionStatus",Label.class));
       
        connectServer();
+       
+ while(client.isConnecting())
+{
+          try {
+              Thread.sleep(1000);
+          } catch (InterruptedException ex) {
+              Logger.getLogger(NGUI_LA.class.getName()).log(Level.SEVERE, null, ex);
+          }
+}
+      
    if(!client.isConnected())
    
    { 
        System.out.println("Impossible de se connecter!!");
    }
    else
-   {       
+   {   
+        
         
       System.out.println("this is start game");
       Variables.setConsole(nifty.getScreen("chatbar").
@@ -219,13 +230,9 @@ String nextScreen;
   System.out.println("Connection au serveur  -- login="+login+"  pass="+pass+" index="+index);
   
   if(index==-1)index=0; 
-  
-  client.connect(login, pass,index);
-  
- 
-  
- // pdfViewer.enable();
- //nifty.gotoScreen("LACorePDFReader");
+     client.connect(login, pass,index);
+      // pdfViewer.enable();
+      //nifty.gotoScreen("LACorePDFReader");
 
   }
   

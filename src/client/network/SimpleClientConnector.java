@@ -52,6 +52,11 @@ public class SimpleClientConnector implements SimpleClientListener{
         this.props = ressources.getProps();		
     }
     
+    private boolean connecting=false;
+
+   
+    
+    
     private RessourceManager ressources;
     
     private Properties props;
@@ -196,7 +201,7 @@ public class SimpleClientConnector implements SimpleClientListener{
         	     * Enables input and updates the status message on successful login.
         	     */
         	    public void loggedIn() {
-        	      
+        	      connecting=false;
                         Connected=true;
         	     // Variables.getConsole().output("Logged in");
                         setStatus("Logged in");
@@ -212,9 +217,11 @@ public class SimpleClientConnector implements SimpleClientListener{
         	     * Updates the status message on failed login.
         	     */
         	    public void loginFailed(String reason) {
-                        
+                        connecting=false;
                         logger.info("Login failed: " + reason);
         	        setStatus("Login failed: " + reason);
+                        Variables.getConnectionStatusLabel().setText("Login failed: " + reason);
+                        Variables.getConnectionStatusLabel().setColor(new Color(1, 0f, 0, 1));
         	    }
 
         	    /**
@@ -223,7 +230,8 @@ public class SimpleClientConnector implements SimpleClientListener{
         	     * Disables input and updates the status message on disconnect.
         	     */
         	    public void disconnected(boolean graceful, String reason) {
-        	      logger.info("->Disconnected: " + reason);
+        	      connecting=false;
+                        logger.info("->Disconnected: " + reason);
         	      
                        Variables.getConnectionStatusLabel().setText(reason);
                         Variables.getConnectionStatusLabel().setColor(new Color(1, 0, 0, 1));
@@ -286,8 +294,8 @@ public class SimpleClientConnector implements SimpleClientListener{
     
     private boolean Connected=false;
     public boolean isConnected() {
-        //return Connected;
-        return true;
+        return Connected;
+        //return true;
         /*
          * return true just pour le test de l'accées
          */
@@ -315,6 +323,9 @@ public class SimpleClientConnector implements SimpleClientListener{
 			//	private String ressourceHttp;
                                 
 			        public void connect(String login, String pass, int num) {
+                                    
+                                    
+                                    this.connecting=true;
                                     this.login=login;
                                     this.pass=pass;
                                     System.out.println("this is connect login="+login+"  pass="+pass);
@@ -342,8 +353,10 @@ public class SimpleClientConnector implements SimpleClientListener{
                                         
 				} catch (IOException e) {
 					setStatus("warning : IOException : Probablement un probleme avec la connexion au serveur.");
+                                        connecting=false;
 				} catch (UnresolvedAddressException e) {
 					setStatus(e.getClass().getSimpleName()+" : Probablement un probleme avec la résolution du DNS ou de Routing.");
+                                        connecting=false;
 				}
 			}
 			
@@ -593,6 +606,16 @@ public class SimpleClientConnector implements SimpleClientListener{
         Variables.getClientConnecteur().send(pck);
     }
 			 
-			
+	
+     public boolean isConnecting() {
+        return connecting;
+    }
+
+    public void setConnecting(boolean connecting) {
+        this.connecting = connecting;
+    }
+    
+    
+    
         	}
 
