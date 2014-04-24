@@ -49,7 +49,8 @@ public class SimpleClientConnector implements SimpleClientListener{
         this.ressources = new RessourceManager();
 		
 		// récupération des propriétés de configuration
-        this.props = ressources.getProps();		
+        Variables.setProps(ressources.getProps());
+        this.props = Variables.getProps();		
     }
     
     private boolean connecting=false;
@@ -201,7 +202,7 @@ public class SimpleClientConnector implements SimpleClientListener{
         	     * Enables input and updates the status message on successful login.
         	     */
         	    public void loggedIn() {
-        	      connecting=false;
+        	        connecting=false;
                         Connected=true;
         	     // Variables.getConsole().output("Logged in");
                         setStatus("Logged in");
@@ -328,6 +329,8 @@ public class SimpleClientConnector implements SimpleClientListener{
                                     this.connecting=true;
                                     this.login=login;
                                     this.pass=pass;
+                                    
+                                   
                                     System.out.println("this is connect login="+login+"  pass="+pass);
 				Properties properties = new Properties(); //http://134.214.147.28/
                                 

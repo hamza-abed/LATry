@@ -101,10 +101,19 @@ String nextScreen;
       if(Variables.getConnectionStatusLabel()==null)
           Variables.setConnectionStatusLabel(nifty.getScreen("start").findNiftyControl("connectionStatus",Label.class));
       
-       connectServer();
+ ///on a besoin de lancer un autre thread ici
+       client.setConnecting(true);
+ Variables.getTaskExecutor().execute(new Runnable() {
+			@Override
+			public void run() {
+                            connectServer();
+                        }
+ });
+      
+       
        
  while(client.isConnecting())
-{
+{   System.out.println("still connecting !!!");
           try {
               Thread.sleep(1000);
           } catch (InterruptedException ex) {
@@ -112,7 +121,7 @@ String nextScreen;
           }
 }
       
-   if(!client.isConnected())
+   if(!client.isConnecting() && !client.isConnected())
    
    { 
        System.out.println("Impossible de se connecter!!");
@@ -219,7 +228,7 @@ String nextScreen;
    
   public void connectServer()
   {
-      
+      System.err.println("This is connect server");
       /// this about connection to the Red Dwarf server
       
   String login=nifty.getCurrentScreen().findNiftyControl("txtf_login", TextField.class).getText();
@@ -323,7 +332,9 @@ String nextScreen;
 	 */
   private static final Logger logger = Logger.getLogger("NGUI_LA");
   PDFFile pdffile;
-	private void openPDF(File f) {
+	
+  
+  private void openPDF(File f) {
 		//logger.entering(ViewerEngine.class.getName(), "openPDF");
 
 		if (pdffile == null)
@@ -345,5 +356,17 @@ String nextScreen;
 
 			logger.exiting(NGUI_LA.class.getName(), "openPDF");
 	}
+  
+  
+  public void autreTaches()
+  {
+      System.out.println("exection d'autres taches");
+      
+      File f=new File("C:\\classes.pdf");
+      
+      System.err.println("Opening PDF ....");
+      openPDF(f);
+      
+  }
   
 }

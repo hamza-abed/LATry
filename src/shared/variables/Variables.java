@@ -17,21 +17,32 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.Label;
+import java.util.Properties;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 /**
  *
  * @author admin
  */
 public class Variables {
-    
-    
-    
+ 
+   private static Properties props;
 
-    
-    
-    
-    
-   
-   
+    public static Properties getProps() {
+        return props;
+    }
+
+    public static void setProps(Properties props) {
+        Variables.props = props;
+    }
+
+    public static ThreadPoolExecutor getExecutor() {
+        return executor;
+    }
+
+    public static void setExecutor(ThreadPoolExecutor executor) {
+        Variables.executor = executor;
+    }
   
     private static Label connectionStatusLabel;
 
@@ -122,5 +133,16 @@ public class Variables {
         Variables.laGame=main;
         world=new World(laGame);
     }
+    
+    private static ThreadPoolExecutor executor;
+    	public static ThreadPoolExecutor getTaskExecutor() {
+		if (executor == null) {
+			executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(Integer.parseInt(props
+					.getProperty("la.max.parallel.task", "8")));
+			
+		}
+		//logger.info("state : "+executor.getActiveCount()+":"+executor.getQueue().size());
+		return executor;
+	}
     
 }

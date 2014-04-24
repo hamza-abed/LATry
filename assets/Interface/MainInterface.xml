@@ -97,7 +97,7 @@
           
         </control>        
         <control height="15%" id="connect" label="Connect" name="button" x="0px" y="75%" focusable="false">
-            <interact onClick="connectServer()"/>
+            <interact onClick="autreTaches()"/>
         </control>
        </panel>
     </control>
