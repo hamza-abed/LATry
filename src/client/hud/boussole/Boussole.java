@@ -77,7 +77,7 @@ public class Boussole {
         cube = new Geometry("box1", box);
         Material mat1 = new Material(Variables.getLaGame().getAssetManager(),
                 "Common/MatDefs/Misc/Unshaded.j3md");
-//mat1.setColor("Color", ColorRGBA.Blue);
+              
         mat1.setTexture("ColorMap", Variables.getLaGame().getAssetManager().
                 loadTexture("Textures/boussole/boussole1.png"));
         mat1.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);

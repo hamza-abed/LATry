@@ -38,11 +38,13 @@
  */
 
 package client;
+import client.map.tool.misc.FileType;
 import client.network.SimpleClientConnector;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.sun.pdfview.PDFFile;
+import com.sun.pdfview.PDFPage;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.ConsoleExecuteCommandEvent;
@@ -62,11 +64,17 @@ import  de.lessvoid.nifty.controls.TextField;
 import  de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.label.LabelControl;
 import java.awt.Desktop;
+import java.awt.Image;
+import java.awt.Rectangle;
 import java.io.File;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.List;
+import org.ghost4j.document.PDFDocument;
+import org.ghost4j.renderer.SimpleRenderer;
 import shared.pdfReaderForLA.PDFRead;
 import shared.utils.PropertyReader;
 
@@ -111,7 +119,7 @@ String nextScreen;
  });
       
        
-       
+ /*      
  while(client.isConnecting())
 {   System.out.println("still connecting !!!");
           try {
@@ -129,8 +137,9 @@ String nextScreen;
    else
    {   
         
-        
+   */     
       System.out.println("this is start game");
+      
       Variables.setConsole(nifty.getScreen("chatbar").
       findNiftyControl("textfield2",Console.class));
     
@@ -138,16 +147,11 @@ String nextScreen;
        //textfield2
       if(nifty==null)System.out.println("\n\n nifty =null");   
       
-    //  nifty.gotoScreen(nextScreen);  // switch to another screen
-      this.nextScreen=nextScreen;
-  // displaySplashScreen();
-   //nifty.removeScreen(nextScreen);
   
-       //if(app==null) System.out.println("app= null");
       
        nifty.gotoScreen("chatbar");
        Variables.getLaGame().initGameWold();
-   }
+  // }
   
    
    }
@@ -360,13 +364,66 @@ String nextScreen;
   
   public void autreTaches()
   {
-      System.out.println("exection d'autres taches");
+      Variables.getLaGame().showPDF();
       
-      File f=new File("C:\\classes.pdf");
+      
+      /*
+      System.out.println("exection d'autres taches");
+      String path="C:\\classes.pdf";
+      File f=new File(path);
       
       System.err.println("Opening PDF ....");
       openPDF(f);
       
+      
+       if (FileType.isPDF(path)) {
+			try {
+				PDFPage page = pdffile.getPage(pageCourante);
+
+				// get the width and height for the doc at the default zoom
+				Rectangle rect = new Rectangle(0, 0, (int) page.getBBox()
+						.getWidth(), (int) page.getBBox().getHeight());
+
+				// generate the image
+				Image img = page.getImage(rect.width, rect.height, // width &
+						// height
+						rect, // clip rect
+						null, // null for the ImageObserver
+						true, // fill background with white
+						true); // block until drawing is done
+/*
+				return TextureManager.loadTexture(img,
+						MinificationFilter.BilinearNearestMipMap,
+						MagnificationFilter.Bilinear, true); 
+			} catch (Exception e) {
+			}
+      
+  }
+  */
+}
+  public void loadPDF()
+  {
+      System.out.println("THis is load PDF !!!");
+    PDFDocument document = new PDFDocument();
+     String path="C:\\classes.pdf";
+    List<Image> images=null;
+     
+     try{
+         System.out.println("THis is load PDF Trying!!!");
+    document.load(new File(path));
+    SimpleRenderer renderer = new SimpleRenderer();
+    images = renderer.render(document);
+    // set resolution (in DPI)
+    renderer.setResolution(300);
+    }
+    catch(Exception e)
+    {
+        System.out.println("File not found");
+    }
+    
+    if(images!=null) System.out.println(images.size()+" pages chargés");
+    
+    else System.out.println("AUCUNE PAGE N4EST CHARGE");
   }
   
 }

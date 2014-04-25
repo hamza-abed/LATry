@@ -47,6 +47,7 @@ import client.map.WaterPlan;
 import client.map.World;
 import client.map.character.Player;
 import com.jme3.app.SimpleApplication;
+import com.jme3.asset.TextureKey;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.shapes.CollisionShape;
@@ -64,6 +65,7 @@ import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
@@ -75,15 +77,20 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
 import com.jme3.terrain.geomipmap.TerrainQuad;
 import com.jme3.terrain.heightmap.AbstractHeightMap;
 import com.jme3.terrain.heightmap.ImageBasedHeightMap;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture.WrapMode;
+import com.jme3.texture.plugins.AWTLoader;
 import com.sun.jersey.core.spi.scanning.uri.VfsSchemeScanner;
 import com.sun.sgs.client.simple.SimpleClient;
 import de.lessvoid.nifty.Nifty;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import shared.pdfReaderForLA.PDFRead;
 import shared.variables.Variables;
 
 /**
@@ -561,11 +568,7 @@ inputManager.setCursorVisible( true );
     public PhysicsSpace getPhysicsSpace() {
         return bulletAppState.getPhysicsSpace();
     }
-
   
-
-   
-    
   
 
     
@@ -576,4 +579,41 @@ inputManager.setCursorVisible( true );
     public void setSceneModel(Spatial sceneModel) {
         this.sceneModel = sceneModel;
     }
+    
+     
+    public void showPDF()
+    {
+        System.out.println("this is show PDF");
+        BufferedImage image=new PDFRead("").toImage();
+        AWTLoader loader = new AWTLoader();
+        com.jme3.texture.Image load = loader.load(image, true);
+      
+  
+         Box box = new Box(new Vector3f(0, 0, 0), 450, 450, 5);
+       Geometry cube = new Geometry("boxPDF", box);
+        Material mat1 = new Material(Variables.getLaGame().getAssetManager(),
+                "Common/MatDefs/Misc/Unshaded.j3md");
+           
+        
+        TextureKey key =new TextureKey("Textures/dirt.jpg",false);
+        Texture tex = assetManager.loadTexture(key);
+        System.out.println("this is show PDF attaching child");
+        
+        tex.setImage(load);
+        mat1.setTexture("ColorMap",tex);
+        mat1.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
+        cube.setMaterial(mat1);
+        cube.move(600, 660, 2);
+        guiNode.attachChild(cube);
+        System.out.println("this is show PDF attaching child end");
+        
+        
+       /*
+        * 
+        */
+        
+      
+
+}
+    
 }

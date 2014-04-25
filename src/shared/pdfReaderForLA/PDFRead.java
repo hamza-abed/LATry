@@ -4,11 +4,15 @@
  */
 package shared.pdfReaderForLA;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.List;
+import javax.imageio.ImageIO;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.util.PDFTextStripper;
 
 /**
@@ -62,4 +66,38 @@ public class PDFRead {
     return parsedText;
     }
     
+
+
+public BufferedImage toImage() //getting the last image
+{
+    BufferedImage image=null;
+    try {
+            String sourceDir = "C:\\classes.pdf";
+            String destinationDir = "C:\\test";
+            File oldFile = new File(sourceDir);
+            String fileName = oldFile.getName().replace(".pdf", "");
+            if (oldFile.exists()) {
+
+            PDDocument document = PDDocument.load(sourceDir);
+            List<PDPage> list = document.getDocumentCatalog().getAllPages();
+
+            int pageNumber= 1;
+            for (PDPage page : list) {
+                image = page.convertToImage();
+               // File outputfile = new File("./f1_"+ pageNumber+".png");
+               // ImageIO.write(image, "png", outputfile);
+                pageNumber++;
+            }
+            document.close();
+
+        } else {
+            System.err.println(fileName +"File not exists");
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return image;
+}
+
 }

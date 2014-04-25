@@ -113,7 +113,7 @@ public class SimpleClientConnector implements SimpleClientListener{
    * the host and port properties.
    */
   protected void login() {
-	  setStatus("this is login method");
+      setStatus("this is login method");
       String host = System.getProperty(HOST_PROPERTY, DEFAULT_HOST);
       String port = System.getProperty(PORT_PROPERTY, DEFAULT_PORT);
 
@@ -296,7 +296,7 @@ public class SimpleClientConnector implements SimpleClientListener{
     private boolean Connected=false;
     public boolean isConnected() {
         return Connected;
-        //return true;
+       // return true;
         /*
          * return true just pour le test de l'accées
          */
@@ -618,7 +618,9 @@ public class SimpleClientConnector implements SimpleClientListener{
         this.connecting = connecting;
     }
     
+
     
     
-        	}
+    
+}
 
