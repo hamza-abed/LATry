@@ -92,6 +92,7 @@ import java.io.RandomAccessFile;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.List;
 import org.ghost4j.document.PDFDocument;
 import org.ghost4j.renderer.SimpleRenderer;
@@ -426,11 +427,16 @@ String nextScreen;
     
 }
   
-  private PDFViewer pdfViewer;
+  private PDFViewer pdfViewer=new PDFViewer();
+  private ArrayList<BufferedImage> pdfPages;
+  private int pageCourante=1;
 private void setNiftyImage() {
    System.out.println("Instantiation PDFViewer"); 
-pdfViewer=new PDFViewer();
+
 pdfViewer.ouvrirPDF();
+    
+pdfPages=pdfViewer.getImages();
+System.out.println("size from nifty...="+pdfPages.size());
 }
 
 
@@ -438,7 +444,8 @@ public void nextPagePDF()
 {
     System.out.println("traitement fait!!");
     pdfViewer.suivPdfPage();
-  
+
+    
 }
 
 
@@ -446,4 +453,6 @@ public void prevPagePDF()
 {
     pdfViewer.predPdfPage();
 }
+
+
 }

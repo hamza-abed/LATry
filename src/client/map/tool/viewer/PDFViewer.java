@@ -45,6 +45,7 @@ import com.jme3.texture.plugins.AWTLoader;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.render.NiftyImage;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import shared.variables.Variables;
 
 /**
@@ -88,7 +89,7 @@ tex = Variables.getLaGame().getAssetManager().loadTexture(key);
 tex.setAnisotropicFilter(16);
 tex.setMagFilter(Texture.MagFilter.Bilinear.Bilinear);
 AWTLoader loader =new AWTLoader();
-com.jme3.texture.Image imageJME=loader.load(image, true);;
+com.jme3.texture.Image imageJME=loader.load(image, true);
 
 tex.setImage(imageJME);
 
@@ -134,9 +135,9 @@ Variables.getNifty().getScreen("pdfReaderScreen").findElementByName("pdfPage").g
  
  public void suivPdfPage()
  {
-     System.out.println("\n \n page suivante");
+ System.out.println("\n \n page suivante");
  BufferedImage image=pdfRead.nextPdfPage();
-AWTLoader loader =new AWTLoader();
+ AWTLoader loader =new AWTLoader();
 com.jme3.texture.Image imageJME=loader.load(image, true);;
 
 tex.setImage(imageJME);
@@ -156,4 +157,9 @@ System.out.println("\n \n jusqu ici");
 Variables.getNifty().getScreen("pdfReaderScreen").findElementByName("pdfPage").getRenderer(ImageRenderer.class).setImage(img2);
  }
  
+ 
+ 
+ public ArrayList<BufferedImage> getImages() {
+        return pdfRead.getImages();
+    }
 }
