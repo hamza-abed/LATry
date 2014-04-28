@@ -43,6 +43,16 @@ import client.network.SimpleClientConnector;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.asset.AssetKey;
+import com.jme3.asset.DesktopAssetManager;
+import com.jme3.asset.TextureKey;
+import com.jme3.material.Material;
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.shape.Box;
+import com.jme3.texture.Texture;
+import com.jme3.texture.Texture.MagFilter;
+import com.jme3.texture.plugins.AWTLoader;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
 import de.lessvoid.nifty.Nifty;
@@ -62,10 +72,18 @@ import de.lessvoid.nifty.controls.Label;
 
 import  de.lessvoid.nifty.controls.TextField;
 import  de.lessvoid.nifty.controls.DropDown;
+import de.lessvoid.nifty.controls.Window;
+import de.lessvoid.nifty.controls.WindowClosedEvent;
 import de.lessvoid.nifty.controls.label.LabelControl;
+import de.lessvoid.nifty.controls.window.WindowControl;
+import de.lessvoid.nifty.elements.render.ImageRenderer;
+import de.lessvoid.nifty.render.NiftyImage;
+import de.lessvoid.nifty.render.batch.spi.BatchRenderBackend;
+import de.lessvoid.nifty.tools.SizeValue;
 import java.awt.Desktop;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -119,7 +137,7 @@ String nextScreen;
  });
       
        
- /*      
+      
  while(client.isConnecting())
 {   System.out.println("still connecting !!!");
           try {
@@ -137,7 +155,7 @@ String nextScreen;
    else
    {   
         
-   */     
+       
       System.out.println("this is start game");
       
       Variables.setConsole(nifty.getScreen("chatbar").
@@ -151,7 +169,7 @@ String nextScreen;
       
        nifty.gotoScreen("chatbar");
        Variables.getLaGame().initGameWold();
-  // }
+ }
   
    
    }
@@ -266,6 +284,9 @@ String nextScreen;
       Variables.getConsole().output(">J'ai recu sa", Color.BLACK);
      
 }
+ 
+ 
+ 
 
 
   public void disablePanel()
@@ -364,66 +385,82 @@ String nextScreen;
   
   public void autreTaches()
   {
-      Variables.getLaGame().showPDF();
-      
-      
       /*
-      System.out.println("exection d'autres taches");
-      String path="C:\\classes.pdf";
-      File f=new File(path);
-      
-      System.err.println("Opening PDF ....");
-      openPDF(f);
-      
-      
-       if (FileType.isPDF(path)) {
-			try {
-				PDFPage page = pdffile.getPage(pageCourante);
-
-				// get the width and height for the doc at the default zoom
-				Rectangle rect = new Rectangle(0, 0, (int) page.getBBox()
-						.getWidth(), (int) page.getBBox().getHeight());
-
-				// generate the image
-				Image img = page.getImage(rect.width, rect.height, // width &
-						// height
-						rect, // clip rect
-						null, // null for the ImageObserver
-						true, // fill background with white
-						true); // block until drawing is done
-/*
-				return TextureManager.loadTexture(img,
-						MinificationFilter.BilinearNearestMipMap,
-						MagnificationFilter.Bilinear, true); 
-			} catch (Exception e) {
-			}
-      
-  }
-  */
-}
-  public void loadPDF()
-  {
-      System.out.println("THis is load PDF !!!");
-    PDFDocument document = new PDFDocument();
-     String path="C:\\classes.pdf";
-    List<Image> images=null;
+       * Ceci execute un bout de code pour afficher un PDF sur
+       * le Plan 2D du jeu, en le transformant en image et puis l'appliquant 
+       * comme texture sur un cube
+       */
+      Variables.getLaGame().showPDF();
      
-     try{
-         System.out.println("THis is load PDF Trying!!!");
-    document.load(new File(path));
-    SimpleRenderer renderer = new SimpleRenderer();
-    images = renderer.render(document);
-    // set resolution (in DPI)
-    renderer.setResolution(300);
-    }
-    catch(Exception e)
-    {
-        System.out.println("File not found");
-    }
-    
-    if(images!=null) System.out.println(images.size()+" pages chargés");
-    
-    else System.out.println("AUCUNE PAGE N4EST CHARGE");
-  }
+}
   
+  
+  
+  /*                                            ********************
+   * Ceci est conçu pour l'affichage d'un PDF     ******************
+   */                                                          
+ public void showPDFBrowser()
+ {
+     
+    nifty.gotoScreen("pdfReaderScreen"); 
+    
+  //  WindowControl w = nifty.getScreen("pdfReaderScreen").findNiftyControl("PDFWindow", WindowControl.class);
+    
+    Element z = nifty.getScreen("pdfReaderScreen").findElementByName("PDFWindow");
+    z.setVisible(!z.isVisible());
+    setNiftyImage();
+    
+   
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+  @NiftyEventSubscriber(id="PDFWindow")
+ public void onPDFWindowClose(String id, WindowClosedEvent event) {
+ System.out.println("element with id [" + id + "] "
+         + "clicked at [" + event.toString());
+      nifty.getScreen("pdfReaderScreen").resetLayout();
+    nifty.gotoScreen("chatbar");
+     nifty.getScreen("pdfReaderScreen").findNiftyControl("PDFWindow", Window.class).closeWindow();
+    System.out.println("window closed");
+    
+    
+}
+  
+  
+private void setNiftyImage() {
+      
+BufferedImage image=new PDFRead("").toImage();
+       
+      
+TextureKey key = new TextureKey("Textures/dirt.jpg",false);
+Texture tex = Variables.getLaGame().getAssetManager().loadTexture(key);
+tex.setAnisotropicFilter(16);
+tex.setMagFilter(MagFilter.Bilinear.Bilinear);
+AWTLoader loader =new AWTLoader();
+com.jme3.texture.Image imageJME=loader.load(image, true);;
+
+
+
+tex.setImage(imageJME);
+Variables.getLaGame().getAssetManager().registerLoader("PNGLoader", ".png");
+((DesktopAssetManager)Variables.getLaGame().getAssetManager()).addToCache(new TextureKey("pippo"), tex);
+
+NiftyImage img2 = null;
+try{
+img2 = nifty.createImage("pippo", false);
+}
+catch (Exception e)
+{
+System.out.println(e.getMessage());
+}
+nifty.getScreen("pdfReaderScreen").findElementByName("pdfPage").getRenderer(ImageRenderer.class).setImage(img2);
+
+
+
+}
+ 
 }

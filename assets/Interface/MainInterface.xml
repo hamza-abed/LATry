@@ -96,9 +96,10 @@
         <control height="75%" lines="10" id="textfield2" name="nifty-console" width="100%" x="0" y="0px" focusable="false">
           
         </control>        
-        <control height="15%" id="connect" label="Connect" name="button" x="0px" y="75%" focusable="false">
-            <interact onClick="autreTaches()"/>
+        <control height="15%" id="connect" label="PDF locale" name="button" x="0px" y="75%" focusable="false">
+            <interact onClick="showPDFBrowser()"/>
         </control>
+        
        </panel>
     </control>
 
@@ -153,25 +154,41 @@
         
       <control id="scrollbarPanelId" name="scrollText" horizontal="true" height="100%" width="100%" wrap="true"> 
           <!-- first child is the content, the area to scroll around -->
-          
-     
-
-         
-           
+  
       <control id="PDFViewer" name="label"  font="Interface/Fonts/Mangal.fnt" height="100%" 
-                 text="ss" width="100%" x="14px" y="20" wrap="true"/>
-          
-         
-       
-        
+               text="ss" width="100%" x="14px" y="20" wrap="true"/>
+
    <!--     <text text="hello" id="PDFViewer"
 font="Interface/Fonts/Mangal.fnt" width="80%" height="100%" wrap="true" /> -->
       
-     </control> 
+ </control> 
       
  </panel>
          
     </layer>
  </screen>
+ 
+ <!-- LOADING A PDF FILE -->
+ 
+ <screen id="pdfReaderScreen" controller="client.NGUI_LA">
+    <layer childLayout="absolute" id="layer2">
+      <control height="70%" id="PDFWindow" name="window" hideOnClose="true" title="" width="50%" x="109" y="187" >
+         
+          <effect>
+	          <onStartScreen name="move" timeType="exp" factor="3.5" direction="left" mode="in" length="500" inherit="true"/>
+	          <onHide name="move" timeType="exp" factor="3.5" direction="left" mode="out" length="370" inherit="true"/>
+            </effect>
+   <panel childLayout="absolute" height="100%" id="panel_grp" style="nifty-panel-simple" width="100%" x="0%" y="0%" backgroundImage="Interface/imgs/bgp.png">     
+<image filename="Interface/interfacePDF/pred.png" x="1%" y="1%" id="pred" height="5%" width="5%">
+
+</image>
+<image filename="Interface/interfacePDF/suiv.png" x="7%" y="1%" id="pred" height="5%" width="5%">
+
+</image>
+        <image filename="Interface/imgs/bgp.png" height="91%" id="pdfPage" width="100%" x="0%" y="7%"/>
+   </panel> 
+      </control>
+    </layer>
+  </screen>
  
 </nifty>

@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.List;
 import javax.imageio.ImageIO;
+import jme3tools.savegame.SaveGame;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -84,8 +85,10 @@ public BufferedImage toImage() //getting the last image
             int pageNumber= 1;
             for (PDPage page : list) {
                 image = page.convertToImage();
-               // File outputfile = new File("./f1_"+ pageNumber+".png");
+                
+              //  File outputfile = new File("Interface/imgs/img1_"+ pageNumber+".png");
                // ImageIO.write(image, "png", outputfile);
+               
                 pageNumber++;
             }
             document.close();

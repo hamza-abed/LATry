@@ -379,12 +379,8 @@ inputManager.setCursorVisible( true );
         rootNode.addLight(dl);
     }
     
-    
-    
-    
-   
-    
-     private void initStartingScene() {
+  
+    private void initStartingScene() {
        // sceneModel = assetManager.loadModel("Scenes/scene1.j3o");
          sceneModel1 = assetManager.loadModel("Scenes/starting.j3o");
         rootNode.attachChild(sceneModel1);
@@ -408,11 +404,6 @@ inputManager.setCursorVisible( true );
         waterPlan.setWaterOnTheGame();
        // waterPlan.setSimpleWaterOnTheGame();
     }
-    
-    
-    
-    
-    
     
     
     private void initSceneGame() {
@@ -581,8 +572,8 @@ inputManager.setCursorVisible( true );
     }
     
      
-    public void showPDF()
-    {
+ public void showPDF()
+ {
         System.out.println("this is show PDF");
         BufferedImage image=new PDFRead("").toImage();
         AWTLoader loader = new AWTLoader();
@@ -606,14 +597,9 @@ inputManager.setCursorVisible( true );
         cube.move(600, 660, 2);
         guiNode.attachChild(cube);
         System.out.println("this is show PDF attaching child end");
-        
-        
        /*
         * 
         */
-        
-      
-
 }
     
 }
