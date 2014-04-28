@@ -2,11 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package shared.pdfReaderForLA;
+package client.map.tool.viewer;
+
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 import jme3tools.savegame.SaveGame;
@@ -27,12 +29,14 @@ public class PDFRead {
     public PDFRead(String path)
     {
         this.path=path;
+        images=new ArrayList<BufferedImage>();
+        System.out.println("\n \n ********* instantiation ******** \n \n");
     }
     
     
     public String transformToText()
     {
-         PDFParser parser = null;
+    PDFParser parser = null;
     PDDocument pdDoc = null;
     COSDocument cosDoc = null;
     PDFTextStripper pdfStripper;
@@ -68,13 +72,34 @@ public class PDFRead {
     }
     
 
+    
+ private ArrayList<BufferedImage> images;
+
+   
+ private int pageNumber=0;
+ private int pageCourante=1;
+   
+    
 
 public BufferedImage toImage() //getting the last image
 {
+   toImages();
+    System.out.println("buffer size="+images.size());
+   return images.get(0);
+}
+
+/*
+ * il faut une liste d'images qui représente 
+ * la totalitée du document
+ */
+ 
+ public void toImages() 
+{
+    System.out.println("size from toImages = "+images.size());
     BufferedImage image=null;
     try {
-            String sourceDir = "C:\\classes.pdf";
-            String destinationDir = "C:\\test";
+            String sourceDir = path;
+            
             File oldFile = new File(sourceDir);
             String fileName = oldFile.getName().replace(".pdf", "");
             if (oldFile.exists()) {
@@ -82,12 +107,11 @@ public BufferedImage toImage() //getting the last image
             PDDocument document = PDDocument.load(sourceDir);
             List<PDPage> list = document.getDocumentCatalog().getAllPages();
 
-            int pageNumber= 1;
+             pageNumber= 1;
             for (PDPage page : list) {
                 image = page.convertToImage();
-                
-              //  File outputfile = new File("Interface/imgs/img1_"+ pageNumber+".png");
-               // ImageIO.write(image, "png", outputfile);
+                images.add(image);
+              
                
                 pageNumber++;
             }
@@ -100,7 +124,36 @@ public BufferedImage toImage() //getting the last image
     } catch (Exception e) {
         e.printStackTrace();
     }
-    return image;
+  
 }
+ 
+ 
+ public BufferedImage nextPdfPage()
+ {
+     System.out.println("\n \n "
+             + "pageNumber= "+images.size()+" \n \n");
+     
+     if(pageCourante<images.size())
+         pageCourante++;
+     return images.get(pageCourante-1);
+ }
 
+ 
+ public BufferedImage predPdfPage()
+ {
+     if(pageCourante>1)
+         pageCourante--;
+     return images.get(pageCourante-1);
+ }
+ 
+ 
+ 
+  public ArrayList<BufferedImage> getImages() {
+        return images;
+    }
+
+    public void setImages(ArrayList<BufferedImage> images) {
+        this.images = images;
+    }
+ 
 }

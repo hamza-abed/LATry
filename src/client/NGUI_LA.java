@@ -39,6 +39,8 @@
 
 package client;
 import client.map.tool.misc.FileType;
+
+import client.map.tool.viewer.PDFViewer;
 import client.network.SimpleClientConnector;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
@@ -93,7 +95,7 @@ import java.nio.channels.FileChannel;
 import java.util.List;
 import org.ghost4j.document.PDFDocument;
 import org.ghost4j.renderer.SimpleRenderer;
-import shared.pdfReaderForLA.PDFRead;
+
 import shared.utils.PropertyReader;
 
 /**
@@ -191,6 +193,7 @@ String nextScreen;
      
     this.nifty = nifty;
     this.screen = screen;
+    Variables.setNifty(nifty);
    
   }
   
@@ -262,18 +265,11 @@ String nextScreen;
   
   if(index==-1)index=0; 
      client.connect(login, pass,index);
-      // pdfViewer.enable();
-      //nifty.gotoScreen("LACorePDFReader");
+      
 
   }
   
-  public void showText()
-  {
-      String text=new PDFRead("C:\\classes.pdf").transformToText();
-      nifty.getScreen("LACorePDFReader").
-      //findElementByName("PDFViewer").getRenderer(TextRenderer.class).setText(text);
-    findNiftyControl("PDFViewer",Label.class).setText("hello");
-  }
+ 
   
  @NiftyEventSubscriber(id="textfield2")
  public void onChatTextSendEvent(String id, ConsoleExecuteCommandEvent event) {
@@ -430,37 +426,24 @@ String nextScreen;
     
 }
   
-  
+  private PDFViewer pdfViewer;
 private void setNiftyImage() {
-      
-BufferedImage image=new PDFRead("").toImage();
-       
-      
-TextureKey key = new TextureKey("Textures/dirt.jpg",false);
-Texture tex = Variables.getLaGame().getAssetManager().loadTexture(key);
-tex.setAnisotropicFilter(16);
-tex.setMagFilter(MagFilter.Bilinear.Bilinear);
-AWTLoader loader =new AWTLoader();
-com.jme3.texture.Image imageJME=loader.load(image, true);;
-
-
-
-tex.setImage(imageJME);
-Variables.getLaGame().getAssetManager().registerLoader("PNGLoader", ".png");
-((DesktopAssetManager)Variables.getLaGame().getAssetManager()).addToCache(new TextureKey("pippo"), tex);
-
-NiftyImage img2 = null;
-try{
-img2 = nifty.createImage("pippo", false);
+   System.out.println("Instantiation PDFViewer"); 
+pdfViewer=new PDFViewer();
+pdfViewer.ouvrirPDF();
 }
-catch (Exception e)
+
+
+public void nextPagePDF()
 {
-System.out.println(e.getMessage());
+    System.out.println("traitement fait!!");
+    pdfViewer.suivPdfPage();
+  
 }
-nifty.getScreen("pdfReaderScreen").findElementByName("pdfPage").getRenderer(ImageRenderer.class).setImage(img2);
 
 
-
+public void prevPagePDF()
+{
+    pdfViewer.predPdfPage();
 }
- 
 }

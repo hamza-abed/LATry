@@ -15,6 +15,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.Label;
 import java.util.Properties;
@@ -28,6 +29,17 @@ public class Variables {
  
    private static Properties props;
 
+   private static  Nifty nifty;
+
+    public static Nifty getNifty() {
+        return nifty;
+    }
+
+    public static void setNifty(Nifty nifty) {
+        Variables.nifty = nifty;
+    }
+   
+   
     public static Properties getProps() {
         return props;
     }

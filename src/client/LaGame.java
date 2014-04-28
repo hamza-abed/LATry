@@ -46,6 +46,7 @@ import client.input.MainGameListener;
 import client.map.WaterPlan;
 import client.map.World;
 import client.map.character.Player;
+import client.map.tool.viewer.PDFRead;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.TextureKey;
 import com.jme3.bullet.BulletAppState;
@@ -90,7 +91,7 @@ import com.sun.sgs.client.simple.SimpleClient;
 import de.lessvoid.nifty.Nifty;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import shared.pdfReaderForLA.PDFRead;
+
 import shared.variables.Variables;
 
 /**
