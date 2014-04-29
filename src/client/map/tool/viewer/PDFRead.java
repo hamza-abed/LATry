@@ -24,12 +24,12 @@ import org.apache.pdfbox.util.PDFTextStripper;
  */
 public class PDFRead {
     
-    private String path;
+    public String path;
     
     public PDFRead(String path)
     {
         this.path=path;
-        images=new ArrayList<BufferedImage>();
+        
         System.out.println("\n \n ********* instantiation ******** \n \n");
     }
     
@@ -73,87 +73,13 @@ public class PDFRead {
     
 
     
- private ArrayList<BufferedImage> images;
+ 
 
    
- private int pageNumber=0;
- private int pageCourante=1;
+
    
     
 
-public BufferedImage toImage() //getting the last image
-{
-   toImages();
-    System.out.println("buffer size="+images.size());
-   return images.get(0);
-}
 
-/*
- * il faut une liste d'images qui représente 
- * la totalitée du document
- */
- 
- public void toImages() 
-{
-    System.out.println("size from toImages = "+images.size());
-    BufferedImage image=null;
-    try {
-            String sourceDir = path;
-            
-            File oldFile = new File(sourceDir);
-            String fileName = oldFile.getName().replace(".pdf", "");
-            if (oldFile.exists()) {
-
-            PDDocument document = PDDocument.load(sourceDir);
-            List<PDPage> list = document.getDocumentCatalog().getAllPages();
-
-             pageNumber= 1;
-            for (PDPage page : list) {
-                image = page.convertToImage();
-                images.add(image);
-              
-               
-                pageNumber++;
-            }
-            document.close();
-
-        } else {
-            System.err.println(fileName +"File not exists");
-        }
-
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-  
-}
- 
- 
- public BufferedImage nextPdfPage()
- {
-     System.out.println("\n \n "
-             + "pageNumber= "+images.size()+" \n \n");
-     
-     if(pageCourante<images.size())
-         pageCourante++;
-     return images.get(pageCourante-1);
- }
-
- 
- public BufferedImage predPdfPage()
- {
-     if(pageCourante>1)
-         pageCourante--;
-     return images.get(pageCourante-1);
- }
- 
- 
- 
-  public ArrayList<BufferedImage> getImages() {
-        return images;
-    }
-
-    public void setImages(ArrayList<BufferedImage> images) {
-        this.images = images;
-    }
  
 }

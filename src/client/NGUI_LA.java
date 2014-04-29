@@ -427,23 +427,28 @@ String nextScreen;
     
 }
   
-  private PDFViewer pdfViewer=new PDFViewer();
-  private ArrayList<BufferedImage> pdfPages;
-  private int pageCourante=1;
+  public PDFViewer pdfViewer;
+ 
 private void setNiftyImage() {
    System.out.println("Instantiation PDFViewer"); 
-
+ pdfViewer=new PDFViewer();
 pdfViewer.ouvrirPDF();
     
-pdfPages=pdfViewer.getImages();
-System.out.println("size from nifty...="+pdfPages.size());
+
 }
 
 
 public void nextPagePDF()
 {
-    System.out.println("traitement fait!!");
+  //  System.out.println("traitement fait!!");
+    if(pdfViewer!=null)
     pdfViewer.suivPdfPage();
+    else 
+    {pdfViewer=new PDFViewer();
+        System.out.println("something is happening !!");
+        
+    pdfViewer.suivPdfPage();
+    }
 
     
 }

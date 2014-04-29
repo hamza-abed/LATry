@@ -47,6 +47,7 @@ import client.map.WaterPlan;
 import client.map.World;
 import client.map.character.Player;
 import client.map.tool.viewer.PDFRead;
+import client.map.tool.viewer.PDFViewer;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.TextureKey;
 import com.jme3.bullet.BulletAppState;
@@ -576,7 +577,9 @@ inputManager.setCursorVisible( true );
  public void showPDF()
  {
         System.out.println("this is show PDF");
-        BufferedImage image=new PDFRead("").toImage();
+        PDFViewer pdfViewer=new PDFViewer();
+        pdfViewer.toImages();
+        BufferedImage image=pdfViewer.getImages().get(0);
         AWTLoader loader = new AWTLoader();
         com.jme3.texture.Image load = loader.load(image, true);
       
