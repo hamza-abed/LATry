@@ -45,9 +45,11 @@ import client.hud3D.MoveCursor;
 import client.input.MainGameListener;
 import client.map.WaterPlan;
 import client.map.World;
+import client.map.character.NonPlayableCharacter;
 import client.map.character.Player;
 import client.map.tool.viewer.PDFRead;
 import client.map.tool.viewer.PDFViewer;
+import client.network.SimpleClientConnector;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.TextureKey;
 import com.jme3.bullet.BulletAppState;
@@ -143,17 +145,21 @@ public class LaGame extends SimpleApplication {
 
     public LaGame() {
 
-        //SimpleClientConnector = new SimpleClientConnector();
-        /*
-         * On a même pas besoin d'ajouter du code ici pour connecter le serveur 
-         * on se connecte que lorsque c'est essentiel,
-         * alors sa sera utile pour se connecter dans le main
-         */
+       
+        Variables.setClientConnecteur(new SimpleClientConnector(new World(this)));
 
         this.actionListener = new ActionListener() {
             public void onAction(String name, boolean keyPressed, float tpf) {
                 if (name.equals("addObject")) {
-//Node fireCamp=(Node) assetManager.loadModel("Models/Oto/Oto.mesh.xml");
+                    /*
+                     * 
+                     */
+                    NonPlayableCharacter npc = Variables.getWorld().getNpcBuildIfAbsent("npc:1");
+			//if (!Variables.getWorld().isUpdate(npc))
+			//	Variables.getClientConnecteur().updateFromServerAndWait(npc);
+                    System.out.println("\n\n ****** npc updating called *** \n\n");
+                    
+                   //Node fireCamp=(Node) assetManager.loadModel("Models/Oto/Oto.mesh.xml");
                     Spatial fireCamp = assetManager.loadModel("Models/campfire/campfire.j3o");
                     fireCamp.setName("fireCamp");
                     rootNode.attachChild(fireCamp);
@@ -291,9 +297,9 @@ inputManager.setCursorVisible( true );
     }
 
     private void initPlayer() {
-       
+       Variables.setWorld(new World(this));
     
-        joueur = new Player(new World(this),"demo");
+        joueur = new Player(Variables.getWorld(),"demo");
 
      //   joueur = new Player();
         joueur.attachToScene();
@@ -605,5 +611,7 @@ inputManager.setCursorVisible( true );
         * 
         */
 }
-    
+ AbstractHeightMap d;
+ImageBasedHeightMap i;   
+
 }

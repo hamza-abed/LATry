@@ -40,9 +40,7 @@ package client.map;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
 import shared.constants.LaConstants;
@@ -55,10 +53,6 @@ import client.LaGame;
 import client.editor.ServerEditor.CreatorCallBack;
 import client.interfaces.graphic.Graphic;
 import client.interfaces.graphic.GraphicCollidable;
-import client.interfaces.graphic.GraphicEditable;
-//import client.interfaces.graphic.GraphicMouseListener;
-import client.interfaces.graphic.GraphicShadowCaster;
-import client.interfaces.graphic.GraphicShadowed;
 import client.interfaces.graphic.GraphicWalkOver;
 import client.interfaces.graphic.GraphicWithGround;
 import client.interfaces.network.Sharable;
@@ -69,7 +63,6 @@ import client.map.character.NonPlayableCharacter;
 import client.map.character.OtherPlayer;
 import client.map.character.PlayableCharacter;
 import client.map.character.Player;
-import client.map.character.AbstractCharacter.Moving;
 import client.map.character.stats.GroupTokens;
 import client.map.character.stats.Item;
 import client.map.character.stats.PlayerItems;
@@ -96,13 +89,9 @@ import client.script.ScriptableMethod;
 //import com.jme.intersection.PickResults;
 //import com.jme.intersection.TrianglePickResults;
 //import com.jme.light.DirectionalLight;
-import com.jme3.math.FastMath;
-import com.jme3.math.Matrix3f;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 //import com.jme.system.DisplaySystem;
 //import com.jme.util.GameTaskQueueManager;
 import com.sun.sgs.client.ClientChannel;
@@ -131,7 +120,7 @@ import shared.variables.Variables;
  * et sont bien pris en charge.
  * ce qui nous impose de les enlever de cette classe
  */
-public  class World extends Node{ // implements ClientChannelListener{ //Sharable {
+public  class World  implements ClientChannelListener,Sharable {
 	private static final long serialVersionUID = 3254692658300941324L;
 
 	private static final Logger logger = Logger.getLogger("World");
@@ -140,16 +129,16 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
 
 //	private Shadow shadow;
         private float mapSize, zoneSize;
-/*
+
 	private HashMap<String, Map> maps = new HashMap<String, Map>();
 
 	private HashMap<String, Zone> zones = new HashMap<String, Zone>();
 
 	private HashMap<String, Tool> tools = new HashMap<String, Tool>();
 
-	private HashMap<String, MapGraphics> objects = new HashMap<String, MapGraphics>();
+//	private HashMap<String, MapGraphics> objects = new HashMap<String, MapGraphics>();
 
-	private HashMap<String, MapLight> lights = new HashMap<String, MapLight>();
+//	private HashMap<String, MapLight> lights = new HashMap<String, MapLight>();
 
 	private ArrayList<GraphicWithGround> groundeds = new ArrayList<GraphicWithGround>();
 
@@ -182,7 +171,7 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
 
 	private HashMap<String, GameData> gameDatas = new HashMap<String, GameData>();
 	
-	private HashMap<String, MapTable> tables = new HashMap<String, MapTable>();
+//	private HashMap<String, MapTable> tables = new HashMap<String, MapTable>();
 
 //	private Sky sky;
 
@@ -209,16 +198,16 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
 
 	@SuppressWarnings("unused")
 	private ClientChannel channel;
-*/
-        LaGame game;
+
+        //LaGame game;
 	/**
 	 * @param light 
 	 * @param laClient
 	 * 
 	 */
-        private HashMap<String, Script> scripts = new HashMap<String, Script>();
+   //     private HashMap<String, Script> scripts = new HashMap<String, Script>();
 	public World(LaGame game) {
-		super("world");
+		//super("world");
 		this.game = game;
 		//sky = new Sky(this);
 		//water = new WaterPlan(sky, game.getProps());
@@ -240,11 +229,11 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
              */
             
         game.getRootNode().detachAllChildren();
-            /*
-		this.detachAllChildren();
+            
+		//this.detachAllChildren();
 
-		this.shadow.clean();
-		this.water.clean();
+		//this.shadow.clean();
+		//this.water.clean();
 
 		this.dialogs.clear();
 		this.collidables.clear();
@@ -254,7 +243,7 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
 		//this.lgfs.clear();
 		this.npcs.clear();
 		this.maps.clear();
-		this.objects.clear();
+		//this.objects.clear();
 		this.playableCharacter.clear();
 		this.regions.clear();
 		this.skills.clear();
@@ -264,11 +253,11 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
 		this.groundeds.clear();
 		this.walkOvers.clear();
 		this.zones.clear();
-		this.tables.clear();
+		//this.tables.clear();
 		this.player = null;
 		this.worldTok = null;
 		this.versionCode = -1;
-                */
+                
 	}
 
 	/**
@@ -305,10 +294,10 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
              * plutard
              */
             
-            /*
-		this.player = new Player(this, login, game.getProps());
+            
+		this.player = new Player(this, login);
 		this.playableCharacter.put(player.getKey(), player);
-             */
+            
 	}
 
 	/* ********************************************************** *
@@ -488,12 +477,14 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
 			Sharable s = getSharable(key);
 			
 			logger.info("reception d'un paquet de commit de " + key);
-			logger.info("reception d'un paquet de commit sur " + s.getClass().toString());
+			//logger.info("reception d'un paquet de commit sur " + s.getClass().toString());
 			s.receiveCommitPck(message);
 			//getGame().getChatSystem().debug("> " + key + " (" + s.getVersionCode() + ")");
+                        Variables.getClientConnecteur().notifyWaitingThread(key);
 			//getGame().notifyWaitingThread(key);
 		} catch (NullPointerException e) {
-			logger.warning("null " + key);
+                    System.out.println("World->receiveCommitPck(msg) ceci est une exception null key="+key+"ce qui sui est un warning");
+			//logger.warning("null " + key);
 		}
 	}
 
@@ -557,12 +548,15 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
 	 * @param message
 	 */
 	public void receivedWorldDataPck(ByteBuffer message) {
-	/*	
+		
             int serverVersion = message.getInt();
 		if (LaConstants.VERSION != serverVersion)  {
-			game.disconnect(null);
-			game.getHud().openErrorPopup(game.getHud().getLocalText("popup.error.version","%server%",Integer.toString(serverVersion),
+                    Variables.getClientConnecteur().disconnect(null);
+               System.out.println("World->receivedWorldDataPck(message) -> deconnection  causé par différence de version");
+			//game.disconnect(null);
+		/*	game.getHud().openErrorPopup(game.getHud().getLocalText("popup.error.version","%server%",Integer.toString(serverVersion),
 					"%client%",Integer.toString(LaConstants.VERSION)));
+                                        */
 			return;
 		}
 
@@ -579,9 +573,19 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
 		String ftpPass = Pck.readString(message);
 
 		getFtp().setParam(ftpUrl,ftpUser,ftpPass,ftpFolder);
-
-		build();
-                */
+System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n"
+        + " zoneSize= "+zoneSize+"\n "
+        + " mapSize= "+mapSize+"\n "
+        + " worldWaterDeep= "+worldWaterDeep+"\n "
+        + " worldScaleY= "+worldScaleY+"\n "
+        + " worldSizeZ= "+worldSizeZ+"\n "
+        + " ftpUrl= "+ftpUrl+"\n "
+        + " ftpFolder= "+ftpFolder+"\n "
+        + " ftpUser= "+ftpUser+"\n "
+        + " ftpPass= "+ftpPass+"\n "
+        + "***********\n\n");
+		//build();
+                
 	}
 
 	/**
@@ -604,7 +608,7 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
 		String key = Pck.readString(message);
 		Sharable s = getSharable(key);
 		if (!(s instanceof SharableGroup)) {
-			logger.warning("reception d'un add sur un truc qui n'est pas un groupe");
+			logger.info("reception d'un add sur un truc qui n'est pas un groupe");
 			return;
 		}
 		int nb = message.getInt();
@@ -1039,11 +1043,11 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
 	 * @return
 	 */
 	public PlayableCharacter getPlayer(String key) {
-		/*
-		 * if (key.equals(getPlayer().getKey())) return getPlayer();//
-		 */
-		//return playableCharacter.get(key);
-            return null;
+		
+		 if (key.equals(getPlayer().getKey())) return getPlayer();
+		
+		return playableCharacter.get(key);
+            
                 
 	}
 
@@ -1054,15 +1058,15 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
 	 * @return
 	 */
 	public PlayableCharacter getPlayerBuildIfAbsent(String key) {
-		/* if (key.equals(getPlayer().getKey()))
+		 if (key.equals(getPlayer().getKey()))
 			return getPlayer(key);
 		if (!playableCharacter.containsKey(key)) {
 			OtherPlayer other = new OtherPlayer(this, key.split(":")[1]);
 			playableCharacter.put(key, other);
 		}
 		return playableCharacter.get(key);
-                */
-            return null;
+                
+         //   return null;
 	}
 
 	/**
@@ -1105,15 +1109,20 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
 	 */
 	public NonPlayableCharacter getNpcBuildIfAbsent(String key) {
 	
-            /*if (!npcs.containsKey(key)) {
+            if (!npcs.containsKey(key)) {
 			NonPlayableCharacter npc = new NonPlayableCharacter(this, Integer
 					.parseInt(key.split(":")[1]));
+                        
+                        
+                        
 			npcs.put(key, npc);
-			game.updateFromServer(npc);
+                        Variables.getClientConnecteur()
+			.updateFromServer(npc);
+                        
 		}
 		return npcs.get(key);
-                */
-            return null;
+                
+            
 	}
 
 	/**
@@ -1384,13 +1393,13 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
 	 * @return
 	 */
         
-        /*
+       
 	public WorldTokens getWorldToken() {
 		if (worldTok == null) {
 			worldTok = new WorldTokens(this);
 		}
 		return worldTok;
-	}*/
+	}
 
 	/**
 	 * Renvoie les token du joueur
@@ -1461,40 +1470,40 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
 	 * @author philippe pernelle
 	 */
 	public Sharable getSharable(String key) {
-	/*	
+		
             switch (LaComponent.type(key)) {
-		case table:return getTableBuildIfAbsent(key);
-		case building:return getMapObject(key);
-		case dialog:return getDialogBuildIfAbsent(key);
-		case gamedata:return getGameDataBuildIfAbsent(key);
+		case table: System.out.println("\nWORLD table \n"); break;//return getTableBuildIfAbsent(key);
+		case building:System.out.println("\nWORLD building \n"); break; //return getMapObject(key);
+		case dialog:System.out.println("\nWORLD dialog \n"); break;//return getDialogBuildIfAbsent(key);
+		case gamedata:System.out.println("\nWORLD gamedata \n"); break;//return getGameDataBuildIfAbsent(key);
 		case group:return getGroupBuildIfAbsent(key);
 		case groupToken: return getGroupToken(key);
-		case item: return getItemBuildIfAbsent(key);
-		//case light: return getLightBuiltIfAbsent(key);
+		case item:System.out.println("\nWORLD item \n"); break; // return getItemBuildIfAbsent(key);
+		case light:System.out.println("\nWORLD light \n"); break;// return getLightBuiltIfAbsent(key);
 		//pas opérationnel en v31
 		//case lgf: return getLgfBuildIfAbsent(key);
-	//	case map: return getMap(key);
-		case npc: return getNpcBuildIfAbsent(key);
-		case object: return getMapObject(key);
-		case particul: return getMapObject(key);
-		case player: return getPlayerBuildIfAbsent(key);
+		case map:System.out.println("\nWORLD map \n"); break;// return getMap(key);
+		case npc: System.out.println("\nWORLD NPC \n key= "+key); return getNpcBuildIfAbsent(key);
+		case object: System.out.println("\nWORLD object \n"); break;//return getMapObject(key);
+		case particul:System.out.println("\nWORLD particul \n"); break;// return getMapObject(key);
+		case player: System.out.println("\nWORLD retourne player \n"); return getPlayerBuildIfAbsent(key);
 		case playerBag: return getPlayerItemBuildIfAbsent(key);
 		case playerSkill: return getPlayerSkillsBuildIfAbsent(key);
 		case playerTarget: return getPlayerTargetsBuildIfAbsent(key);
 		case playerTask: return getPlayerTasksBuildIfAbsent(key);
 		case playerToken: return getPlayerTokensBuildIfAbsent(key);
-		case region: return getRegionBuildIfAbsent(key);
+		case region: System.out.println("\nWORLD getRegionBuild \n"); break;//return getRegionBuildIfAbsent(key);
 		case script: return getScriptBuildIfAbsent(key);
-		case skill: return getSkillBuildIfAbsent(key);
-		case slides: return getSlideShowBuildIfAbsent(key);
-		case task: return getTaskBuildIfAbsent(key);
-		case tool: return getToolBuildIfAbsent(key);
+		case skill: System.out.println("\nWORLD skill \n"); break;//return getSkillBuildIfAbsent(key);
+		case slides: System.out.println("\nWORLD slides \n"); break;//return getSlideShowBuildIfAbsent(key);
+		case task: System.out.println("\nWORLD task \n"); break;//return getTaskBuildIfAbsent(key);
+		case tool: System.out.println("\nWORLD tool \n"); break;//return getToolBuildIfAbsent(key);
 		case zone: return getZoneBuildIfAbsent(key);
-		case worldToken: return getWorldToken();
+		case worldToken: System.out.println("\nWORLD world token \n"); break;//return getWorldToken();
 		default:
 			throw new IllegalArgumentException("type de clef incconnu "+key);
 		}
-                */
+               
             return null;
 	}
 
@@ -1539,8 +1548,7 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
 	 */
 	//@Override
 	public int getVersionCode() {
-		//return versionCode;
-            return 0;
+		return versionCode;
 	}
 
 	/*
@@ -1797,7 +1805,7 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
 	 * @param channel
 	 *            the channel to set
 	 */
-        /*
+        
 	public void setChannel(ClientChannel channel) {
 		this.channel = channel;
 	}
@@ -1842,7 +1850,7 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
 	/**
 	 * @return the player
 	 */
-        private Player player;
+        
 	public Player getPlayer() {
 		return player;
 	}
@@ -1860,7 +1868,7 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
 	 * 
 	 * @return
 	 */
-        private ScriptExecutor scriptExecutor;
+       
 	public ScriptExecutor getScriptExecutor() {
 		if (scriptExecutor == null)
 			scriptExecutor = new ScriptExecutor(this);
@@ -1914,15 +1922,33 @@ public  class World extends Node{ // implements ClientChannelListener{ //Sharabl
 	 * Renvoie le gestionnaire de FTP
 	 * @return
 	 */
-        private FtpManager ftp;
+        
 	public FtpManager getFtp() {
 		if (ftp == null) {
-			//ftp = new FtpManager(this,game.isUseSSH());
+			ftp = new FtpManager(this,Variables.getClientConnecteur().isUseSSH());
 		}
 		return ftp;
 	}
 
+   /* ********************************************************** *
+	 * * 				Sharable - IMPLEMENTS 					* *
+	 * ********************************************************** */
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see client.network.Sharable#getKey()
+	 */
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see client.interfaces.network.Sharable#addData(shared.pck.Pck)
+	 */
 
+    public String getKey() {
+       return LaComponent.world.prefix(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
         
         
         

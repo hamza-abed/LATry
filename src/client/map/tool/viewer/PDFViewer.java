@@ -42,6 +42,7 @@ import com.jme3.asset.DesktopAssetManager;
 import com.jme3.asset.TextureKey;
 import com.jme3.texture.Texture;
 import com.jme3.texture.plugins.AWTLoader;
+import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.render.NiftyImage;
 import java.awt.image.BufferedImage;
@@ -100,7 +101,8 @@ public class PDFViewer {
 
 Variables.getNifty().getScreen("pdfReaderScreen").findElementByName("pdfPage").getRenderer(ImageRenderer.class).setImage(imagesNifty.get(0));
 
-   
+   Variables.getNifty().getScreen("pdfReaderScreen").
+           findNiftyControl("numeroPage", TextField.class).setText(pageCourante+"/"+pageNumber);
  }
  
 
@@ -109,6 +111,10 @@ Variables.getNifty().getScreen("pdfReaderScreen").findElementByName("pdfPage").g
     if(pageCourante>1)pageCourante--;
 Variables.getNifty().getScreen("pdfReaderScreen").findElementByName("pdfPage").
         getRenderer(ImageRenderer.class).setImage(imagesNifty.get(pageCourante-1));
+
+
+Variables.getNifty().getScreen("pdfReaderScreen").
+        findNiftyControl("numeroPage", TextField.class).setText(pageCourante+"/"+pageNumber);
  }
  
  
@@ -119,6 +125,8 @@ Variables.getNifty().getScreen("pdfReaderScreen").findElementByName("pdfPage").
  
 Variables.getNifty().getScreen("pdfReaderScreen").findElementByName("pdfPage").
         getRenderer(ImageRenderer.class).setImage(imagesNifty.get(pageCourante-1));
+
+Variables.getNifty().getScreen("pdfReaderScreen").findNiftyControl("numeroPage", TextField.class).setText(pageCourante+"/"+pageNumber);
  }
  
  

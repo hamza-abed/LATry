@@ -4,7 +4,9 @@
  */
 package client.map.character;
 
+import client.map.Region;
 import client.map.World;
+import client.map.Zone;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.AnimEventListener;
@@ -17,15 +19,37 @@ import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import java.util.Map;
 import shared.variables.Variables;
 
 /**
  *
  * @author admin
  */
-public class Player //extends PlayableCharacter 
+public class Player extends PlayableCharacter 
 implements AnimEventListener {
 
+    
+    /**
+	 * region ou se trouve le joueur actuellement
+	 */
+	private Region currentRegion = null;
+
+	private Zone currentZone;
+
+	private Map currentMap;
+
+
+	private boolean is_scenarizing;
+
+	private Group maingroup;
+
+	//private Text debug;
+	
+	private boolean canMove = true;
+    
+    
+    
     private AnimChannel channel;
     private boolean left = false, right = false, up = false, down = false;
     private Vector3f camDir = new Vector3f();
@@ -76,15 +100,12 @@ implements AnimEventListener {
     private Vector3f walkDirection = new Vector3f();
 
     public Player(World world, String login) {
-     //   super(world, login);
+        super(world, login);
                initPlayer();
-        //  Variables.getLaGame().getPhysicsSpace().addCollisionListener(this);
+       //  Variables.getLaGame().getPhysicsSpace().addCollisionListener(this);
     }
     
-    public Player()
-    {
-        initPlayer();
-    }
+  
     private CapsuleCollisionShape capsuleShape;
 
     private void initPlayer() {
@@ -342,5 +363,15 @@ implements AnimEventListener {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     */
+
+    @Override
+    protected boolean canMoveAt(Vector3f newPos) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    protected boolean testCollision(Vector3f newPos, Vector3f dir) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

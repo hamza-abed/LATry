@@ -85,8 +85,10 @@ public class RessourceManager {
 	/**
 	 * Variable pour les log
 	 */
+    
 	private static final Logger logger = Logger.getLogger("RessourceManager");
 	
+        
 
 	/**
 	 * Serveur REST contenant les ressources

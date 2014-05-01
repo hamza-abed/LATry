@@ -38,6 +38,7 @@
  */
 
 package client;
+import client.map.World;
 import client.map.tool.misc.FileType;
 
 import client.map.tool.viewer.PDFViewer;
@@ -212,7 +213,7 @@ String nextScreen;
      * Une fois la classe SimpleClientConnector est instancié 
      * elle est automatiquement affecté dans la calsse statique Variables
      */
-    client=new SimpleClientConnector();
+    client=Variables.getClientConnecteur();
     for (int i=0;i<PropertyReader.getInt(client.getProps(),"server.count", 1);i++) 
      dropDown.addItem(client.getProps().getProperty("server."+i+".name", "Server inconnu : "+i));
     }

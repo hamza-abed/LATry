@@ -149,7 +149,7 @@ public abstract class PlayableCharacter extends AbstractCharacter {
 		super(world);
 		this.login = login;
 		//world.getGame().
-              // Variables.getClientConnecteur().updateFromServer(this);
+               Variables.getClientConnecteur().updateFromServer(this);
 		this.tokens = new PlayerTokens(this);
 		this.items = new PlayerItems(this);
 		this.tasks = new PlayerTasks(this);
@@ -157,15 +157,15 @@ public abstract class PlayableCharacter extends AbstractCharacter {
 		this.skills = new PlayerSkills(this);
 		this.um = new UserModel(this);
 		//world.getGame().
-//                Variables.getClientConnecteur().updateFromServer(this.tokens);
+                Variables.getClientConnecteur().updateFromServer(this.tokens);
 		//world.getGame().
-  //              Variables.getClientConnecteur().updateFromServer(this.items);
+                Variables.getClientConnecteur().updateFromServer(this.items);
 		//world.getGame().
-    //            Variables.getClientConnecteur().updateFromServer(this.tasks);
+               Variables.getClientConnecteur().updateFromServer(this.tasks);
 		//world.getGame().
-      //          Variables.getClientConnecteur().updateFromServer(this.targets);
+               Variables.getClientConnecteur().updateFromServer(this.targets);
 		//world.getGame().
-        //        Variables.getClientConnecteur().updateFromServer(this.skills);
+               Variables.getClientConnecteur().updateFromServer(this.skills);
 	}
 
 	/* ********************************************************** *

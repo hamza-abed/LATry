@@ -198,7 +198,7 @@ font="Interface/Fonts/Mangal.fnt" width="80%" height="100%" wrap="true" /> -->
 <control name="button" style="btn-next" x="7%" y="1%" id="next" height="32px" width="32px" childLayout="absolute" focusable="true">
 <interact onClick="nextPagePDF()"/>
 </control>
-
+ <control id="numeroPage" name="textfield" width="30px" x="47%" y="1%" enabled="false"/>
 
       <control name="scrollPanel" id="scroll_panel"  width="100%" height="95%" x="0%" y="7%">
         <image filename="Interface/imgs/bgp.png" height="842px" id="pdfPage" width="596px" x="0%" y="0%"/>

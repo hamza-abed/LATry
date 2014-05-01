@@ -11,6 +11,8 @@ import client.chat.ChatSystem;
 import client.editor.ServerEditor;
 import client.interfaces.network.Sharable;
 import client.map.World;
+import client.map.Zone;
+import client.map.character.Group;
 import client.task.PingPongTask;
 import com.sun.sgs.client.ClientChannel;
 import com.sun.sgs.client.ClientChannelListener;
@@ -30,19 +32,23 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+import shared.constants.LaConstants;
 import shared.constants.PckCode;
+import shared.enums.LaComponent;
 import shared.pck.Pck;
+import shared.utils.PropertyReader;
 import shared.variables.Variables;
 
 /**
  *
  * @author admin
  */
-public class SimpleClientConnector implements SimpleClientListener{
+public class SimpleClientConnector implements SimpleClientListener,ClientChannelListener{
     
     
-    public SimpleClientConnector()
+    public SimpleClientConnector(World world)
     {
+        this.world=world;
         Variables.setClientConnecteur(this);
         this.login=login; this.pass=pass;
         
@@ -51,11 +57,16 @@ public class SimpleClientConnector implements SimpleClientListener{
 		// récupération des propriétés de configuration
         Variables.setProps(ressources.getProps());
         this.props = Variables.getProps();		
+       useSSH =  PropertyReader.getBoolean(props, "la.useSFTP");
     }
     
     private boolean connecting=false;
 
-   
+   private boolean useSSH =false;
+
+    public boolean isUseSSH() {
+        return useSSH;
+    }
     
     
     private RessourceManager ressources;
@@ -108,7 +119,7 @@ public class SimpleClientConnector implements SimpleClientListener{
         this.pass = pass;
     }
     private String login,pass;
-    /**
+  /**
    * Initiates asynchronous login to the RDS server specified by
    * the host and port properties.
    */
@@ -117,9 +128,6 @@ public class SimpleClientConnector implements SimpleClientListener{
       String host = System.getProperty(HOST_PROPERTY, DEFAULT_HOST);
       String port = System.getProperty(PORT_PROPERTY, DEFAULT_PORT);
 
-      
-      
-      
       try {
           logger.info("---------> methode login trying to login");
     	  setStatus("try to login");
@@ -143,7 +151,7 @@ public class SimpleClientConnector implements SimpleClientListener{
       if(Variables.getConsole()!=null)
       Variables.getConsole().output("> " + status);
       else
-          System.out.println("> " + status);
+      System.out.println("> " + status);
       
   }
 
@@ -177,10 +185,8 @@ public class SimpleClientConnector implements SimpleClientListener{
         	        }
         	    }
 
-        	   
-        	   
-
-        	    // Implement SimpleClientListener
+  
+  // Implement SimpleClientListener
 
         	    /**
         	     * {@inheritDoc}
@@ -206,7 +212,8 @@ public class SimpleClientConnector implements SimpleClientListener{
                         Connected=true;
         	     // Variables.getConsole().output("Logged in");
                         setStatus("Logged in");
-        	      
+                        world.createPlayer(login);
+        	        updateFromServer(world);
         	        getPingPongTask().start();
         	   //   Variables.getConsole().output("ping pong task has just started !");
                         setStatus("ping pong task has just started !");
@@ -243,7 +250,25 @@ public class SimpleClientConnector implements SimpleClientListener{
         	     * Returns {@code null} since this basic client doesn't support channels.
         	     */
         	    public ClientChannelListener joinedChannel(ClientChannel channel) {
-        	        return null;
+        	       logger.fine("Rejoins le channel : " + channel.getName());
+		if (channel.getName().equals(LaComponent.world.prefix())) {
+			world.setChannel(channel);
+			updateFromServer(world.getWorldToken());
+			return world;
+		}
+		if (channel.getName().matches(LaComponent.zone.regex())) {
+			Zone zone = world.getZoneBuildIfAbsent(channel.getName());
+			zone.setChannel(channel);
+			return zone;
+		}
+		if (channel.getName().matches(LaComponent.group.regex())) {
+			Group gr = world.getGroupBuildIfAbsent(channel.getName());
+			gr.setChannel(channel);
+			return  gr;
+		}
+
+		logger.warning("channel inconnu "+channel.getName());
+		return null;
         	    }
 
         	    /**
@@ -277,20 +302,74 @@ public class SimpleClientConnector implements SimpleClientListener{
         	    public void reconnecting() {
         	        setStatus("reconnecting");
         	    }
+     
+    @Override
+    public void receivedMessage(ByteBuffer message) {
 
-        	  
+        short c = message.getShort();
+        setStatus("a message received from server ! : " + c);
+        
 
-				@Override
-				public void receivedMessage(ByteBuffer message) {
-					
-					 short c = message.getShort();
-					setStatus("a message received from server ! : "+c);
-					switch (c) {
-				case PckCode.PING:
-					getPingPongTask().pong();
-					break;
-					}
-				}
+        switch (c) {
+            case PckCode.COMMIT:
+                System.out.println("\n\n *** RECEIVE COMMIT!! ****\n\n");
+                world.receiveCommitPck(message);
+                System.out.println("\n\n SCC*** RECEIVE COMMIT ****\n\n");
+                break;
+            case PckCode.ADD_OBJECT:
+                System.out.println("\n\n *** ADD OBJECT ****\n\n");
+                world.receiveSharedAddPck(message);
+
+                break;
+            case PckCode.EXTENDED_DATA:
+                System.out.println("\n\n *** EXTENDED DATA ****\n\n");
+                world.receiveExtendedDataPck(message);
+                break;
+            case PckCode.CREATE_OBJECT:
+                System.out.println("\n\n *** CREATE OBJECT ****\n\n");
+                //getServerEditor().receiveCreate(message);
+                break;
+            case PckCode.UP_TO_DATE_OBJECT:
+                System.out.println("\n\n *** UP TO DATE OBJECT ****\n\n");
+                world.receiveUpToDatePck(message);
+                break;
+
+            case PckCode.ERROR_DATA:
+                System.out.println("\n\n *** ERROR DATA ****\n\n");
+                getChatSystem().debug(message);
+                break;
+// pas opérationnelle en v31
+//		case PckCode.LGF_NOTIFY_EVENT:
+//			Lgf.receivedEvent(message);
+//			break;
+
+            case PckCode.PLAYER_TELEPORT:
+                System.out.println("\n\n *** PLAYER TELEPORT ****\n\n");
+                //world.getPlayer().receiveTeleport(message);
+                break;
+
+            case PckCode.EXECUTE_SCRIPT:
+                System.out.println("\n\n *** EXECUTE SCRIPT ****\n\n");
+                world.getScriptExecutor().receivedExecuteScript(message);
+                break;
+
+            case PckCode.PING:
+                System.out.println("\n\n *** PING ****\n\n");
+                getPingPongTask().pong();
+
+                break;
+
+            // ancien qui disparaitra
+            case PckCode.WORLD_DATA:
+                System.out.println("\n\n *** WORLD DATA ****\n\n");
+                world.receivedWorldDataPck(message);
+                break;
+
+            default:
+                logger.warning("code packet inconnu : " + c);
+        }
+
+    }
 
     
     private boolean Connected=false;
@@ -459,17 +538,17 @@ public class SimpleClientConnector implements SimpleClientListener{
      * @param map
      */
     public void updateFromServer(Sharable sharable) {
-        //logger.info("Update de " + sharable.getKey());
+        logger.info("simpleClientConnector->updateFromServer(sharable)-> Update de " + sharable.getKey());
         if(sharable==null) System.out.println("sharable is null");
         
         setStatus("Update de " + sharable.getKey());
-        getChatSystem().debug(
+     /*   getChatSystem().debug(
                 "? " + sharable.getKey() + " (" + sharable.getVersionCode()
-                + ")");
+                + ")"); */
         Pck pck = new Pck(PckCode.UPDATE);
         pck.putString(sharable.getKey());
         pck.putInt(sharable.getVersionCode());
-        //send(pck); c'est au SimpleClient 
+        send(pck);// c'est au SimpleClient 
 
     }
       public ChatSystem getChatSystem() {
@@ -490,11 +569,11 @@ public class SimpleClientConnector implements SimpleClientListener{
         }
         try {
             callbackWaitingUpdateAnswer.get(key).put(callback);
-            getChatSystem().debug("pause de " + callback);
+            getChatSystem().debug("updateFromServerAndWait(s,r)->pause de " + callback);
             updateFromServer(s);
         } catch (InterruptedException e) {
-            //logger.warning("impossible de mettre en pause le callback");
-            Variables.getConsole().output("impossible de mettre en pause le callback");
+            logger.warning("impossible de mettre en pause le callback");
+            //Variables.getConsole().output("impossible de mettre en pause le callback");
         }
 
     }
@@ -522,12 +601,30 @@ public class SimpleClientConnector implements SimpleClientListener{
             try {
                 sync.wait();
             } catch (InterruptedException e) {
-                //logger.warning(e.getLocalizedMessage());
-                Variables.getConsole().output(e.getLocalizedMessage());
+                logger.warning("updateFromServerAndWait(s)->"+e.getLocalizedMessage());
+               // Variables.getConsole().output(e.getLocalizedMessage());
             }
         }
 
     }
+    
+    
+    /**
+	 * noptify les obj qui attendait a la methdoe precedente
+	 * 
+	 * @param key
+	 */
+	public void notifyWaitingThread(String key) {
+		LinkedBlockingQueue<Runnable> queue = callbackWaitingUpdateAnswer.get(key);
+		if (queue != null) {
+			Runnable c;
+			while ( (c=queue.poll())!=null ) {
+				getTaskExecutor().execute(c);
+				//getChatSystem().debug("reprise de " + c);
+                                System.out.println("\n \n reprise de " + c);
+			}
+		}
+	}
     /**
      * gestionnaire de tache
      *
@@ -538,17 +635,17 @@ public class SimpleClientConnector implements SimpleClientListener{
     public ThreadPoolExecutor getTaskExecutor() {
         if (executor == null) {
             executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(Integer.parseInt(
-                    Variables.getClientConnecteur().getProps()
+                  getProps()
                     .getProperty("la.max.parallel.task", "8")));
             getSchedulerTaskExecutor().scheduleAtFixedRate(new Runnable() {
              @Override
              public void run() {
-            // logger.info("state : "+executor.getActiveCount()+":"+executor.getQueue().size());
-             Variables.getConsole().output("state : "+executor.getActiveCount()+":"+executor.getQueue().size());
+             logger.info("state : "+executor.getActiveCount()+":"+executor.getQueue().size());
+            // Variables.getConsole().output("state : "+executor.getActiveCount()+":"+executor.getQueue().size());
              }
              }, 1, 1, TimeUnit.SECONDS);
         }
-        //logger.info("state : "+executor.getActiveCount()+":"+executor.getQueue().size());
+        logger.info("state : "+executor.getActiveCount()+":"+executor.getQueue().size());
         return executor;
     }
     /**
@@ -597,7 +694,8 @@ public class SimpleClientConnector implements SimpleClientListener{
      */
     public void commitOnServer(Sharable sharable) {
         //logger.info("Commit de " + sharable.getKey());
-        Variables.getConsole().output("Commit de " + sharable.getKey());
+        System.out.println("SCC->CommitOnServer(s) : Commit de " + sharable.getKey());
+        //Variables.getConsole().output("Commit de " + sharable.getKey());
         getChatSystem().debug(
                 "< " + sharable.getKey() + " (" + sharable.getVersionCode()
                 + ")");
@@ -605,8 +703,8 @@ public class SimpleClientConnector implements SimpleClientListener{
         pck.putString(sharable.getKey());
         pck.putInt(sharable.getVersionCode());
         sharable.addData(pck);
-        //send(pck);
-        Variables.getClientConnecteur().send(pck);
+        send(pck);
+        
     }
 			 
 	
@@ -618,7 +716,47 @@ public class SimpleClientConnector implements SimpleClientListener{
         this.connecting = connecting;
     }
     
+/**
+	 * Recois la, structure du monde
+	 * 
+	 * @param message
+	 */
+	public void receivedWorldDataPck(ByteBuffer message) {
+		int serverVersion = message.getInt();
+		/*if (LaConstants.VERSION != serverVersion)  {
+			game.disconnect(null);
+			game.getHud().openErrorPopup(game.getHud().getLocalText("popup.error.version","%server%",Integer.toString(serverVersion),
+					"%client%",Integer.toString(LaConstants.VERSION)));
+			return;
+		} */
 
+	int worldSizeX = message.getInt();
+        int worldSizeZ = message.getInt();
+	float worldScaleY = message.getFloat();
+	float worldWaterDeep = message.getFloat();
+		float mapSize = message.getFloat();
+		float zoneSize = message.getFloat();
+
+		String ftpUrl = Pck.readString(message);
+		String ftpFolder = Pck.readString(message);
+		String ftpUser = Pck.readString(message);
+		String ftpPass = Pck.readString(message);
+
+	//	getFtp().setParam(ftpUrl,ftpUser,ftpPass,ftpFolder);
+
+		//build();
+                
+                Variables.getConsole().output("worldSizeX="+worldSizeX+" url= "+ftpUrl);
+                System.out.println("\n\n **************\n worldSizeX="+worldSizeX+" url= "+ftpUrl+"\n ***********\n\n");
+	}
+
+    public void receivedMessage(ClientChannel cc, ByteBuffer bb) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void leftChannel(ClientChannel cc) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     
     
