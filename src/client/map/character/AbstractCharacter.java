@@ -168,6 +168,8 @@ GraphicShadowCaster, GraphicShadowed {
 	 * recharge l'apperence de l'objet dans une tache secondaire;
 	 */
 	protected void rebuild() {
+            
+            System.out.println("This is rebuilding AbstractCharacter, it s empty");
 		/*world.getGame().getTaskExecutor().execute(new Runnable() {
 			@Override
 			public void run() {

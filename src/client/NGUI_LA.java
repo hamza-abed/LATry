@@ -38,31 +38,17 @@
  */
 
 package client;
-import client.map.World;
-import client.map.tool.misc.FileType;
 
 import client.map.tool.viewer.PDFViewer;
 import client.network.SimpleClientConnector;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.asset.AssetKey;
-import com.jme3.asset.DesktopAssetManager;
-import com.jme3.asset.TextureKey;
-import com.jme3.material.Material;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.shape.Box;
-import com.jme3.texture.Texture;
-import com.jme3.texture.Texture.MagFilter;
-import com.jme3.texture.plugins.AWTLoader;
 import com.sun.pdfview.PDFFile;
-import com.sun.pdfview.PDFPage;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.ConsoleExecuteCommandEvent;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
@@ -77,26 +63,12 @@ import  de.lessvoid.nifty.controls.TextField;
 import  de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.Window;
 import de.lessvoid.nifty.controls.WindowClosedEvent;
-import de.lessvoid.nifty.controls.label.LabelControl;
-import de.lessvoid.nifty.controls.window.WindowControl;
-import de.lessvoid.nifty.elements.render.ImageRenderer;
-import de.lessvoid.nifty.render.NiftyImage;
-import de.lessvoid.nifty.render.batch.spi.BatchRenderBackend;
-import de.lessvoid.nifty.tools.SizeValue;
 import java.awt.Desktop;
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.List;
-import org.ghost4j.document.PDFDocument;
-import org.ghost4j.renderer.SimpleRenderer;
 
 import shared.utils.PropertyReader;
 
@@ -123,7 +95,17 @@ public class NGUI_LA extends AbstractAppState implements ScreenController {
 String nextScreen;
 
 
-  public void startGame(String nextScreen) {
+
+
+public void startloadingTheGame()
+{
+ nifty.gotoScreen("loadGame");  
+ 
+ /*
+  * doit appeler startGame() par la suite pour pouvoir se connecter
+  */
+}
+  public void startGame() {
       
       /*
        * Verification de la connection
@@ -225,7 +207,7 @@ String nextScreen;
       if(nifty.getCurrentScreen().getScreenId().equals("start"))
       {
          // nifty.getCurrentScreen().findNiftyControl("txtf_login", TextField.class).setText("hello");
-          System.out.println("this is start ");
+          //System.out.println("this is start ");
           fillListBox();
       }
       

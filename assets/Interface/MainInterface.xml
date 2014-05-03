@@ -26,6 +26,21 @@
         </effect>
   </style>
   
+  <!--
+  ******************* DEFINITION DE NOUVELS COMPOSANTS ******************
+  -->
+    <!-- this is our nifty little progressbar control -->
+    <controlDefinition name="progressbar" controller="client.gui.controllers.ProgressbarControl">
+        <image filename="Interface/progressbar/progressbar-outer.png" imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15"
+               childLayout="absolute">
+            <image id="#progress" x="0" y="0" filename="Interface/progressbar/progressbar-inner.png" width="32px" height="100%"
+                   imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15"/>
+            <text id="#progress-text" font="Interface/Fonts/Mangal.fnt" text="" textHAlign="center" textVAlign="center"
+                  width="100%" height="100%" x="0" y="0" color="#f00f"/>
+        </image>
+    </controlDefinition>
+
+    <!-- a simple screen -->
  
   
   <screen id="start" controller="client.NGUI_LA">
@@ -61,7 +76,7 @@
         END OF THE FORM
         -->
         <control childLayout="center" height="33px" id="button0" label="Continue" name="button" x="30%" y="80%">
-            <interact onClick="startGame(hud)" />
+            <interact onClick="startloadingTheGame()" />
         </control>
        
         <control childLayout="center" height="32px" id="button1" label="Quit" name="button" x="50%" y="80%">
@@ -69,6 +84,19 @@
         </control>
       </panel>
     </layer>
+  </screen>
+  
+  <screen id="loadGame" controller="client.NGUI_LA">
+       <layer childLayout="absolute" id="layerLoadGame">
+      <panel childLayout="absolute" height="30%" id="panelLoadGame" style="nifty-panel-simple" backgroundImage="Interface/imgs/bgp.png" width="50%" x="25%" y="35%" alpha="30%">
+           <effect>
+	          <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" inherit="true"/>
+	          <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" inherit="true"/>
+	   </effect>
+           
+           <control id="loader" name="progressbar" align="center"   width="400px" height="32px" x="10%" y="37%"/>
+      </panel>
+       </layer>
   </screen>
   
 

@@ -20,6 +20,7 @@ import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.Label;
 import java.util.Properties;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 /**
  *
@@ -81,6 +82,15 @@ public class Variables {
     private static de.lessvoid.nifty.controls.Console console;
     private static SimpleClientConnector clientConnecteur;
     private static  Player mainPlayer;
+    private static  Player playerMission;
+
+    public static Player getPlayerMission() {
+        return playerMission;
+    }
+
+    public static void setPlayerMission(Player playerMission) {
+        Variables.playerMission = playerMission;
+    }
     private static Spatial sceneModel;
 
     public static Spatial getSceneModel() {
@@ -92,6 +102,7 @@ public class Variables {
     }
 
     public static void setWorld(World world) {
+         System.out.println("Variables -> setWorld");
         Variables.world = world;
     }
 
@@ -143,7 +154,7 @@ public class Variables {
     public static void setLaGame(LaGame main)
     {
         Variables.laGame=main;
-        world=new World(laGame);
+       
     }
     
     private static ThreadPoolExecutor executor;
@@ -156,5 +167,23 @@ public class Variables {
 		//logger.info("state : "+executor.getActiveCount()+":"+executor.getQueue().size());
 		return executor;
 	}
+        /**
+	 * gestionnaire de tache
+	 * 
+	 * @return
+	 */
+        private static ScheduledThreadPoolExecutor scheduledExecutor;
+	public static ScheduledThreadPoolExecutor getSchedulerTaskExecutor() {
+		if (scheduledExecutor == null) {
+			scheduledExecutor = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(
+					Integer.parseInt(props.getProperty("la.scheduled.task", "10")));
+			
+			
+			
+
+		}
+		return scheduledExecutor;
+	}
+
     
 }

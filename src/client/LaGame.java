@@ -144,9 +144,9 @@ public class LaGame extends SimpleApplication {
     }
 
     public LaGame() {
-
-       
-        Variables.setClientConnecteur(new SimpleClientConnector(new World(this)));
+        
+        Variables.setWorld(new World(this));
+        Variables.setClientConnecteur(new SimpleClientConnector());
 
         this.actionListener = new ActionListener() {
             public void onAction(String name, boolean keyPressed, float tpf) {
@@ -154,10 +154,19 @@ public class LaGame extends SimpleApplication {
                     /*
                      * 
                      */
-                    NonPlayableCharacter npc = Variables.getWorld().getNpcBuildIfAbsent("npc:1");
-			//if (!Variables.getWorld().isUpdate(npc))
-			//	Variables.getClientConnecteur().updateFromServerAndWait(npc);
-                    System.out.println("\n\n ****** npc updating called *** \n\n");
+                    Player pl=Variables.getWorld().getPlayer();
+                    if(pl!=null)
+                    {
+              System.out.println("\n\n\n ********************* AFFICHAGE DES PARAMETRES DU JOUEUR **************\n\n\n");
+              System.out.println("joueur.getTokens().toString()= "+pl.getTokens().toString());
+              System.out.println("joueur.getItems().toString()= "+pl.getItems().getAllItem().size());
+              System.out.println("joueur.getTasks().toString()= "+pl.getTasks().list().size());
+              System.out.println("pl.getTargets().getAll().size()= "+pl.getTargets().getAll().size());
+              System.out.println("pl.getSkills().getAllSkills().size()= "+pl.getSkills().getAllSkills().size());
+              System.out.println("pl.getName()= "+pl.getName());
+              
+                    }else System.out.println("player got from world est nulll !!");
+              
                     
                    //Node fireCamp=(Node) assetManager.loadModel("Models/Oto/Oto.mesh.xml");
                     Spatial fireCamp = assetManager.loadModel("Models/campfire/campfire.j3o");
@@ -297,7 +306,7 @@ inputManager.setCursorVisible( true );
     }
 
     private void initPlayer() {
-       Variables.setWorld(new World(this));
+     
     
         joueur = new Player(Variables.getWorld(),"demo");
 

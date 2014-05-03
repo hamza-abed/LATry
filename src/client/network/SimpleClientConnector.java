@@ -46,9 +46,9 @@ import shared.variables.Variables;
 public class SimpleClientConnector implements SimpleClientListener,ClientChannelListener{
     
     
-    public SimpleClientConnector(World world)
+    public SimpleClientConnector()
     {
-        this.world=world;
+        this.world=Variables.getWorld();
         Variables.setClientConnecteur(this);
         this.login=login; this.pass=pass;
         
@@ -148,9 +148,9 @@ public class SimpleClientConnector implements SimpleClientListener,ClientChannel
    * @param status the status message to set
    */
   protected void setStatus(String status) {
-      if(Variables.getConsole()!=null)
-      Variables.getConsole().output("> " + status);
-      else
+    //  if(Variables.getConsole()!=null)
+     // Variables.getConsole().output("> " + status);
+     // else
       System.out.println("> " + status);
       
   }
@@ -212,7 +212,9 @@ public class SimpleClientConnector implements SimpleClientListener,ClientChannel
                         Connected=true;
         	     // Variables.getConsole().output("Logged in");
                         setStatus("Logged in");
+                        System.out.println("\n\n\n ********************* CREATE PLAYER FROM SERVER **************\n\n\n");
                         world.createPlayer(login);
+                        System.out.println("\n\n\n ********************* UPDATE WORLD FROM SERVER **************\n\n\n");
         	        updateFromServer(world);
         	        getPingPongTask().start();
         	   //   Variables.getConsole().output("ping pong task has just started !");
@@ -250,7 +252,8 @@ public class SimpleClientConnector implements SimpleClientListener,ClientChannel
         	     * Returns {@code null} since this basic client doesn't support channels.
         	     */
         	    public ClientChannelListener joinedChannel(ClientChannel channel) {
-        	       logger.fine("Rejoins le channel : " + channel.getName());
+        	       //logger.fine("Rejoins le channel : " + channel.getName());
+                        System.out.println("Rejoins le channel : " + channel.getName());
 		if (channel.getName().equals(LaComponent.world.prefix())) {
 			world.setChannel(channel);
 			updateFromServer(world.getWorldToken());
@@ -307,35 +310,35 @@ public class SimpleClientConnector implements SimpleClientListener,ClientChannel
     public void receivedMessage(ByteBuffer message) {
 
         short c = message.getShort();
-        setStatus("a message received from server ! : " + c);
+       // setStatus("a message received from server ! : " + c);
         
 
         switch (c) {
             case PckCode.COMMIT:
-                System.out.println("\n\n *** RECEIVE COMMIT!! ****\n\n");
+                System.out.println("\n\n SCC*** RECEIVE COMMIT!! ****\n\n");
                 world.receiveCommitPck(message);
-                System.out.println("\n\n SCC*** RECEIVE COMMIT ****\n\n");
+              //  System.out.println("\n\n SCC*** RECEIVE COMMIT ****\n\n");
                 break;
             case PckCode.ADD_OBJECT:
-                System.out.println("\n\n *** ADD OBJECT ****\n\n");
+                System.out.println("\n\n SCC*** ADD OBJECT ****\n\n");
                 world.receiveSharedAddPck(message);
 
                 break;
             case PckCode.EXTENDED_DATA:
-                System.out.println("\n\n *** EXTENDED DATA ****\n\n");
+                System.out.println("\n\n SCC*** EXTENDED DATA ****\n\n");
                 world.receiveExtendedDataPck(message);
                 break;
             case PckCode.CREATE_OBJECT:
-                System.out.println("\n\n *** CREATE OBJECT ****\n\n");
+                System.out.println("\n\n SCC*** CREATE OBJECT ****\n\n");
                 //getServerEditor().receiveCreate(message);
                 break;
             case PckCode.UP_TO_DATE_OBJECT:
-                System.out.println("\n\n *** UP TO DATE OBJECT ****\n\n");
+                System.out.println("\n\n SCC*** UP TO DATE OBJECT ****\n\n");
                 world.receiveUpToDatePck(message);
                 break;
 
             case PckCode.ERROR_DATA:
-                System.out.println("\n\n *** ERROR DATA ****\n\n");
+                System.out.println("\n\n SCC*** ERROR DATA ****\n\n");
                 getChatSystem().debug(message);
                 break;
 // pas opérationnelle en v31
@@ -344,24 +347,24 @@ public class SimpleClientConnector implements SimpleClientListener,ClientChannel
 //			break;
 
             case PckCode.PLAYER_TELEPORT:
-                System.out.println("\n\n *** PLAYER TELEPORT ****\n\n");
+                System.out.println("\n\n SCC*** PLAYER TELEPORT ****\n\n");
                 //world.getPlayer().receiveTeleport(message);
                 break;
 
             case PckCode.EXECUTE_SCRIPT:
-                System.out.println("\n\n *** EXECUTE SCRIPT ****\n\n");
+                System.out.println("\n\n SCC*** EXECUTE SCRIPT ****\n\n");
                 world.getScriptExecutor().receivedExecuteScript(message);
                 break;
 
             case PckCode.PING:
-                System.out.println("\n\n *** PING ****\n\n");
+                System.out.println("\n\n SCC*** PING ****\n\n");
                 getPingPongTask().pong();
 
                 break;
 
             // ancien qui disparaitra
             case PckCode.WORLD_DATA:
-                System.out.println("\n\n *** WORLD DATA ****\n\n");
+                System.out.println("\n\n SCC*** WORLD DATA ****\n\n");
                 world.receivedWorldDataPck(message);
                 break;
 
@@ -460,7 +463,7 @@ public class SimpleClientConnector implements SimpleClientListener,ClientChannel
 			public void send(Pck pck) {
 				try {
 					simpleClient.send(pck.toByteBuffer());
-					setStatus("a message has been sent to the server ! : "+pck.toString());
+					setStatus("a message has been sent to the server ! : **SCC "+pck.toString()+" SCC**");
 				} catch (IOException e) {
 					//logger.warning("Connection au serveur echoué");
 					disconnect("Broken Pipe");
@@ -538,10 +541,11 @@ public class SimpleClientConnector implements SimpleClientListener,ClientChannel
      * @param map
      */
     public void updateFromServer(Sharable sharable) {
-        logger.info("simpleClientConnector->updateFromServer(sharable)-> Update de " + sharable.getKey());
+        System.out.println("simpleClientConnector->updateFromServer(sharable)-> Update de " + sharable.getKey());
+        //logger.info("simpleClientConnector->updateFromServer(sharable)-> Update de " + sharable.getKey());
         if(sharable==null) System.out.println("sharable is null");
         
-        setStatus("Update de " + sharable.getKey());
+        System.out.println("Update de " + sharable.getKey());
      /*   getChatSystem().debug(
                 "? " + sharable.getKey() + " (" + sharable.getVersionCode()
                 + ")"); */
@@ -742,16 +746,27 @@ public class SimpleClientConnector implements SimpleClientListener,ClientChannel
 		String ftpUser = Pck.readString(message);
 		String ftpPass = Pck.readString(message);
 
-	//	getFtp().setParam(ftpUrl,ftpUser,ftpPass,ftpFolder);
+	        //getFtp().setParam(ftpUrl,ftpUser,ftpPass,ftpFolder);
 
 		//build();
                 
-                Variables.getConsole().output("worldSizeX="+worldSizeX+" url= "+ftpUrl);
-                System.out.println("\n\n **************\n worldSizeX="+worldSizeX+" url= "+ftpUrl+"\n ***********\n\n");
+              
+ System.out.println("\n\n **************\n SCC receivedWorldDataPck worldSizeX="+worldSizeX+" url= "+ftpUrl+"\n ***********\n\n");
 	}
 
-    public void receivedMessage(ClientChannel cc, ByteBuffer bb) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void receivedMessage(ClientChannel channel, ByteBuffer message) {
+       short code = message.getShort();
+		switch (code) {
+		case PckCode.COMMIT: System.out.println("SCC->receivedMessage->received commit "); break;//receiveCommitPck(message);	break;
+		case PckCode.CHAT: System.out.println("SCC->receivedMessage->received chat code "); break;//getGame().
+                    //Variables.getClientConnecteur().getChatSystem().receivedChatMessage(message); break;
+		case PckCode.DELETE_OBJECT: System.out.println("SCC->receivedMessage->received DELETE OBJECT "); break;//dropObject(Pck.readString(message)); break;
+		case PckCode.PLAYER_DISCONNECT: System.out.println("SCC->receivedMessage->received Player disconnect "); break;//receivePlayerDisconnect(message); break;
+
+		default:
+			//logger.warning("Code packet incconu dans le world : " + code);
+                    System.out.println("SCC-> receivedMessage->Code packet incconu dans le world : " + code); 
+		}
     }
 
     public void leftChannel(ClientChannel cc) {

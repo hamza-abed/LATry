@@ -341,24 +341,32 @@ public abstract class PlayableCharacter extends AbstractCharacter {
 		String oldDisplayName = displayName;
 		String oldGroups = groupStrings;
 		CharacterModel oldModel = modelType;
-		
+		System.out.println("****receiving palyer informations ***");
 		this.versionCode = message.getInt(); // version code
+                System.out.println("versionCode : "+versionCode);
 		this.displayName = Pck.readString(message);
+                System.out.println("displayName : "+displayName);
 		this.groupStrings = Pck.readString(message);
+                System.out.println("groupStrings : "+groupStrings);
 		this.admin = Pck.readBoolean(message);
+                System.out.println("admin : "+admin);
 		this.connected = Pck.readBoolean(message);
+                System.out.println("connected: "+connected);
 		this.modelType = Pck.readEnum(CharacterModel.class, message);
+                System.out.println("modelType: "+modelType.toString());
 		this.hairCut = message.getInt();
+                System.out.println("hairCut: "+hairCut);
 		// this.modelType = CharacterModelType.women;
 		this.x = message.getFloat();
+                System.out.println("X: "+x);
 		this.z = message.getFloat();
-
+                System.out.println("Z: "+z);
 		if (!isNpc() && oldVersionCode == versionCode && oldConnected == connected) {
 			logger.info("reception d'un packet joueur identique au precedent je le prend pas en compte");
 			return;
 		}	
 		
-                
+                System.out.println("****palyer informations received ***");
                 /*
 		this.skin = new ColorRGBA(message.getFloat(), message.getFloat(),message.getFloat(), 1);
 		this.skinAmbient = message.getFloat();
@@ -373,9 +381,12 @@ public abstract class PlayableCharacter extends AbstractCharacter {
 */
 		if (oldModel != modelType || characterNode==null || 
 				oldDisplayName==null || !oldDisplayName.equals(displayName))
+                { System.out.println(" must rebuild ");
 			rebuild();
-		/*else 
-			requestApplyMaterial(); */
+                }
+	        else 
+                    System.out.println(" request aplly material ");
+			//requestApplyMaterial();
 
 		if (groupStrings !=null && !groupStrings.equals(oldGroups))
 			updateGroups();

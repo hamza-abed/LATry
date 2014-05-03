@@ -73,6 +73,11 @@ import client.map.character.stats.PlayerTokens;
 import client.map.character.stats.Skill;
 import client.map.character.stats.Task;
 import client.map.data.SlideShow;
+import client.map.object.BasicMapObject;
+import client.map.object.BuildingMapObject;
+import client.map.object.MapGraphics;
+import client.map.object.MapTable;
+import client.map.object.ParticulEngine;
 //import client.map.object.BasicMapObject;
 //import client.map.object.BuildingMapObject;
 //import client.map.object.MapGraphics;
@@ -96,6 +101,7 @@ import com.jme3.scene.Node;
 //import com.jme.util.GameTaskQueueManager;
 import com.sun.sgs.client.ClientChannel;
 import com.sun.sgs.client.ClientChannelListener;
+import java.util.Collection;
 import java.util.Map;
 import shared.variables.Variables;
 
@@ -136,7 +142,7 @@ public  class World  implements ClientChannelListener,Sharable {
 
 	private HashMap<String, Tool> tools = new HashMap<String, Tool>();
 
-//	private HashMap<String, MapGraphics> objects = new HashMap<String, MapGraphics>();
+	private HashMap<String, MapGraphics> objects = new HashMap<String, MapGraphics>();
 
 //	private HashMap<String, MapLight> lights = new HashMap<String, MapLight>();
 
@@ -171,7 +177,7 @@ public  class World  implements ClientChannelListener,Sharable {
 
 	private HashMap<String, GameData> gameDatas = new HashMap<String, GameData>();
 	
-//	private HashMap<String, MapTable> tables = new HashMap<String, MapTable>();
+	private HashMap<String, MapTable> tables = new HashMap<String, MapTable>();
 
 //	private Sky sky;
 
@@ -207,6 +213,7 @@ public  class World  implements ClientChannelListener,Sharable {
 	 */
    //     private HashMap<String, Script> scripts = new HashMap<String, Script>();
 	public World(LaGame game) {
+            System.out.println("instantiation de World");
 		//super("world");
 		this.game = game;
 		//sky = new Sky(this);
@@ -243,7 +250,7 @@ public  class World  implements ClientChannelListener,Sharable {
 		//this.lgfs.clear();
 		this.npcs.clear();
 		this.maps.clear();
-		//this.objects.clear();
+		this.objects.clear();
 		this.playableCharacter.clear();
 		this.regions.clear();
 		this.skills.clear();
@@ -253,7 +260,7 @@ public  class World  implements ClientChannelListener,Sharable {
 		this.groundeds.clear();
 		this.walkOvers.clear();
 		this.zones.clear();
-		//this.tables.clear();
+		this.tables.clear();
 		this.player = null;
 		this.worldTok = null;
 		this.versionCode = -1;
@@ -265,11 +272,13 @@ public  class World  implements ClientChannelListener,Sharable {
 	 * voila
 	 */
 	private void build() {
+            
+            System.out.println("World-> build() : vide !!");
 	/*
          * J'en sais rien encore à propos de sa
          * Hamza ABED
          */
-            /*
+          /*  
             for (int x = 0; x < worldSizeX; x++)
 			for (int z = 0; z < worldSizeZ; z++)
 				if (!maps.containsKey(LaComponent.map.prefix() + x + ":" + z)) {
@@ -289,14 +298,13 @@ public  class World  implements ClientChannelListener,Sharable {
 	 * @param login
 	 */
 	public void createPlayer(String login) {
-            /*
-             * cela je vais le faire 
-             * plutard
-             */
+            
             
             
 		this.player = new Player(this, login);
 		this.playableCharacter.put(player.getKey(), player);
+                System.out.println("Player created player.getKey()="+player.getKey());
+                Variables.setPlayerMission(player);
             
 	}
 
@@ -475,8 +483,8 @@ public  class World  implements ClientChannelListener,Sharable {
 		String key = Pck.readString(message);
 		try {
 			Sharable s = getSharable(key);
-			
-			logger.info("reception d'un paquet de commit de " + key);
+                 System.out.println("reception d'un paquet de commit de " + key);
+			//logger.info("reception d'un paquet de commit de " + key);
 			//logger.info("reception d'un paquet de commit sur " + s.getClass().toString());
 			s.receiveCommitPck(message);
 			//getGame().getChatSystem().debug("> " + key + " (" + s.getVersionCode() + ")");
@@ -608,14 +616,17 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 		String key = Pck.readString(message);
 		Sharable s = getSharable(key);
 		if (!(s instanceof SharableGroup)) {
-			logger.info("reception d'un add sur un truc qui n'est pas un groupe");
+			//logger.info("reception d'un add sur un truc qui n'est pas un groupe");
+                        System.out.println("reception d'un add sur un truc qui n'est pas un groupe");
 			return;
 		}
 		int nb = message.getInt();
 		ArrayList<Sharable> sharables = new ArrayList<Sharable>();
 		for (int i = 0; i < nb; i++) {
 			Sharable obj = getSharable(Pck.readString(message));
+                        if(obj==null) System.out.println("obj=null !!");
 			int incomingVersionCode = message.getInt();
+                        System.out.println("incomingVersionCode= "+incomingVersionCode);
 			if (obj.getVersionCode() != incomingVersionCode)
 				//game.
                             Variables.getClientConnecteur().updateFromServer(obj);
@@ -1002,14 +1013,14 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 * @return
 	 */
 	public Zone getZoneBuildIfAbsent(String name) {
-		/*if (!zones.containsKey(name)) {
+		if (!zones.containsKey(name)) {
 			String[] str = name.split(":");
 			Zone zone = new Zone(this, Integer.parseInt(str[1]), Integer.parseInt(str[2]));
 			this.zones.put(name, zone);
 			return zone;
 		}
-		return zones.get(name); */
-            return null;
+		return zones.get(name); 
+            //return null;
 	}
 
 	/**
@@ -1165,8 +1176,10 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 */
         
         
-        /*
+        
 	public MapGraphics getMapObject(String key) {
+            
+            System.out.println("World->getMapObject(key) key ="+key);
 		if (!objects.containsKey(key)) {
 			MapGraphics obj;
 			if (key.matches(LaComponent.object.regex()))
@@ -1182,7 +1195,7 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 			this.objects.put(key, obj);
 		}
 		return objects.get(key);
-	}*/
+	}
 
 	/**
 	 * Retrouve une region et le construit si il n'existe pas
@@ -1484,7 +1497,7 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 		//case lgf: return getLgfBuildIfAbsent(key);
 		case map:System.out.println("\nWORLD map \n"); break;// return getMap(key);
 		case npc: System.out.println("\nWORLD NPC \n key= "+key); return getNpcBuildIfAbsent(key);
-		case object: System.out.println("\nWORLD object \n"); break;//return getMapObject(key);
+		case object: System.out.println("\nWORLD object \n"); return getMapObject(key);
 		case particul:System.out.println("\nWORLD particul \n"); break;// return getMapObject(key);
 		case player: System.out.println("\nWORLD retourne player \n"); return getPlayerBuildIfAbsent(key);
 		case playerBag: return getPlayerItemBuildIfAbsent(key);
@@ -1859,8 +1872,8 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 * @return the collidables
 	 */
 	public ArrayList<GraphicCollidable> getCollidables() {
-		//return collidables;
-           return null;
+		return collidables;
+           //return null;
 	}
 
 	/**
@@ -1880,13 +1893,13 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 * @param newPos
 	 * @return
 	 */
-        /*
+       
 	public Region getRegionAt(Vector3f v) {
 		for (Region r : regions.values()) 
 			if (Math.abs(v.x-r.getX())<r.getW() && Math.abs(v.z-r.getZ())<r.getH())
 				return r;
 		return null;
-	}*/
+	}
 	/**
 	 * renvoie la zone à ce point
 	 * @param x
@@ -1902,14 +1915,15 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 * @return the regionVisible
 	 */
 	public boolean isIdenObjectVisible() {
-		//return idenObjectVisible;
-            return true;
+		return idenObjectVisible;
+            //return true;
 	}
 
 	/**
 	 * @param idenObjectVisible the regionVisible to set
 	 */
 	public void setIdenObjectVisible(boolean idenObjectVisible) {
+            System.out.println("World -> setIdenObjectVisible(bool) : vide");
 		/*this.idenObjectVisible = idenObjectVisible;
 		for(Region r : regions.values())
 			r.setVisible(idenObjectVisible);
@@ -1957,7 +1971,7 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	/**
 	 * @return
 	 */
-        /*
+       
 	public Collection<Group> getGroups() {
 		return groups.values();
 	}
@@ -1966,7 +1980,7 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 * Renvoie la liste des joueur connu
 	 * @return
 	 */
-        /*
+        
 	public Collection<PlayableCharacter> getPlayers() {
 		return playableCharacter.values();
 	}

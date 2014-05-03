@@ -53,7 +53,10 @@ import client.editor.annotation.Editable;
 import client.interfaces.network.SharableReflexEditable;
 import client.map.character.NonPlayableCharacter;
 import client.map.character.PlayableCharacter;
+import client.map.object.BasicMapObject;
+import client.map.object.MapTable;
 import com.jme3.math.Vector3f;
+import shared.variables.Variables;
 /*
 import client.map.object.BasicMapObject;
 import client.map.object.MapTable;
@@ -78,7 +81,7 @@ public class PlayerTargets implements SharableReflexEditable, Runnable {
 
 
 	@Editable(type=FieldEditType.map,innerType=FieldEditType.vertex, keyType=FieldEditType.string)
-	//private HashMap<String, Vector3f> targets = new HashMap<String, Vector3f>();
+	private HashMap<String, Vector3f> targets = new HashMap<String, Vector3f>();
 
 	/**
 	 * joueur à qui appartiennent ces tokens
@@ -111,13 +114,13 @@ public class PlayerTargets implements SharableReflexEditable, Runnable {
 	 */
 	@Override
 	public void addData(Pck pck) {
-	/*	
+		
             pck.putInt(targets.size());
 		for (Entry<String, Vector3f> target : targets.entrySet()) {
 			pck.putString(target.getKey());	
 			pck.putFloat(target.getValue().x,target.getValue().y,target.getValue().z);
 		}
-                */
+               
 	}
 
 	/*
@@ -150,7 +153,7 @@ public class PlayerTargets implements SharableReflexEditable, Runnable {
 	public void receiveCommitPck(ByteBuffer message) {
 		this.versionCode = message.getInt(); // version code
 		int c = message.getInt();
-		/*
+		
                 HashMap<String, Vector3f> news = new HashMap<String, Vector3f>();
 		for (int i = 0; i < c; i++)
 			news.put(Pck.readString(message), new Vector3f(
@@ -159,7 +162,7 @@ public class PlayerTargets implements SharableReflexEditable, Runnable {
 					message.getFloat()));
 		targets = news;
 		refreshHud();
-                */
+                
 	}
 	
 	/**
@@ -167,7 +170,8 @@ public class PlayerTargets implements SharableReflexEditable, Runnable {
 	 */
 	private void refreshHud() {
 		if (!player.isPlayer()) return;
-		
+                System.out.println("PlayerTargets->refreshHud() : instruction manquante!!");
+		// refresh boussole pour afficher l'objectif sur la boussole
 		//game.getHud().refreshBoussole();
 	}
 
@@ -179,7 +183,7 @@ public class PlayerTargets implements SharableReflexEditable, Runnable {
 		if (!commiting) {
 			logger.fine("requete de commit des targets");
 			commiting = true;
-			//game.getSchedulerTaskExecutor().schedule(this,LaConstants.WAIT_COMMITING_TIME,TimeUnit.MILLISECONDS);
+			Variables.getSchedulerTaskExecutor().schedule(this,LaConstants.WAIT_COMMITING_TIME,TimeUnit.MILLISECONDS);
 		}
 	}
 	
@@ -190,7 +194,7 @@ public class PlayerTargets implements SharableReflexEditable, Runnable {
 	public void run() {
 		logger.fine("ca commit les targets");
 		commiting = false;
-		//game.commitOnServer(this);		
+		          Variables.getClientConnecteur().commitOnServer(this);		
 	}
 
 	/* ********************************************************** *
@@ -203,8 +207,8 @@ public class PlayerTargets implements SharableReflexEditable, Runnable {
 	 * @return
 	 */
 	public boolean hasTarget(String target) {
-		//return targets.containsKey(target);
-            return false;
+		return targets.containsKey(target);
+           
 	}
 
 	/**
@@ -213,7 +217,7 @@ public class PlayerTargets implements SharableReflexEditable, Runnable {
 	 * @param v
 	 */
 	public void setTarget(String target, Vector3f v) {
-		//targets.put(target, v);
+		targets.put(target, v);
 		commit();
 	}
 	
@@ -221,59 +225,61 @@ public class PlayerTargets implements SharableReflexEditable, Runnable {
 	 * @param npc
 	 */
 	public void setTarget(final NonPlayableCharacter npc) {
-		/*player.getWorld().getGame().updateFromServerAndWait(npc,new Runnable() {
+		Variables.getClientConnecteur().updateFromServerAndWait(npc,new Runnable() {
 			@Override
 			public void run() {
-				//logger.fine("Ajout d'une target de type NPC\n" + npc.getName()+" "+npc.getWorldLoc());
+			logger.fine("Ajout d'une target de type NPC\n" + npc.getName()+" "+npc.getWorldLoc());
 				setTarget(npc.getName(),npc.getWorldLoc());
 			}
 		});
-                */
+               
 	}
 	
 	/**
 	 * @param npc
 	 */
 	public void delTarget(final NonPlayableCharacter npc) {
-	/*	
-            player.getWorld().getGame().updateFromServerAndWait(npc,new Runnable() {
+		
+            //player.getWorld().getGame()
+              Variables.getClientConnecteur().updateFromServerAndWait(npc,new Runnable() {
 			@Override
 			public void run() {
-				//logger.fine("Ajout d'une target de type NPC\n" + npc.getName()+" "+npc.getWorldLoc());
+				logger.fine("Ajout d'une target de type NPC\n" + npc.getName()+" "+npc.getWorldLoc());
 				delTarget(npc.getName());
 			}
 		});
-                */
+                
 	}
 	
 	/**
 	 * @param name
 	 * @param obj
 	 */
-        /*
+     
 	public void setTarget(final String name, final BasicMapObject obj) {
-		player.getWorld().getGame().updateFromServerAndWait(obj,new Runnable() {
+		Variables.getClientConnecteur().updateFromServerAndWait(obj,new Runnable() {
 			@Override
 			public void run() {
 				setTarget(name,obj.getWorldLoc());
 			}
 		});
 	}
-	*/
+	
 	/**
 	 * @param name
 	 * @param obj
 	 */
-        /*
+        
 	public void setTarget(final String name, final MapTable obj) {
-		player.getWorld().getGame().updateFromServerAndWait(obj,new Runnable() {
+		//player.getWorld().getGame()
+          Variables.getClientConnecteur().updateFromServerAndWait(obj,new Runnable() {
 			@Override
 			public void run() {
 				setTarget(name,obj.getWorldLoc());
 			}
 		});
 	}
-        */
+        
 
 	/**
 	 * supprime un target
@@ -281,7 +287,7 @@ public class PlayerTargets implements SharableReflexEditable, Runnable {
 	 * @param target
 	 */
 	public void delTarget(String target) {
-		//targets.remove(target);
+		targets.remove(target);
 		commit();
 	}
 
@@ -289,7 +295,7 @@ public class PlayerTargets implements SharableReflexEditable, Runnable {
 	 * supprime tous les target du joueur
 	 */
 	public void clear() {
-		//targets.clear();
+		targets.clear();
 		commit();
 	}
 	
@@ -297,8 +303,8 @@ public class PlayerTargets implements SharableReflexEditable, Runnable {
 	 * @return
 	 */
 	public HashMap<String, Vector3f> getAll() {
-		//return new HashMap<String, Vector3f>(targets);
-            return null;
+		return new HashMap<String, Vector3f>(targets);
+            //return null;
 	}
 
 	
