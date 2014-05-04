@@ -12,6 +12,7 @@ import de.lessvoid.nifty.tools.SizeValue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import shared.variables.Variables;
 
 public class ProgressbarControl implements Controller, NiftyExample {
   @Nullable
@@ -27,6 +28,8 @@ public class ProgressbarControl implements Controller, NiftyExample {
       @Nonnull final Parameters parameter) {
     progressBarElement = element.findElementById("#progress");
     progressTextElement = element.findElementById("#progress-text");
+    System.out.println("progressbar bound!!!");
+      Variables.setProgressBarBound(true);
   }
 
   @Override

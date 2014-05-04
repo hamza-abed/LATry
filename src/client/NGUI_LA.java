@@ -39,6 +39,7 @@
 
 package client;
 
+import client.gui.controllers.ProgressbarControl;
 import client.map.tool.viewer.PDFViewer;
 import client.network.SimpleClientConnector;
 import com.jme3.app.Application;
@@ -94,16 +95,51 @@ public class NGUI_LA extends AbstractAppState implements ScreenController {
   }
 String nextScreen;
 
+private float progressing=0.0f;
 
+public void progress()
+{
+ if(Variables.isProgressBarBound())  
+ {
+     System.out.println("Progressing="+progressing);
+    progressing+=0.3f;
+    nifty.getScreen("start").findControl("loader", ProgressbarControl.class).setProgress(progressing);
+ }
+ else
+     System.out.println("Progress bar not bound yet!!!");
+   
+ 
+}
 
-
+private boolean canStartLoading=false;
 public void startloadingTheGame()
 {
- nifty.gotoScreen("loadGame");  
+    System.out.println("start loading the game !!");
  
- /*
-  * doit appeler startGame() par la suite pour pouvoir se connecter
-  */
+   
+    
+     //nifty.getScreen("start").findElementByName("GameTitle").setVisible(false);
+     nifty.getScreen("start").findElementByName("user").setVisible(false);
+     nifty.getScreen("start").findElementByName("password").setVisible(false);
+     nifty.getScreen("start").findElementByName("serverSelection").setVisible(false);
+     nifty.getScreen("start").findElementByName("connectionStatus").setVisible(false);
+     nifty.getScreen("start").findElementByName("btnContinue").setVisible(false);
+     nifty.getScreen("start").findElementByName("btnQuit").setVisible(false);
+     nifty.getScreen("start").findElementByName("txtf_login").setVisible(false);
+     nifty.getScreen("start").findElementByName("txtf_pass").setVisible(false);
+     nifty.getScreen("start").findElementByName("selectServer").setVisible(false);
+      
+           nifty.getScreen("start").findElementByName("loader").setVisible(true);
+          /* 
+           for(int i=0;i<50;i++)
+           {progress();
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(NGUI_LA.class.getName()).log(Level.SEVERE, null, ex);
+        }
+           }
+      */
 }
   public void startGame() {
       
@@ -114,23 +150,23 @@ public void startloadingTheGame()
           Variables.setConnectionStatusLabel(nifty.getScreen("start").findNiftyControl("connectionStatus",Label.class));
       
  ///on a besoin de lancer un autre thread ici
-       client.setConnecting(true);
+        client.setConnecting(true);
+         connectServer();
  Variables.getTaskExecutor().execute(new Runnable() {
-			@Override
-			public void run() {
-                            connectServer();
-                        }
- });
+   @Override
+   public void run() {
+   
+   
+                     
       
-       
-      
- while(client.isConnecting())
+ while(client.isConnecting());
 {   System.out.println("still connecting !!!");
-          try {
+        /*  try {
               Thread.sleep(1000);
           } catch (InterruptedException ex) {
               Logger.getLogger(NGUI_LA.class.getName()).log(Level.SEVERE, null, ex);
-          }
+          } 
+          */
 }
       
    if(!client.isConnecting() && !client.isConnected())
@@ -140,27 +176,36 @@ public void startloadingTheGame()
    }
    else
    {   
-        
-       
       System.out.println("this is start game");
       
+     // startloadingTheGame();
+      Variables.getClientConnecteur().startLoadingTheGame();
+    /*  
       Variables.setConsole(nifty.getScreen("chatbar").
       findNiftyControl("textfield2",Console.class));
-    
-    
-       //textfield2
-      if(nifty==null)System.out.println("\n\n nifty =null");   
+        
+  
       
+       nifty.gotoScreen("chatbar");
+       Variables.getLaGame().initGameWold();
+       */
+ }
+      }
+ });
+  
+   
+   }
+
+ public void movetoGameScreen()
+ {
+     Variables.setConsole(nifty.getScreen("chatbar").
+      findNiftyControl("textfield2",Console.class));
+        
   
       
        nifty.gotoScreen("chatbar");
        Variables.getLaGame().initGameWold();
  }
-  
-   
-   }
-
-  
  
   
   public void quitGame() {
@@ -236,7 +281,8 @@ public void startloadingTheGame()
   SimpleClientConnector client;
    
   public void connectServer()
-  {
+  {Variables.setNiftyGUI(this);
+      
       System.err.println("This is connect server");
       /// this about connection to the Red Dwarf server
       

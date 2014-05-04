@@ -53,21 +53,27 @@
 	          <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" inherit="true"/>
 	          <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" inherit="true"/>
 	   </effect>
-        <control font="Interface/Fonts/Mangal.fnt" height="46px" id="label0" name="label" text="Learning Adventure" width="100%" x="0px" y="5%"/>
+           
+           <!--
+           DEFINTION DU PROGRESSBAR INVISIBLE
+           -->
+           
+        <control id="loader" name="progressbar" width="400px" height="32px" x="10%" y="37%" visible="false"/>
+        <control font="Interface/Fonts/Mangal.fnt" height="46px" id="GameTitle" name="label" text="Learning Adventure" width="100%" x="0px" y="5%"/>
         
         <!--
         A FORM FOR CONNECTION
         -->
         <!-- LOGIN -->
-        <control font="aurulent-sans-16.fnt" height="50px" id="label0" name="label" text="Utilisateur" width="100px" x="15%" y="23%"/>
+        <control font="aurulent-sans-16.fnt" height="50px" id="user" name="label" text="Utilisateur" width="100px" x="15%" y="23%"/>
         <control id="txtf_login" name="textfield" width="50%" x="35%" y="30%"/>
       
         <!-- PASSWORD -->
-        <control font="aurulent-sans-16.fnt" height="50px" id="label3" name="label" text="Mot de Passe" width="100px" x="15%" y="38%"/>
+        <control font="aurulent-sans-16.fnt" height="50px" id="password" name="label" text="Mot de Passe" width="100px" x="15%" y="38%"/>
         <control id="txtf_pass" name="textfield" width="50%" x="35%" y="45%" passwordChar="*"/>
         
         <!-- SERVER SELECTION -->
-        <control font="aurulent-sans-16.fnt" height="50px" id="label31" name="label" text="Serveur" width="100px" x="15%" y="52%"/>
+        <control font="aurulent-sans-16.fnt" height="50px" id="serverSelection" name="label" text="Serveur" width="100px" x="15%" y="52%"/>
         <control type="dropDown" id="selectServer"  selectionMode="Single" x="35%" y="60%" width="50%"/>
         <!-- A SIMPLE FIELD FOR CONNECTION STATUS -->
         <control font="aurulent-sans-16.fnt" height="50px" id="connectionStatus" name="label" text="non connecté" width="100%" x="0%" y="63%"/>
@@ -75,11 +81,11 @@
         <!--
         END OF THE FORM
         -->
-        <control childLayout="center" height="33px" id="button0" label="Continue" name="button" x="30%" y="80%">
-            <interact onClick="startloadingTheGame()" />
+        <control childLayout="center" height="33px" id="btnContinue" label="Continue" name="button" x="30%" y="80%">
+            <interact onClick="startGame()" />
         </control>
        
-        <control childLayout="center" height="32px" id="button1" label="Quit" name="button" x="50%" y="80%">
+        <control childLayout="center" height="32px" id="btnQuit" label="Quit" name="button" x="50%" y="80%">
             <interact onClick="quitGame()"/>
         </control>
       </panel>
@@ -94,7 +100,11 @@
 	          <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" inherit="true"/>
 	   </effect>
            
-           <control id="loader" name="progressbar" align="center"   width="400px" height="32px" x="10%" y="37%"/>
+           <control id="loader" name="progressbar" width="400px" height="32px" x="10%" y="37%" visible="false"/>
+           
+            <control  height="33px" id="ok" label="Continue" name="button" x="30%" y="80%">
+            <interact onClick="progress()" />
+        </control>
       </panel>
        </layer>
   </screen>

@@ -5,15 +5,12 @@
 package shared.variables;
 
 import client.LaGame;
+import client.NGUI_LA;
 import client.hud3D.MoveCursor;
 import client.map.World;
 import client.map.character.Player;
 import client.network.SimpleClientConnector;
-import com.jme3.bullet.collision.shapes.BoxCollisionShape;
-import com.jme3.bullet.control.GhostControl;
-import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Console;
@@ -27,6 +24,26 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @author admin
  */
 public class Variables {
+    
+    
+    private static boolean progressBarBound=false;
+
+    public static boolean isProgressBarBound() {
+        return progressBarBound;
+    }
+
+    public static void setProgressBarBound(boolean progressBarBound) {
+        Variables.progressBarBound = progressBarBound;
+    }
+    private static NGUI_LA niftyGUI;
+
+    public static NGUI_LA getNiftyGUI() {
+        return niftyGUI;
+    }
+
+    public static void setNiftyGUI(NGUI_LA niftyGUI) {
+        Variables.niftyGUI = niftyGUI;
+    }
  
    private static Properties props;
 

@@ -426,13 +426,15 @@ inputManager.setCursorVisible( true );
     private void initSceneGame() {
           //  Variables.getConsole().output("initSceneGame()"); 
         boussole=new Boussole();
+        //sceneModel1.updateGeometricState();
         rootNode.detachAllChildren();
+        rootNode.updateGeometricState();
         sceneModel1.updateGeometricState();
         //rootNode.updateGeometricState();
         //  rootNode.detachChildNamed("water"); 
         //rootNode.detachChild(sceneModel1);
         sceneModel = assetManager.loadModel("Scenes/scene1.j3o");
-       // sceneModel.updateGeometricState();
+        sceneModel.updateGeometricState();
         sceneModel.setName("Scene of the main game");
          //sceneModel = assetManager.loadModel("Scenes/starting.j3o");
           rootNode.attachChild(sceneModel);

@@ -4,7 +4,6 @@
  */
 package client.network;
 
-import client.HttpResourceLocator;
 import client.LaTraces;
 import client.RessourceManager;
 import client.chat.ChatSystem;
@@ -32,7 +31,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
-import shared.constants.LaConstants;
 import shared.constants.PckCode;
 import shared.enums.LaComponent;
 import shared.pck.Pck;
@@ -211,15 +209,27 @@ public class SimpleClientConnector implements SimpleClientListener,ClientChannel
         	        connecting=false;
                         Connected=true;
         	     // Variables.getConsole().output("Logged in");
-                        setStatus("Logged in");
+                        
+                        Variables.getNiftyGUI().startloadingTheGame();
+                        startLoadingTheGame();
+                       
+        	    }
+                public void startLoadingTheGame()
+                {
+                     setStatus("Logged in");
+                        Variables.getNiftyGUI().progress();
                         System.out.println("\n\n\n ********************* CREATE PLAYER FROM SERVER **************\n\n\n");
                         world.createPlayer(login);
+                        Variables.getNiftyGUI().progress();
                         System.out.println("\n\n\n ********************* UPDATE WORLD FROM SERVER **************\n\n\n");
         	        updateFromServer(world);
+                        Variables.getNiftyGUI().progress();
         	        getPingPongTask().start();
+                        Variables.getNiftyGUI().progress();
         	   //   Variables.getConsole().output("ping pong task has just started !");
                         setStatus("ping pong task has just started !");
-        	    }
+                        Variables.getNiftyGUI().movetoGameScreen();
+                }
 
         	    /**
         	     * {@inheritDoc}
