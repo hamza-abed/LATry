@@ -61,7 +61,6 @@ import client.map.character.stats.UserModel;
 //import client.map.object.BasicMapObject;
 //import client.map.object.MapTable;
 import client.script.ScriptableMethod;
-import com.jme3.math.ColorRGBA;
 
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector2f;
@@ -161,11 +160,11 @@ public abstract class PlayableCharacter extends AbstractCharacter {
 		//world.getGame().
                 Variables.getClientConnecteur().updateFromServer(this.items);
 		//world.getGame().
-               Variables.getClientConnecteur().updateFromServer(this.tasks);
+                Variables.getClientConnecteur().updateFromServer(this.tasks);
 		//world.getGame().
-               Variables.getClientConnecteur().updateFromServer(this.targets);
+                Variables.getClientConnecteur().updateFromServer(this.targets);
 		//world.getGame().
-               Variables.getClientConnecteur().updateFromServer(this.skills);
+                Variables.getClientConnecteur().updateFromServer(this.skills);
 	}
 
 	/* ********************************************************** *
@@ -319,13 +318,13 @@ public abstract class PlayableCharacter extends AbstractCharacter {
 		pck.putEnum(modelType);
 		pck.putInt(hairCut);
 		pck.putFloat(x,z);
-                /*
+               
 		pck.putFloat(skin.r,skin.g,skin.b,skinAmbient);
 		pck.putFloat(topCloth.r,topCloth.g,topCloth.b,topClothAmbient);
 		pck.putFloat(bottomCloth.r,bottomCloth.g,bottomCloth.b,bottomClothAmbient);
 		pck.putFloat(hair.r,hair.g,hair.b,hairAmbient);
 		pck.putFloat(shoes.r,shoes.g,shoes.b,shoesAmbient);
-                */
+               
 	}
 
 	/*

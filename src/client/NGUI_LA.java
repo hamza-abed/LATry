@@ -90,8 +90,6 @@ public class NGUI_LA extends AbstractAppState implements ScreenController {
   private boolean firstTime=true;
   /** custom methods */
   public NGUI_LA() {
-      //screen= this
-   
       
     /** You custom constructor, can accept arguments */
   }
@@ -131,21 +129,11 @@ public void startloadingTheGame()
      nifty.getScreen("start").findElementByName("txtf_pass").setVisible(false);
      nifty.getScreen("start").findElementByName("selectServer").setVisible(false);
       
-           nifty.getScreen("start").findElementByName("loader").setVisible(true);
-          /* 
-           for(int i=0;i<50;i++)
-           {progress();
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(NGUI_LA.class.getName()).log(Level.SEVERE, null, ex);
-        }
-           }
-      */
+     nifty.getScreen("start").findElementByName("loader").setVisible(true);
+         
 }
   public void startGame() {
-      
-      /*
+     /*
        * Verification de la connection
        */
       if(Variables.getConnectionStatusLabel()==null)
@@ -174,6 +162,7 @@ public void startloadingTheGame()
         try{
         if(Variables.getLaGame().getFindWay()==null)
                 System.out.println("\n findway=null !!");
+        
          Variables.getLaGame().getSchedulerTaskExecutor().submit(Variables.getLaGame().getFindWay());
         }catch(Exception ex)
         {

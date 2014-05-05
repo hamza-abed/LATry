@@ -278,7 +278,7 @@ public  class World  implements ClientChannelListener,Sharable {
          * J'en sais rien encore à propos de sa
          * Hamza ABED
          */
-          /*  
+         /*
             for (int x = 0; x < worldSizeX; x++)
 			for (int z = 0; z < worldSizeZ; z++)
 				if (!maps.containsKey(LaComponent.map.prefix() + x + ":" + z)) {
@@ -303,7 +303,7 @@ public  class World  implements ClientChannelListener,Sharable {
             
 		this.player = new Player(this, login);
 		this.playableCharacter.put(player.getKey(), player);
-                System.out.println("Player created player.getKey()="+player.getKey());
+                System.out.println("Player created player.getKey()="+player.getName());
                 Variables.setPlayerMission(player);
             
 	}
@@ -318,7 +318,7 @@ public  class World  implements ClientChannelListener,Sharable {
 	 * @param interpolation
 	 */
 	public void update(float interpolation) {
-            
+            System.out.println("World->update(interpolation="+interpolation+") : vide !!");
             /*
              * En jme3 on a pas besoin de mettre à jour des animation
              * car les animation sont tout simplement gérés par 
@@ -370,7 +370,7 @@ public  class World  implements ClientChannelListener,Sharable {
 	public void removeGraphics(Graphic s) {
             
             /*
-             * Cela aussi peut être aussi plus simpel que sa
+             * Cela aussi peut être plus simple que sa
              */
             /*
 		if (s.getGraphic() == null)
@@ -465,10 +465,11 @@ public  class World  implements ClientChannelListener,Sharable {
             /*
              * Cela ne sera plus pris en compte
              * Hamza ABED
-             * 
+             */ 
+            System.out.println("World->updateMapObjectY(Map)");
 		for (MapGraphics obj : objects.values())
 			obj.updateY();
-                      */
+                      
 	}
 
 	/* ********************************************************** *
@@ -1183,13 +1184,13 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 		if (!objects.containsKey(key)) {
 			MapGraphics obj;
 			if (key.matches(LaComponent.object.regex()))
-				obj = new BasicMapObject(this, Integer.parseInt(key.split(":")[1]));
+                        {	obj = new BasicMapObject(this, Integer.parseInt(key.split(":")[1])); System.out.println("OBJECT");}
 			else if (key.matches(LaComponent.building.regex()))
-				obj = new BuildingMapObject(this, Integer.parseInt(key.split(":")[1]));
+                        {obj = new BuildingMapObject(this, Integer.parseInt(key.split(":")[1]));System.out.println("BUILDING");}
 			else if (key.matches(LaComponent.particul.regex()))
-				obj = new ParticulEngine(this, Integer.parseInt(key.split(":")[1]));
+                        {obj = new ParticulEngine(this, Integer.parseInt(key.split(":")[1])); System.out.println("PARTICUL");}
 			else if (key.matches(LaComponent.table.regex()))
-				obj = new MapTable(this, Integer.parseInt(key.split(":")[1]));
+                        {obj = new MapTable(this, Integer.parseInt(key.split(":")[1])); System.out.println("TABLE");}
 			else 
 				throw new IllegalArgumentException("type de clef incconnu "+key);
 			this.objects.put(key, obj);
@@ -1203,13 +1204,13 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 * @return
 	 */
         
-        /*
+        
 	public Region getRegionBuildIfAbsent(String key) {
 		if (!regions.containsKey(key)) {
 			this.regions.put(key, new Region(this,Integer.parseInt(key.split(":")[1])));
 		}
 		return regions.get(key);
-	}*/
+	}
 
 	/**
 	 * Renvoie l'outil correspondant
@@ -1217,14 +1218,14 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 * @param key
 	 * @return
 	 */
-        /*
+       
 	private Tool getToolBuildIfAbsent(String key) {
 		if (!tools.containsKey(key)) {
 			Tool tool = new Tool(this, Integer.parseInt(key.split(":")[1]));
 			this.tools.put(key, tool);
 		}
 		return tools.get(key);
-	}*/
+	}
 
 	/**
 	 * Renvoie l'outil correspondant
@@ -1233,10 +1234,10 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 * @return
 	 */
         
-        /*
+        
 	public Tool getToolBuildIfAbsent(int id) {
 		return getToolBuildIfAbsent(LaComponent.tool.prefix()+id);
-	}*/
+	}
 
 	/**
 	 * Renvoie l'item la crais si elle n'existe pas
@@ -1244,15 +1245,15 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 * @param key
 	 * @return
 	 */
-        /*
+        
 	public MapTable getTableBuildIfAbsent(String key) {
 		if (!tables.containsKey(key)) {
 			MapTable obj = new MapTable(this, Integer.parseInt(key.split(":")[1]));
 			this.tables.put(key, obj);
-			//game.updateFromServer(obj);
+			Variables.getClientConnecteur().updateFromServer(obj);
 		}
 		return tables.get(key);
-	}*/
+	}
 	
 	/**
 	 * Renvoie l'item la crais si elle n'existe pas
@@ -1261,15 +1262,15 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 * @return
 	 */
         
-        /*
+       
 	public Item getItemBuildIfAbsent(String key) {
 		if (!items.containsKey(key)) {
 			Item obj = new Item(this, Integer.parseInt(key.split(":")[1]));
 			this.items.put(key, obj);
-			game.updateFromServer(obj);
+			Variables.getClientConnecteur().updateFromServer(obj);
 		}
 		return items.get(key);
-	}*/
+	}
 
 	/**
 	 * Renvoie le skill la crais si elle n'existe pas
@@ -1277,25 +1278,25 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 * @param key
 	 * @return
 	 */
-        /*
+       
 	private Skill getSkillBuildIfAbsent(String key) {
 		if (!skills.containsKey(key)) {
 			Skill obj = new Skill(this, Integer.parseInt(key.split(":")[1]));
 			this.skills.put(key, obj);
-			game.updateFromServer(obj);
+			Variables.getClientConnecteur().updateFromServer(obj);
 		}
 		return skills.get(key);
-	}*/
+	}
 
 	/**
 	 * idem mais avec un identifiant
 	 * @param skill
 	 * @return
 	 */
-        /*
+       
 	public Skill getSkillBuildIfAbsent(int skill) {
 		return getSkillBuildIfAbsent(LaComponent.skill.prefix()+skill);
-	}*/
+	}
 
 	/**
 	 * Renvoie le dialog le crais si absent
@@ -1304,14 +1305,14 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 * @return
 	 */
         
-        /*
+       
 	public Dialog getDialogBuildIfAbsent(String key) {
 		if (!dialogs.containsKey(key)) {
 			Dialog obj = new Dialog(this, Integer.parseInt(key.split(":")[1]));
 			this.dialogs.put(key, obj);
 		}
 		return dialogs.get(key);
-	}*/
+	}
 
 	/**
 	 * TODO commentaire World.getGameDataBuildIfAbsent
@@ -1319,14 +1320,14 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 * @return
 	 */
         
-        /*
+       
 	private GameData getGameDataBuildIfAbsent(String key) {
 		if (!gameDatas.containsKey(key)) {
 			GameData gd = new GameData(this, Integer.parseInt(key.split(":")[1]));
 			this.gameDatas.put(key, gd);
 		}
 		return gameDatas.get(key);
-	}*/
+	}
 
 	/**
 	 * Renvoie la ressource LGF le creer si absent
@@ -1350,14 +1351,14 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 * @return
 	 */
         
-        /*
+       
 	private Task getTaskBuildIfAbsent(String key) {
 		if (!tasks.containsKey(key)) {
 			Task obj = new Task(this, Integer.parseInt(key.split(":")[1]));
 			this.tasks.put(key, obj);
 		}
 		return tasks.get(key);
-	}*/
+	}
 
 	/**
 	 * idem avec un identifiant numeraire
@@ -1365,11 +1366,11 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 * @return
 	 */
         
-        /*
+       
 	public Task getTaskBuildIfAbsent(int taskId) {
 		return getTaskBuildIfAbsent(LaComponent.task.prefix()+taskId);
 	}
-*/
+
 	/**
 	 * Renvoie le script le crais si il n'existe pas
 	 * 
@@ -1392,14 +1393,14 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 * @return
 	 */
         
-        /*
+        
 	public SlideShow getSlideShowBuildIfAbsent(String key) {
 		if (!slides.containsKey(key)) {
 			SlideShow s = new SlideShow(this,Integer.parseInt(key.split(":")[1]));
 			this.slides.put(key,s);
 		}
 		return slides.get(key);
-	}*/
+	}
 
 
 	/**
@@ -1485,7 +1486,7 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	public Sharable getSharable(String key) {
 		
             switch (LaComponent.type(key)) {
-		case table: System.out.println("\nWORLD table \n"); break;//return getTableBuildIfAbsent(key);
+		case table: System.out.println("\nWORLD table \n"); return getTableBuildIfAbsent(key);
 		case building:System.out.println("\nWORLD building \n"); break; //return getMapObject(key);
 		case dialog:System.out.println("\nWORLD dialog \n"); break;//return getDialogBuildIfAbsent(key);
 		case gamedata:System.out.println("\nWORLD gamedata \n"); break;//return getGameDataBuildIfAbsent(key);
@@ -1505,12 +1506,12 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 		case playerTarget: return getPlayerTargetsBuildIfAbsent(key);
 		case playerTask: return getPlayerTasksBuildIfAbsent(key);
 		case playerToken: return getPlayerTokensBuildIfAbsent(key);
-		case region: System.out.println("\nWORLD getRegionBuild \n"); break;//return getRegionBuildIfAbsent(key);
+		case region: System.out.println("\nWORLD getRegionBuild \n"); return getRegionBuildIfAbsent(key);
 		case script: return getScriptBuildIfAbsent(key);
-		case skill: System.out.println("\nWORLD skill \n"); break;//return getSkillBuildIfAbsent(key);
-		case slides: System.out.println("\nWORLD slides \n"); break;//return getSlideShowBuildIfAbsent(key);
-		case task: System.out.println("\nWORLD task \n"); break;//return getTaskBuildIfAbsent(key);
-		case tool: System.out.println("\nWORLD tool \n"); break;//return getToolBuildIfAbsent(key);
+		case skill: System.out.println("\nWORLD skill \n"); return getSkillBuildIfAbsent(key);
+		case slides: System.out.println("\nWORLD slides \n"); return getSlideShowBuildIfAbsent(key);
+		case task: System.out.println("\nWORLD task \n"); return getTaskBuildIfAbsent(key);
+		case tool: System.out.println("\nWORLD tool \n"); return getToolBuildIfAbsent(key);
 		case zone: return getZoneBuildIfAbsent(key);
 		case worldToken: System.out.println("\nWORLD world token \n"); break;//return getWorldToken();
 		default:
@@ -1646,7 +1647,7 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 */
 	@ScriptableMethod(description="change la valeur du token dans la categorie par defaut")
 	public void setToken(String token, String value) {
-		//getWorldToken().addToken(token, value);
+		getWorldToken().addToken(token, value);
 	}
 
 		
@@ -1657,7 +1658,7 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 */
 	@ScriptableMethod(description="supprime le token dans la categorie par defaut")
 	public void delToken(String token) {
-		//getWorldToken().delToken(token);
+		getWorldToken().delToken(token);
 	}
 
 	/**
@@ -1667,7 +1668,7 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 */
 	@ScriptableMethod(description="supprime le token dans la categorie donné")
 	public void delToken(String cat, String token) {
-		//getWorldToken().delToken(cat, token);
+		getWorldToken().delToken(cat, token);
 	}
 
 	/**
@@ -1678,8 +1679,8 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 */
 	@ScriptableMethod(description="renvoie la valeur string du token")
 	public Long getTokenAsLong(String cat, String token) {
-		//return getWorldToken().getTokenAsLong(cat, token);
-            return null;
+		return getWorldToken().getTokenAsLong(cat, token);
+            
 	}
 
 	/**
@@ -1690,8 +1691,8 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 */
 	@ScriptableMethod(description="renvoie la valeur string du token")
 	public String getTokenAsString(String cat, String token) {
-		//return getWorldToken().getTokenAsString(cat, token);
-             return null;
+		return getWorldToken().getTokenAsString(cat, token);
+             
 	}
 
 	/**
@@ -1708,8 +1709,8 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 */
 	@ScriptableMethod(description="renvoie la valeur numerere du token")
 	public float getToken(String cat, String token) {
-		//return getWorldToken().getToken(cat, token);
-             return 0;
+		return getWorldToken().getToken(cat, token);
+             
 	}
 
 	/**
@@ -1725,8 +1726,8 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 */
 	@ScriptableMethod(description="renvoie la valeur numerere du token")
 	public float getToken(String token) {
-		//return getWorldToken().getToken(token);
-             return 0;
+		return getWorldToken().getToken(token);
+             
 	}
 
 	/**
@@ -1734,7 +1735,7 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 */
 	@ScriptableMethod(description="supprimme tous les token du monde")
 	public void clearAllToken() {
-		//getWorldToken().clearAll();
+		getWorldToken().clearAll();
 	}
 
 
@@ -1762,22 +1763,22 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 			});
 			out.wait();
 		}
-		//return getGameDataBuildIfAbsent(out[0]);
+		return getGameDataBuildIfAbsent(out[0]);
                 
-                return null;
+               
 	}
 	
 	@ScriptableMethod(description="Renvoie la donner de jeux correspondant à la clef")
 	public GameData getGameData(String key) {
-		//return getGameDataBuildIfAbsent(key);
-             return null;
+		return getGameDataBuildIfAbsent(key);
+             
 	}
-/*
+
 	@ScriptableMethod(description="permet de lancer une recher sur les game data")
 	public GameDataSearch findGameData() {
 		return new GameDataSearch(gameDatas.values());
 	}
-*/	
+	
 	/* ********************************************************** *
 	 * * 					Getters / Setters 					* *
 	 * ********************************************************** */
@@ -1810,9 +1811,9 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	/**
 	 * @return the channel
 	 */
-	/*public ClientChannel getChannel() {
+	public ClientChannel getChannel() {
 		return channel;
-	}/*/
+	}
 
 	/**
 	 * @param channel
@@ -1826,7 +1827,7 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	/**
 	 * @return the worldScaleY
 	 */
-        /*
+       
 	public float getWorldScaleY() {
 		return worldScaleY;
 	}
@@ -1834,7 +1835,7 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	/**
 	 * @return the worldWaterDeep
 	 */
-        /*
+       
 	public float getWorldWaterDeep() {
 		return worldWaterDeep;
 	}

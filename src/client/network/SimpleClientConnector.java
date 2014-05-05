@@ -41,7 +41,7 @@ import shared.variables.Variables;
  *
  * @author admin
  */
-public class SimpleClientConnector implements SimpleClientListener,ClientChannelListener{
+public class SimpleClientConnector implements SimpleClientListener{
     
     
     public SimpleClientConnector()
@@ -208,8 +208,8 @@ public class SimpleClientConnector implements SimpleClientListener,ClientChannel
         	    public void loggedIn() {
         	        connecting=false;
                         Connected=true;
-        	     // Variables.getConsole().output("Logged in");
-                        
+        	    
+                    //cela affichera le progressBar    
                         Variables.getNiftyGUI().startloadingTheGame();
                         startLoadingTheGame();
                        

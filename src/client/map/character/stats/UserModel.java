@@ -103,10 +103,10 @@ public class UserModel implements Runnable {
 	 */
 	@Override
 	public void run() {
-		logger.info("start UM Task "+server+"user/"+player.getLogin());
+		System.out.println("start UM Task "+server+"user/"+player.getLogin());
 		try {
 			
-			logger.info("UM serveur "+player);
+			System.out.println("UM serveur "+player);
 			ClientResponse r = client.
 			resource(server+"user/"+player.getLogin()).
 			accept(MediaType.APPLICATION_XML).
@@ -127,7 +127,7 @@ public class UserModel implements Runnable {
 			logger.warning("le Server UserModel marche pas j'arrete la tache pour : "+player+"[erreur= "+e.getLocalizedMessage()+"]");
 			task.cancel(false);
 		}
-		logger.fine("end UM Task "+player);
+		          System.out.println("end UM Task "+player);
 	}
 
 	/**
@@ -170,6 +170,7 @@ public class UserModel implements Runnable {
 	 * Met à jour le hud.
 	 */
 	private void refreshHud() {
+            System.out.println("UserModel->refreshHud() : vide !!");
 		//player.getWorld().getGame().getHud().getSkillBook().refresh();
 	}
 
@@ -247,8 +248,8 @@ public class UserModel implements Runnable {
 	 * Envoie les préférence de l'utisateur sur son apperence
 	 */
 	public void sendCharacterPreference() {
-	/*	
-            player.getWorld().getGame().getTaskExecutor().execute(new Runnable() {
+		
+            Variables.getTaskExecutor().execute(new Runnable() {
 			@Override
 			public void run() {
 				setValue(prefCatName, "model", player.getModelType().toString(),"1");
@@ -265,7 +266,7 @@ public class UserModel implements Runnable {
 				setValue(prefCatName, "hair-ambient", Float.toString(player.getHairAmbient()),"1");
 			}
 		});
-                */
+               
 	}
 
 	/* ********************************************************** *

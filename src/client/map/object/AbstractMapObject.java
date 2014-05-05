@@ -54,7 +54,9 @@ import client.script.ScriptableMethod;
 import client.task.GraphicsAddRemoveSceneTask;
 import client.utils.ModelLoader;
 import com.jme3.math.FastMath;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.Spatial.CullHint;
 import shared.variables.Variables;
 /*
 import com.jme.bounding.OrientedBoundingBox;
@@ -180,7 +182,7 @@ GraphicReflexEditable, GraphicCollidable, GraphicShadowCaster {
 	 */
 	private void rebuildTask() {
           System.out.println("AbstractMapObject->rebuildTask() vide!!");
-            /*
+           /*
 		          Variables.getTaskExecutor().execute(new Runnable() {
 			@Override
 			public void run() {
