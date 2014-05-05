@@ -183,7 +183,7 @@ public class PlayerTargets implements SharableReflexEditable, Runnable {
 		if (!commiting) {
 			logger.fine("requete de commit des targets");
 			commiting = true;
-			Variables.getSchedulerTaskExecutor().schedule(this,LaConstants.WAIT_COMMITING_TIME,TimeUnit.MILLISECONDS);
+			Variables.getLaGame().getSchedulerTaskExecutor().schedule(this,LaConstants.WAIT_COMMITING_TIME,TimeUnit.MILLISECONDS);
 		}
 	}
 	

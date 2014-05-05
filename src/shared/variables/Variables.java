@@ -184,23 +184,7 @@ public class Variables {
 		//logger.info("state : "+executor.getActiveCount()+":"+executor.getQueue().size());
 		return executor;
 	}
-        /**
-	 * gestionnaire de tache
-	 * 
-	 * @return
-	 */
-        private static ScheduledThreadPoolExecutor scheduledExecutor;
-	public static ScheduledThreadPoolExecutor getSchedulerTaskExecutor() {
-		if (scheduledExecutor == null) {
-			scheduledExecutor = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(
-					Integer.parseInt(props.getProperty("la.scheduled.task", "10")));
-			
-			
-			
-
-		}
-		return scheduledExecutor;
-	}
+        
 
     
 }

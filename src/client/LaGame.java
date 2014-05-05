@@ -45,9 +45,7 @@ import client.hud3D.MoveCursor;
 import client.input.MainGameListener;
 import client.map.WaterPlan;
 import client.map.World;
-import client.map.character.NonPlayableCharacter;
 import client.map.character.Player;
-import client.map.tool.viewer.PDFRead;
 import client.map.tool.viewer.PDFViewer;
 import client.network.SimpleClientConnector;
 import com.jme3.app.SimpleApplication;
@@ -61,10 +59,8 @@ import com.jme3.collision.CollisionResults;
 import com.jme3.font.BitmapText;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.KeyInput;
-import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
-import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
@@ -89,11 +85,16 @@ import com.jme3.terrain.heightmap.ImageBasedHeightMap;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture.WrapMode;
 import com.jme3.texture.plugins.AWTLoader;
-import com.sun.jersey.core.spi.scanning.uri.VfsSchemeScanner;
 import com.sun.sgs.client.simple.SimpleClient;
 import de.lessvoid.nifty.Nifty;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import shared.variables.Variables;
 
@@ -137,10 +138,7 @@ public class LaGame extends SimpleApplication {
         app.setSettings(settings);
         app.start();
 
-        /*
-         * ici on doit se connecter pour commencer à recevoir les message ping pong
-         * on appelle la methode connect du SimpleClientConnector
-         */
+       
     }
 
     public LaGame() {
@@ -216,10 +214,19 @@ public class LaGame extends SimpleApplication {
     @Override
     public void simpleInitApp() {
 
+         System.out.println("This is calling find way0 "+Thread.currentThread().getName()); 
         app.setDisplayFps(false);
         app.setDisplayStatView(false);
         bulletAppState = new BulletAppState(); //Ceci c'est pour spécifier 
         stateManager.attach(bulletAppState); //qu'on va travailler avec des physics
+       
+        
+     
+        
+        
+        
+        
+        
         //le bulletAppState est un variable utilisé dans tout le jeux
         //pour ajouter des palyers
         
@@ -242,8 +249,43 @@ public class LaGame extends SimpleApplication {
         setUpKeys();
         bulletAppState.getPhysicsSpace().enableDebug(assetManager);
         */
+     
+        findWay = new Callable(){
+    public Object call() throws Exception {
+ 
+        //Read or write data from the scene graph -- via the execution queue:
+         enqueue(new Callable() {
+            public Object call() throws Exception {
+               System.out.println("This is calling find way1 "+Thread.currentThread().getName()); 
+               initGameWorld();
+                
+                return null;
+            }
+        }).get();
+ 
+        // This world class allows safe access via synchronized methods
+        // Data data = myWorld.getData(); 
+ 
+        //... Now process data and find the way ...
+ 
+        return null;
+    }
+
+        };
+        
+        
+           
+     
         }
-    
+  
+  private Callable findWay;  
+
+    public Callable getFindWay() {
+        return findWay;
+    }
+  
+  
+  
 private static final float INCLINAISON = FastMath.HALF_PI;
     public BulletAppState getBulletAppState() {
         return bulletAppState;
@@ -399,55 +441,50 @@ inputManager.setCursorVisible( true );
   
     private void initStartingScene() {
        // sceneModel = assetManager.loadModel("Scenes/scene1.j3o");
-         sceneModel1 = assetManager.loadModel("Scenes/starting.j3o");
+        sceneModel1 = assetManager.loadModel("Scenes/starting.j3o");
         rootNode.attachChild(sceneModel1);
         sceneModel1.setName("sceneModel1");
-     //   sceneModel.setLocalTranslation(0, 2, 0);
+
         
         sceneModel1.setLocalTranslation(0, -170, 0);
-        //initTerrain();
-        //initSimpleWater();
-        //initPPcWater();
-        /*    CollisionShape sceneShape =
-                CollisionShapeFactory.createMeshShape((Node) sceneModel);
-        landscape = new RigidBodyControl(sceneShape, 0);
-        sceneModel.addControl(landscape);  //define the scene as a rigid body
-
-        bulletAppState.getPhysicsSpace().add(landscape);
-
-        Variables.setSceneModel(sceneModel);
-        */
+       
         waterPlan=new WaterPlan(sceneModel1);
         waterPlan.setWaterOnTheGame();
-       // waterPlan.setSimpleWaterOnTheGame();
+       
     }
     
     
     private void initSceneGame() {
-          //  Variables.getConsole().output("initSceneGame()"); 
+      //  Variables.getConsole().output("initSceneGame()"); 
+        
+      //  guiNode.detachAllChildren();
+      //  guiNode.updateGeometricState();
         boussole=new Boussole();
-        //sceneModel1.updateGeometricState();
+       // sceneModel1.updateGeometricState();
+       // rootNode.updateGeometricState();
         rootNode.detachAllChildren();
-        rootNode.updateGeometricState();
+       
         sceneModel1.updateGeometricState();
-        //rootNode.updateGeometricState();
-        //  rootNode.detachChildNamed("water"); 
-        //rootNode.detachChild(sceneModel1);
+        rootNode.updateGeometricState();
+        
         sceneModel = assetManager.loadModel("Scenes/scene1.j3o");
         sceneModel.updateGeometricState();
         sceneModel.setName("Scene of the main game");
          //sceneModel = assetManager.loadModel("Scenes/starting.j3o");
           rootNode.attachChild(sceneModel);
+          //rootNode.updateGeometricState();
           sceneModel.setLocalTranslation(0, 2, 0);
         
         
         CollisionShape sceneShape =
-                CollisionShapeFactory.createMeshShape((Node) sceneModel);
+        CollisionShapeFactory.createMeshShape((Node) sceneModel);
         landscape = new RigidBodyControl(sceneShape, 0);
         sceneModel.addControl(landscape);  //define the scene as a rigid body
-
-        bulletAppState.getPhysicsSpace().add(landscape);
-
+           //bulletAppState.getPhysicsSpace().clearForces();
+        Variables.getLaGame().getBulletAppState()
+        .getPhysicsSpace().add(landscape);
+         //bulletAppState.update(0);
+     //  stateManager.
         Variables.setSceneModel(sceneModel);
         
         waterPlan=new WaterPlan(sceneModel);
@@ -460,6 +497,7 @@ inputManager.setCursorVisible( true );
     @Override
     public void simpleRender(RenderManager rm) {
         //TODO: add render code
+    
     }
 
     private TerrainQuad terrain;
@@ -541,9 +579,25 @@ inputManager.setCursorVisible( true );
     }
 
     
-    public void initGameWold()
+    
+    
+ private Future ft;
+
+    /*
+     * cette méthode exécute la méthode 
+     */
+    public Future getFt() {
+        return ft;
+    }
+
+    public void setFt(Future ft) {
+        this.ft = ft;
+    }
+  
+    
+    public void initGameWorld()
     {
-       
+        System.out.println("This is calling find way2 "+Thread.currentThread().getName()); 
         initSceneGame();
         initPlayer();
         gameListener = new MainGameListener(sceneModel);
@@ -556,6 +610,7 @@ inputManager.setCursorVisible( true );
        
          setUpKeys();
        //   isStartScreen=false;
+         
          
     }
     public void initNiftyGUI() {
@@ -622,7 +677,25 @@ inputManager.setCursorVisible( true );
         * 
         */
 }
- AbstractHeightMap d;
-ImageBasedHeightMap i;   
+ /*
+  * Ordonnencement des Thread
+  */
 
+ /**
+	 * gestionnaire de tache
+	 * 
+	 * @return
+	 */
+        private  ScheduledThreadPoolExecutor scheduledExecutor;
+	public  ScheduledThreadPoolExecutor getSchedulerTaskExecutor() {
+		if (scheduledExecutor == null) {
+	scheduledExecutor = new ScheduledThreadPoolExecutor(
+		Integer.parseInt(Variables.getProps().getProperty("la.scheduled.task", "10")));
+			
+			
+			
+
+		}
+		return scheduledExecutor;
+	}
 }

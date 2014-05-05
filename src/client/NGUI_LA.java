@@ -45,6 +45,7 @@ import client.network.SimpleClientConnector;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.scene.Spatial;
 import com.sun.pdfview.PDFFile;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
@@ -70,6 +71,7 @@ import java.io.RandomAccessFile;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.concurrent.Callable;
 
 import shared.utils.PropertyReader;
 
@@ -152,46 +154,14 @@ public void startloadingTheGame()
  ///on a besoin de lancer un autre thread ici
         client.setConnecting(true);
          connectServer();
- Variables.getTaskExecutor().execute(new Runnable() {
+/* Variables.getTaskExecutor().execute(new Runnable() {
    @Override
    public void run() {
-   
+  */ 
    
                      
       
- while(client.isConnecting());
-{   System.out.println("still connecting !!!");
-        /*  try {
-              Thread.sleep(1000);
-          } catch (InterruptedException ex) {
-              Logger.getLogger(NGUI_LA.class.getName()).log(Level.SEVERE, null, ex);
-          } 
-          */
-}
-      
-   if(!client.isConnecting() && !client.isConnected())
-   
-   { 
-       System.out.println("Impossible de se connecter!!");
-   }
-   else
-   {   
-      System.out.println("this is start game");
-      
-     // startloadingTheGame();
-      Variables.getClientConnecteur().startLoadingTheGame();
-    /*  
-      Variables.setConsole(nifty.getScreen("chatbar").
-      findNiftyControl("textfield2",Console.class));
-        
-  
-      
-       nifty.gotoScreen("chatbar");
-       Variables.getLaGame().initGameWold();
-       */
- }
-      }
- });
+
   
    
    }
@@ -200,11 +170,18 @@ public void startloadingTheGame()
  {
      Variables.setConsole(nifty.getScreen("chatbar").
       findNiftyControl("textfield2",Console.class));
+        System.out.println("This is calling find way "+Thread.currentThread().getName());
+        try{
+        if(Variables.getLaGame().getFindWay()==null)
+                System.out.println("\n findway=null !!");
+         Variables.getLaGame().getSchedulerTaskExecutor().submit(Variables.getLaGame().getFindWay());
+        }catch(Exception ex)
+        {
+            System.out.println("\n exception = "+ex.getMessage());
+        }
         
-  
-      
-       nifty.gotoScreen("chatbar");
-       Variables.getLaGame().initGameWold();
+       nifty.gotoScreen("chatbar"); 
+      // Variables.getLaGame().initGameWorld();
  }
  
   

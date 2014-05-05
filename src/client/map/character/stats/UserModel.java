@@ -57,6 +57,7 @@ import client.map.character.PlayableCharacter;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
+import shared.variables.Variables;
 
 /**
  * Représente le usermodel du joueur
@@ -83,15 +84,15 @@ public class UserModel implements Runnable {
 	 * @param playableCharacter
 	 */
 	public UserModel(PlayableCharacter playableCharacter) {
-	/*	
+		
             this.player = playableCharacter;
-		this.server = player.getWorld().getGame().getProps().getProperty("la.usermodel.server", "http://google.fr");
-		int refresh = Integer.parseInt(player.getWorld().getGame().getProps().getProperty("la.usermodel.refreshtime","30"));
-		this.prefCatName = player.getWorld().getGame().getHud().getLocalText("la.usermodel.preference.cat", "préférence");
-		this.groupCatName = player.getWorld().getGame().getHud().getLocalText("la.usermodel.group.cat", "group");
+		this.server = Variables.getProps().getProperty("la.usermodel.server", "http://google.fr");
+		int refresh = Integer.parseInt(Variables.getProps().getProperty("la.usermodel.refreshtime","30"));
+		//this.prefCatName = player.getWorld().getGame().getHud().getLocalText("la.usermodel.preference.cat", "préférence");
+		//this.groupCatName = player.getWorld().getGame().getHud().getLocalText("la.usermodel.group.cat", "group");
 		this.client = new Client();
 		this.task = executor.scheduleAtFixedRate(this, 0, player.isPlayer()?refresh:refresh*10, TimeUnit.SECONDS);
-                * */
+                
 		
 		// FIXME close l'executor à la sortie
 	}
