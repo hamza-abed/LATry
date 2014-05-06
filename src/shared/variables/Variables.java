@@ -6,6 +6,7 @@ package shared.variables;
 
 import client.LaGame;
 import client.NGUI_LA;
+import client.chat.ChatSystem;
 import client.hud3D.MoveCursor;
 import client.map.World;
 import client.map.character.Player;
@@ -184,7 +185,64 @@ public class Variables {
 		//logger.info("state : "+executor.getActiveCount()+":"+executor.getQueue().size());
 		return executor;
 	}
+    private static ChatSystem chatSystem;
         
 
-    
+    /**
+	 * renvoie le gestionnaire de chat
+	 * 
+	 * @return
+	 */
+	public static ChatSystem getChatSystem() {
+		if (chatSystem == null) {
+			chatSystem = new ChatSystem(getLaGame());
+		}
+		return chatSystem;
+	}
+        /**
+	 * indique si le jeux tourne en mode editeur Graphic
+	 */
+	private static boolean editMode;
+        
+        /**
+	 * indique si le jeux est en mode edit ou pas
+	 * 
+	 * @return
+	 */
+	public static boolean isEditMode() {
+		return editMode;
+	}
+        
+	/**
+	 * active / desactiv le mode d'edition
+	 * 
+	 * @param b
+	 */
+	public static void setEditMode(boolean b) {
+		editMode = b;
+	}
+        
+       
+        /**
+	 * Indique la fin du jeux
+	 */
+	private static boolean finished = false;
+        
+        /**
+	 * @return the finished
+	 */
+	public static boolean isFinished() {
+		return finished;
+	}
+        
+        public static void setFinished(boolean b)
+        {
+            finished=b;
+        }
+private static String language;
+	public static String getLanguage() {
+            
+            if(language ==null) language = props.getProperty("la.language","en");
+		return language;
+	}
 }

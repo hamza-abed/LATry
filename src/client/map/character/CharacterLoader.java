@@ -57,7 +57,7 @@ import com.jme3.scene.plugins.ogre.MaterialLoader;
 import com.model.md5.MD5Node;
 import com.model.md5.controller.MD5Controller;
 import com.model.md5.importer.MD5Importer;
-import de.lessvoid.nifty.controls.Controller;
+
 /*
 import com.jme.animation.SkinNode;
 import com.jme.bounding.BoundingBox;
@@ -115,10 +115,10 @@ public class CharacterLoader {
 	/*
 	 * CHARGEMENT DU MESH GRAPHIQUE
 	 */
-/*
-	public static final Node loadNode(AbstractCharacter character) throws IOException, ModelFormatException {
+
+	public static final Node loadNode(AbstractCharacter character) throws IOException {
 		Node node;
-		if (isMd5Model(character))	node = loadMd5(character);
+		if (isMd5Model(character)) node = loadMd5(character);
 		else if (isJmexModel(character) || isDotModel(character)) node = loadJmex(character);
 		else node = loadOgre(character);
 		node.setLocalScale(getModelScale(character));
@@ -126,7 +126,7 @@ public class CharacterLoader {
 		/*if (character.isPlayer())
 			for (Spatial s :node.getChildren())
 				System.out.println(s.getName());//*/
-/*
+
 		if (getModelOrient(character)!=null)
 			for (Spatial s :node.getChildren())
 				s.getLocalRotation().set(getModelOrient(character));
@@ -141,16 +141,19 @@ public class CharacterLoader {
 	 * @return
 	 * @throws IOException 
 	 */
-/*
+
         private static Node loadMd5(AbstractCharacter character) throws IOException {
-		MD5Importer importer = new MD5Importer();
+	           System.out.println("CharacterLoader -> loadMd5() : vide !!");	
+            /*MD5Importer importer = new MD5Importer();
 		MD5Node body;
 
 		switch (character.modelType) {
 		case marine:
+                    
 			importer.load(
-					getMd5MeshUrl(character), BODY_NAME, 
-					getMd5Anim(character,CharacterAnimation.walk), WALK_ANIM_NAME,1);
+					getMd5MeshUrl(character), BODY_NAME,
+					getMd5Anim(character,CharacterAnimation.walk), WALK_ANIM_NAME,
+					1); //Controller.RT_WRAP=1
 			body = (MD5Node) importer.getMD5Node();
 			importer.cleanup();
 
@@ -162,28 +165,29 @@ public class CharacterLoader {
 			importer.cleanup();
 
 			importer.loadAnim(getMd5Anim(character,CharacterAnimation.idle), IDLE_ANIM_NAME);
-			//((MD5Controller)body.getController(0)).addAnimation(importer.getAnimation());
+			((MD5Controller)body.getController(0)).addAnimation(importer.getAnimation());
 			importer.cleanup();
-			//return body;
-		default:
+			return body;
+		        default:
 			importer.load(
 					getMd5MeshUrl(character), BODY_NAME, 
 					getMd5Anim(character,CharacterAnimation.idle), IDLE_ANIM_NAME,
-					1);
+					Controller.RT_WRAP);
 			body = (MD5Node) importer.getMD5Node();
 			importer.cleanup();
 
 			importer.loadAnim(getMd5Anim(character,CharacterAnimation.run), RUN_ANIM_NAME);
-			//((MD5Controller)body.getController(0)).addAnimation(importer.getAnimation());
+			((MD5Controller)body.getController(0)).addAnimation(importer.getAnimation());
 			importer.cleanup();
 
 			importer.loadAnim(getMd5Anim(character,CharacterAnimation.walk), WALK_ANIM_NAME);
-			//((MD5Controller)body.getController(0)).addAnimation(importer.getAnimation());
-			importer.cleanup();//*/
-//return body;
-        /*
-			return null;
+			((MD5Controller)body.getController(0)).addAnimation(importer.getAnimation());
+			importer.cleanup();
+
+			return body;
 		}
+                */
+            return null;
 	}
 
 	/**
@@ -193,9 +197,10 @@ public class CharacterLoader {
 	 * @throws IOException 
 	 * @throws ModelFormatException 
 	 */
-/*
-	private static Node loadOgre(AbstractCharacter character) throws IOException, ModelFormatException {
-		OgreLoader ol = new OgreLoader();
+
+	private static Node loadOgre(AbstractCharacter character) throws IOException {
+	System.out.println("CharacterLoader -> loadOgre() : vide !!");	
+            /*OgreLoader ol = new OgreLoader();
 		MaterialLoader ml = new MaterialLoader();
 
 		// tentative de resolution des bonhomme blanc
@@ -204,10 +209,14 @@ public class CharacterLoader {
 
 		ol.setMaterials(ml.getMaterials());
 		return ol.loadModel(getOgreMeshUrl(character));
+                */
+            return null;
 	}
 
 
 	private static Node loadJmex(AbstractCharacter character) {
+            System.out.println("CharacterLoader -> loadJmex() : vide !!");
+            /*
 		Spatial s = ModelLoader.get().load(character.modelType.name()+".jmex");
 		if (s instanceof Node || s instanceof SkinNode) {
 			s.setModelBound(new BoundingBox());
@@ -218,14 +227,16 @@ public class CharacterLoader {
 		//s.setLocalTranslation(0, getModelTranslation(character), 0);
 		n.attachChild(s);
 		n.setModelBound(new BoundingBox());
-		return n;
+		return n;*
+                */
+            return null;
 	}
 	
 	/**
 	 * @param character 
 	 * @return
 	 */
-/*
+
         static boolean isMd5Model(AbstractCharacter character) {
 		return character.modelType == CharacterModel.marine || character.modelType==CharacterModel.mage;
 		//character.modelType == CharacterModel.skelet;
@@ -430,9 +441,12 @@ public class CharacterLoader {
 	/**
 	 * applique les materiaux
 	 */
-        /*
+      
 	public static void applyMaterials(AbstractCharacter character, Node graphic) {
-		if (graphic != null)
+	
+            System.out.println("CharacterLoader -> applyMaterials() : vide !!");
+            /*	
+            if (graphic != null)
 			try {
 				for (MaterialState m : getSkinMaterials(character,graphic)) {
 					m.setDiffuse(character.skin);
@@ -506,6 +520,7 @@ public class CharacterLoader {
 			} catch (NullPointerException e) {
 				logger.warning("NullPointerException : Le model n'est pas encore chargé");
 			}
+                        */
 	}
 
 
@@ -630,7 +645,7 @@ public class CharacterLoader {
 	 * @param player
 	 * @return
 	 */
-        /*
+       
 	public static int getHairCutCount(Player player) {
 		switch (player.modelType) {
 		case women: return 4;

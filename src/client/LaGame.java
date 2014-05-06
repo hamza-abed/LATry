@@ -40,6 +40,7 @@
 
 package client;
 
+import client.editor.ServerEditor;
 import client.hud.boussole.Boussole;
 import client.hud3D.MoveCursor;
 import client.input.MainGameListener;
@@ -698,4 +699,43 @@ inputManager.setCursorVisible( true );
 		}
 		return scheduledExecutor;
 	}
+        
+        public void quitGame()
+        {
+            Variables.setFinished(true);
+            
+            System.out.println("ici quit game !!");
+        }
+        /**
+	 * permet de creer des objets sur le server
+	 */
+	private ServerEditor serverEditor;
+        
+        private RessourceManager ressources;
+        private LaTraces traces;
+        /**
+	 * renvoie l'object permettant d'envoyé des traces
+	 * @return
+	 */
+	public LaTraces getTraces() {
+		if (traces == null) 
+			traces = new LaTraces(this);
+		return traces;
+	}
+        
+        /**
+	 * Permet la creation de nouveau objet sur le server
+	 * 
+	 * @return
+	 */
+	public ServerEditor getServerEditor() {
+		if (serverEditor == null) {
+			serverEditor = new ServerEditor(this);
+		}
+		return serverEditor;
+	}
+        /**
+	 * @return the language
+	 */
+       
 }

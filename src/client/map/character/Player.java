@@ -352,17 +352,14 @@ implements AnimEventListener {
          }
          */
     }
-/*
-    @Override
-    protected boolean canMoveAt(Vector3f newPos) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    protected boolean testCollision(Vector3f newPos, Vector3f dir) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    */
+/**
+	 * @return renvoie le group principal
+	 */
+    public Group getMainGroup() {
+		if (maingroup==null&&groups.size()>0)
+				return groups.get(0);
+		return maingroup;
+	}
 
     @Override
     protected boolean canMoveAt(Vector3f newPos) {

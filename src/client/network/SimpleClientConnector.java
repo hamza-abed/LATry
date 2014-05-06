@@ -13,6 +13,8 @@ import client.map.World;
 import client.map.Zone;
 import client.map.character.Group;
 import client.task.PingPongTask;
+import com.jmex.bui.BRootNode;
+import com.jmex.bui.BWindow;
 import com.sun.sgs.client.ClientChannel;
 import com.sun.sgs.client.ClientChannelListener;
 import com.sun.sgs.client.simple.SimpleClient;
@@ -230,6 +232,7 @@ public class SimpleClientConnector implements SimpleClientListener{
                         setStatus("ping pong task has just started !");
                         Variables.getNiftyGUI().movetoGameScreen();
                 }
+                
 
         	    /**
         	     * {@inheritDoc}
