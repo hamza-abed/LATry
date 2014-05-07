@@ -1,0 +1,20 @@
+<?xml  version='1.0' encoding='UTF-8'?>
+        <com.jme.scene.TriMesh name='document'>
+            <renderStateList size='16'>
+                <com.jme.scene.state.TextureState>
+                    <texture size='1'>
+                        <com.jme.image.Texture2D combineFuncAlpha='Modulate' combineFuncRGB='Modulate' imageLocation='file:/Users/loicmichea/Desktop/MonkEdy/data/texture/tex_document.jpg' magnificationFilter='Bilinear' minificationFilter='BilinearNearestMipMap' wrapS='Repeat' wrapT='Repeat'>
+                            <textureKey class='com.jme.util.TextureKey' file='tex_document.jpg' flipped='true' host='' protocol='file'/>
+                        </com.jme.image.Texture2D>
+                    </texture>
+                </com.jme.scene.state.TextureState>
+            </renderStateList>
+            <normBuf data='0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 -0.0' size='12'/>
+            <vertBuf data='1.0 -0.0 -1.490993 -1.0 -0.0 -1.490993 -1.0 0.0 1.490993 1.0 0.0 1.490993' size='12'/>
+            <texBuf size='1'>
+                <com.jme.scene.TexCoords perVert='2'>
+                    <coords data='1.005273 1.002649 0.005293 1.002649 0.005293 0.00358 1.005273 0.00358' size='8'/>
+                </com.jme.scene.TexCoords>
+            </texBuf>
+            <indexBuffer data='0 1 2 0 2 3' size='6'/>
+        </com.jme.scene.TriMesh>

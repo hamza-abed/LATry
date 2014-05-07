@@ -163,7 +163,16 @@ public void startloadingTheGame()
         if(Variables.getLaGame().getFindWay()==null)
                 System.out.println("\n findway=null !!");
         
-         Variables.getLaGame().getSchedulerTaskExecutor().submit(Variables.getLaGame().getFindWay());
+         Variables.getLaGame().enqueue(
+                 new Callable<Void>() {
+		@Override
+		public Void call(){
+        // Variables.getLaGame().getSchedulerTaskExecutor().submit(Variables.getLaGame().getFindWay());
+        System.out.println("This is calling find way from nifty "+Thread.currentThread().getName()); 
+              Variables.getLaGame().initGameWorld();
+              return null;
+		}
+		});
         }catch(Exception ex)
         {
             System.out.println("\n exception = "+ex.getMessage());

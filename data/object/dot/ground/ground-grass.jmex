@@ -1,0 +1,26 @@
+<?xml  version='1.0' encoding='UTF-8'?>
+<com.jme.scene.TriMesh name='ground-grass'>
+    <renderStateList size='16'>
+        <com.jme.scene.state.TextureState>
+            <texture size='2'>
+                <com.jme.image.Texture2D anisotropicFilterPercent='0.2' combineFuncAlpha='Modulate' combineFuncRGB='Modulate' imageLocation='file:/home/shionn/workspaceperso/DotModeler/data/model/export/dot64.png' magnificationFilter='Bilinear' memReq='4096' minificationFilter='BilinearNoMipMaps' wrapS='Repeat' wrapT='Repeat'>
+                    <textureKey class='com.jme.util.TextureKey' file='dot64.png' protocol='file'/>
+                </com.jme.image.Texture2D>
+                <com.jme.image.Texture2D anisotropicFilterPercent='0.2' combineFuncAlpha='Modulate' combineFuncRGB='Modulate' imageLocation='file:/home/shionn/workspaceperso/DotModeler/data/model/export/ground-grass.png' memReq='972' wrapS='Repeat' wrapT='Repeat'>
+                    <textureKey class='com.jme.util.TextureKey' file='ground-grass.png' flipped='true' format='RGB8' host='' protocol='file'/>
+                </com.jme.image.Texture2D>
+            </texture>
+        </com.jme.scene.state.TextureState>
+    </renderStateList>
+    <normBuf data='0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0' size='12'/>
+    <vertBuf data='-8.0 0.0 -8.0 -8.0 0.0 8.0 8.0 0.0 8.0 8.0 0.0 -8.0' size='12'/>
+    <texBuf size='2'>
+        <com.jme.scene.TexCoords perVert='2'>
+            <coords data='0.0 16.0 0.0 0.0 16.0 0.0 16.0 16.0' size='8'/>
+        </com.jme.scene.TexCoords>
+        <com.jme.scene.TexCoords perVert='2'>
+            <coords data='0.055555556 0.9444444 0.055555556 0.055555582 0.9444444 0.055555582 0.9444444 0.9444444' size='8'/>
+        </com.jme.scene.TexCoords>
+    </texBuf>
+    <indexBuffer data='0 1 2 0 2 3' size='6'/>
+</com.jme.scene.TriMesh>

@@ -102,7 +102,7 @@ import com.jme3.scene.Node;
 import com.sun.sgs.client.ClientChannel;
 import com.sun.sgs.client.ClientChannelListener;
 import java.util.Collection;
-import java.util.Map;
+
 import shared.variables.Variables;
 
 /**
@@ -304,7 +304,7 @@ public  class World  implements ClientChannelListener,Sharable {
 		this.player = new Player(this, login);
 		this.playableCharacter.put(player.getKey(), player);
                 System.out.println("Player created player.getKey()="+player.getName());
-                Variables.setPlayerMission(player);
+                Variables.setMainPlayer(player);
             
 	}
 
@@ -986,8 +986,7 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 */
 	public Map getMapAt(float x, float z) {
 		if (x<0 || z<0) return null;
-		//return getMapAt((int) (x / mapSize), (int) (z / mapSize));
-                return null;
+		return getMapAt((int) (x / mapSize), (int) (z / mapSize));
 	}
 
 	/**
@@ -999,8 +998,8 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 */
 	public Map getMapAt(int x, int z) {
 		if (x<0 || z<0) return null;
-		//return maps.get(LaComponent.map.prefix() + x + ":" + z);
-                return null;
+		return maps.get(LaComponent.map.prefix() + x + ":" + z);
+                
 	}
 
 	/* ********************************************************** *
@@ -1961,6 +1960,7 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 */
 
     public String getKey() {
+        
        return LaComponent.world.prefix(); //To change body of generated methods, choose Tools | Templates.
     }
     

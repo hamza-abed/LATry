@@ -1,0 +1,51 @@
+<?xml  version='1.0' encoding='UTF-8'?>
+        <com.jme.scene.TriMesh name='donjon-ground'>
+            <renderStateList size='16'>
+                <com.jme.scene.state.MaterialState shininess='25.0'>
+                    <ambient a='1.0' b='0.8' class='com.jme.renderer.ColorRGBA' g='0.8' r='0.8'/>
+                    <diffuse a='1.0' b='0.8' class='com.jme.renderer.ColorRGBA' g='0.8' r='0.8'/>
+                    <specular a='1.0' b='0.8' class='com.jme.renderer.ColorRGBA' g='0.8' r='0.8'/>
+                </com.jme.scene.state.MaterialState>
+                <com.jme.scene.state.TextureState>
+                    <texture size='3'>
+                        <com.jme.image.Texture2D combineFuncAlpha='Modulate' combineFuncRGB='Modulate' imageLocation='file:/home/shionn/workspace-perso/MonkEdy/data/texture/hd-pattern/49-diffus.tga' magnificationFilter='Bilinear' memReq='262144' minificationFilter='Trilinear' wrapS='Repeat' wrapT='Repeat'>
+                            <textureKey class='com.jme.util.TextureKey' file='pattern_58-cool-ground-diffus.tga' flipped='true' protocol='file'/>
+                        </com.jme.image.Texture2D>
+                        <com.jme.image.Texture2D combineFuncAlpha='Modulate' combineFuncRGB='Modulate' imageLocation='file:/home/shionn/workspace-perso/MonkEdy/data/texture/hd-pattern/49-normal.tga' magnificationFilter='Bilinear' memReq='786432' minificationFilter='Trilinear' wrapS='Repeat' wrapT='Repeat'>
+                            <textureKey class='com.jme.util.TextureKey' file='pattern_58-cool-ground-normal.tga' flipped='true' format='GuessNoCompression' protocol='file'/>
+                        </com.jme.image.Texture2D>
+                        <com.jme.image.Texture2D combineFuncAlpha='Modulate' combineFuncRGB='Modulate' imageLocation='file:/home/shionn/workspace-perso/MonkEdy/data/texture/hd-pattern/49-specular.tga' magnificationFilter='Bilinear' memReq='262144' minificationFilter='Trilinear' wrapS='Repeat' wrapT='Repeat'>
+                            <textureKey class='com.jme.util.TextureKey' file='pattern_58-cool-ground-specular.tga' flipped='true' protocol='file'/>
+                        </com.jme.image.Texture2D>
+                    </texture>
+                </com.jme.scene.state.TextureState>
+                <com.jme.scene.state.GLSLShaderObjectsState>
+                    <shaderUniforms>
+                        <MapEntry key='specularMap'>
+                            <Savable class='com.jme.util.shader.uniformtypes.ShaderVariableInt' name='specularMap' value1='2' variableID='2'/>
+                        </MapEntry>
+                        <MapEntry key='normalMap'>
+                            <Savable class='com.jme.util.shader.uniformtypes.ShaderVariableInt' name='normalMap' value1='1' variableID='1'/>
+                        </MapEntry>
+                        <MapEntry key='baseMap'>
+                            <Savable class='com.jme.util.shader.uniformtypes.ShaderVariableInt' name='baseMap' variableID='0'/>
+                        </MapEntry>
+                    </shaderUniforms>
+                    <shaderAttributes/>
+                </com.jme.scene.state.GLSLShaderObjectsState>
+            </renderStateList>
+            <userData>
+                <MapEntry key='fragement'>
+                    <Savable class='client.utils.ShaderInfo' frag='data/shader/normalmap.frag' vert='data/shader/normalmap.vert'/>
+                </MapEntry>
+            </userData>
+            <normBuf data='0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 -0.0' size='12'/>
+            <vertBuf data='1.0 0.2 -1.0 -1.0 0.2 -1.0 -1.0 0.2 1.0 1.0 0.2 1.0' size='12'/>
+            <texBuf size='1'>
+                <com.jme.scene.TexCoords perVert='2'>
+                    <coords data='0.0 0.0 1.0 0.0 1.0 1.0 0.0 1.0' size='8'/>
+                </com.jme.scene.TexCoords>
+            </texBuf>
+            <indexBuffer data='0 1 2 0 2 3' size='6'/>
+        </com.jme.scene.TriMesh>
+

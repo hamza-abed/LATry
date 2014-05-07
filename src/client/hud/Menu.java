@@ -88,11 +88,13 @@ public class Menu extends BWindow implements Runnable, Callable<Void> {
 	 * 
 	 */
 	public Menu(Hud hud) {
+           
 		super("menu",
 				BStyleSheetUtil.getStyleSheet(FileLoader.getResourceAsUrl("data/hud/style/menu.bss")),
 				new TableLayout(6, 0, 0));
 
 		this.hud = hud;
+                 System.out.println("Menu -> constructeur !!!");
 
 		initialize();
 	}

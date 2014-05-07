@@ -1,0 +1,87 @@
+root {
+	color: #FFFFFF;
+	font: "Arial" plain 12;
+	padding:0;
+}
+
+window {
+	background: image "data/hud/window-back.png";
+	size: 274 424;
+}
+
+container { 
+}
+
+items-container { 
+	padding: 2 0 2 0;
+}
+
+container-middle {
+	padding: 8 5 11 8;
+}
+
+label { 
+	
+}
+
+label-title {
+	text-align: center;
+	size : 202 42;
+}
+
+close {
+	size : 36 42;
+}
+
+
+button {
+	
+}
+
+button-icon {
+	border: 0 blank;
+	background: blank;
+	padding: 0;
+	vertical-align: bottom;
+}
+
+tooltip {
+	text-align: center;
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+}
+
+scrollbar {
+	padding: 2;
+	border: 0 blank;
+	background: image "data/hud/scroll-bar.png";
+	size: 22 362;
+}
+
+scrollbar_vless {
+	icon: image "data/hud/scroll-up.png";
+	background: blank;
+	border: 0 blank;
+	size:16 16;
+}
+
+scrollbar_vmore {
+	icon: image "data/hud/scroll-down.png";
+	background: blank;
+	border: 0 blank;
+	size:16 16;
+}
+
+scrollbar_vwell {
+	icon: image "data/hud/scroll-well.png";
+	background: blank;
+	border: 0 blank;
+	padding: 1;
+	size:16 16;
+}
+
+scrollbar_vthumb {
+	/*background: solid #22BBFFFF;*/
+	background: blank;
+	border: 0 blank;
+}

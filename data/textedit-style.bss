@@ -1,0 +1,35 @@
+
+root {
+	color: #FFFFFF;
+	font: "Arial" plain 12;
+	padding: 1;
+}
+
+container { }
+
+label {
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+	text-align: center;
+}
+
+textfield {
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+}
+
+window {
+	border: 0 blank;
+	background: blank;
+}
+
+checkbox {
+  	icon: image "data/icon/lgpl/cross-12.png" centery;
+   	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+	text-align: center;
+}
+
+checkbox:selected {
+  	icon: image "data/icon/lgpl/ok-12.png" centery;
+}

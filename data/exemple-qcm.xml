@@ -1,0 +1,20 @@
+<la-poll title="titre">
+
+	<question type="qcm"
+		question="Quelle est la réponse la plus logique celon vous ?">
+		<choice valid="false">Aucune celle ci comprise</choice>
+		<choice valid="true">Toutes celui ci comprise</choice>
+		<choice valid="false">Toutes sauf celle la</choice>
+		<choice valid="true">Il y 42 réponses possibles</choice>
+	</question>
+
+	<question type="open" question="Justifier votre précédente réponse" />
+
+	<question type="multiintvalue" maxSelectedAnswer="2" maxPoint="3"
+		question="Sélectionner la ou les réponses qui sont bonnes selon vous puis justifier votre choix">
+		<choice>J'aime le pain</choice>
+		<choice>Vive le PSG !</choice>
+		<choice>42 est la réponse</choice>
+	</question>
+
+</la-poll>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<texture-params>
+    <texture>rock01.jpg</texture>
+    <texture idealMaxH="1.0" idealMaxT="30.0" idealMinH="0.0" idealMinT="0.0" zeroMaxH="1.0" zeroMaxT="40.0" zeroMinH="0.0" zeroMinT="0.0">terre01.jpg</texture>
+    <texture idealMaxH="1.0" idealMaxT="20.0" idealMinH="0.0" idealMinT="0.0" zeroMaxH="1.0" zeroMaxT="30.0" zeroMinH="0.0" zeroMinT="0.0">herbe03.jpg</texture>
+    <texture idealMaxH="1.0" idealMaxT="10.0" idealMinH="0.0" idealMinT="0.0" zeroMaxH="1.0" zeroMaxT="20.0" zeroMinH="0.0" zeroMinT="0.0">graviers01.jpg</texture>
+</texture-params>

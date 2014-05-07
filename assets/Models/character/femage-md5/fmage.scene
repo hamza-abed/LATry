@@ -1,0 +1,33 @@
+<scene exported_by="shionn" formatVersion="1.0.1" previous_export_time="1316618279.12714" export_time="1316618414.883597" >
+	<nodes >
+		<node name="Armature" uuid="9d96de0832b0accddf32d831863492fa" >
+			<position y="0.000000" x="0.000000" z="-0.000000" />
+			<rotation qy="0.000000" qx="0.000000" qz="-0.000000" qw="1.000000" />
+			<scale y="1.000000" x="1.000000" z="1.000000" />
+			<game >
+				<sensors />
+				<actuators />
+			</game>
+		</node>
+		<node name="Cube" uuid="08fe7c63bf1fa2ee0287d00a401eb97b" >
+			<position y="0.000000" x="0.000000" z="-0.000000" />
+			<rotation qy="0.000000" qx="0.000000" qz="-0.000000" qw="1.000000" />
+			<scale y="1.000000" x="1.000000" z="1.000000" />
+			<game >
+				<sensors />
+				<actuators />
+			</game>
+			<entity anisotropic_friction="False" lock_trans_y="False" damping_trans="0.03999999910593033" damping_rot="0.10000000149011612" inertia_tensor="0.4000000059604645" actor="False" velocity_min="0.0" lock_trans_z="False" physics_type="STATIC" lock_trans_x="False" meshFile="Cube.001.mesh" friction_y="1.0" friction_x="1.0" friction_z="1.0" velocity_max="0.0" ghost="False" name="Cube.001" mass_radius="1.0" mass="1.0" lock_rot_x="False" lock_rot_y="False" lock_rot_z="False" />
+		</node>
+	</nodes>
+	<externals >
+		<item type="material" >
+			<file name="/home/shionn/workspace-work/LaClient/data/character/mage-md5/Material.003.material" />
+		</item>
+	</externals>
+	<environment >
+		<colourBackground r="0.05087608844041824" b="0.05087608844041824" g="0.05087608844041824" />
+		<colourAmbient r="0.0" b="0.0" g="0.0" />
+		<colourDiffuse r="0.05087608844041824" b="0.05087608844041824" g="0.05087608844041824" />
+	</environment>
+</scene>

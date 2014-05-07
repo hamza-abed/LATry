@@ -1,0 +1,37 @@
+root {
+	color: #FFFFFF;
+	font: "Arial" plain 12;
+	padding:0;
+}
+
+container { 
+	padding:2;
+}
+
+label { }
+
+window {
+	background: solid #000000FF;
+}
+
+textfield {
+	border: 1 solid #FFFFFF;
+}
+
+button {
+	text-align: center;
+}
+
+combobox {
+	border: 1 solid #FFFFFF;
+}
+
+popupmenu {
+	border: 1 solid #FFFFFF;
+	background: solid #000000FF;
+	padding:2;
+}
+
+geoview {
+	background: solid #AAAAAAFF;
+}

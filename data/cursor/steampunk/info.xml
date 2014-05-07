@@ -1,0 +1,5 @@
+<cursor>
+	<base x="1" y="31">00standard_select_000.png</base>
+	<npc x="1" y="31">01help_select_000.png</npc>
+	<object x="1" y="31" delay="32">02working_in_background_000.png;02working_in_background_001.png;02working_in_background_002.png;02working_in_background_003.png;02working_in_background_004.png;02working_in_background_005.png;02working_in_background_006.png;02working_in_background_007.png;02working_in_background_008.png;02working_in_background_009.png;02working_in_background_010.png</object>
+</cursor>

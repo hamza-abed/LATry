@@ -1,0 +1,65 @@
+root {
+	color: #FFFFFF;
+	font: "Arial" plain 12;
+	padding:2;
+}
+
+container { 
+
+}
+
+label {
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+	text-align: center;
+}
+
+label-title {
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+	text-align: center;
+}
+
+button {
+	text-align: center;
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+}
+
+
+textarea {
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+	padding:1;
+}
+
+window { }
+
+scrollbar {
+	padding: 2;
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+}
+
+scrollbar_vless {
+	icon: image "data/icon/lgpl/uparrow-12.png";
+	background: blank;
+	border: 0 blank;
+}
+
+scrollbar_vmore {
+	icon: image "data/icon/lgpl/downarrow-12.png";
+	background: blank;
+	border: 0 blank;
+}
+
+scrollbar_vwell {
+	background: blank;
+	border: 1 solid #FFFFFF;
+	padding: 1;
+}
+
+scrollbar_vthumb {
+	background: solid #22BBFFFF;
+}
+

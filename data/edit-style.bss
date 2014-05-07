@@ -1,0 +1,133 @@
+root {
+	color: #FFFFFF;
+	font: "Arial" plain 12;
+	padding:1;
+}
+
+container { 
+	padding:0;
+}
+
+container-in-scroll-pane { 
+	padding:2;
+}
+
+combobox-scenarization { 
+	padding:2;
+	border: 1 solid #FFFFFF;
+	background: solid #000000;
+}
+popupmenu-scenarization {
+	border: 1 solid #FFFFFF;
+	background: solid #000000;
+	padding:2;
+}
+
+container-in-scroll-pane-scenarization { 
+	padding:2;
+	border: 1 solid #FFFFFF;
+}
+
+container-front-edition-scenarization { 
+	padding:2;
+	border: 1 solid #FFFFFF;
+	background: solid #335577;
+}
+label-title-front-edition-scenarization {
+	border: 1 solid #FFFFFF;
+	background: solid #335577;
+	text-align: center;
+}
+label-front-edition-scenarization {
+	background: solid #335577;
+}
+label-centered-front-edition-scenarization {
+	background: solid #335577;
+	text-align: center;
+}
+button-front-edition-scenarization {
+	text-align: center;
+	border: 1 solid #FFFFFF;
+	background: solid #335577;
+}
+textfield-front-edition-scenarization {
+	border: 1 solid #FFFFFF;
+	background: solid #335577;
+}
+
+container-middle { 
+	padding:0;
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+}
+
+label { }
+
+label-title {
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+	text-align: center;
+}
+
+window { }
+
+textfield {
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+}
+
+button {
+	text-align: center;
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+}
+
+button-icon {
+	border: 0 blank;
+	background: blank;
+	padding:0;
+}
+popupmenu {
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+	padding:2;
+}
+
+checkbox {
+  icon: image "data/icon/lgpl/cross-12.png" centery;
+}
+
+checkbox:selected {
+  icon: image "data/icon/lgpl/ok-12.png" centery;
+}
+
+hslider {
+	icon: image "data/icon/lgpl/downarrow-12.png";
+}
+
+scrollbar {
+	padding: 2;
+	border: 0 blank;
+	background: blank;
+}
+
+scrollbar_vless {
+	icon: image "data/icon/lgpl/uparrow-12.png";
+	background: blank;
+	border: 0 blank;
+}
+
+scrollbar_vmore {
+	icon: image "data/icon/lgpl/downarrow-12.png";
+	background: blank;
+	border: 0 blank;
+}
+
+scrollbar_vwell {
+	background: blank;
+	border: 1 solid #FFFFFF;
+}
+
+scrollbar_vthumb {
+	background: solid #22BBFFFF;
+}

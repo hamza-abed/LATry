@@ -1,0 +1,11 @@
+root {
+  color: #000000;
+  font: "Arial" bold 12;
+  padding:0;
+  background: blank;
+  border: 0 blank;
+}
+
+
+
+

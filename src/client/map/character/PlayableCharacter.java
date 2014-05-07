@@ -411,7 +411,9 @@ public abstract class PlayableCharacter extends AbstractCharacter {
 	 * Met à jour les droit du joueur (admin ect...)
 	 */
 	protected void updateRights() {
-		logger.info("Mise à jour des droit d'admin");
+		//logger.info("Mise à jour des droit d'admin");
+            
+            System.err.println("Mise à jour des droit d'admin");
 	}
 	
 	/* ********************************************************** *

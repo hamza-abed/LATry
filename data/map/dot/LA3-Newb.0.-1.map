@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dot-map name="LA3-Newb">
+    <map-elem id="0" name="half-border-dirt-grass" ry="0" s="2.0" x="16.0" y="0.0" z="-144.0"/>
+    <map-elem id="1" name="half-border-dirt-grass" ry="0" s="2.0" x="48.0" y="0.0" z="-144.0"/>
+    <map-elem id="2" name="half-border-dirt-grass" ry="0" s="2.0" x="80.0" y="0.0" z="-144.0"/>
+    <map-elem id="3" name="half-border-dirt-grass" ry="0" s="2.0" x="112.0" y="0.0" z="-144.0"/>
+    <map-elem id="24" name="half-border-dirt-grass" ry="270" s="2.0" x="144.0" y="0.0" z="-112.0"/>
+    <map-elem id="25" name="half-border-dirt-grass" ry="270" s="2.0" x="144.0" y="0.0" z="-80.0"/>
+    <map-elem id="26" name="half-border-dirt-grass" ry="270" s="2.0" x="144.0" y="0.0" z="-48.0"/>
+    <map-elem id="27" name="half-border-dirt-grass" ry="270" s="2.0" x="144.0" y="0.0" z="-16.0"/>
+    <map-elem id="32" name="half-border-outter-corner-dirt-grass" ry="0" s="2.0" x="144.0" y="0.0" z="-144.0"/>
+</dot-map>

@@ -1,0 +1,38 @@
+root {
+  color: #000000;
+  font: "Arial" bold 12;
+  padding:1;
+  effect-color: #FFFFFFAA;
+  effect-size: 1;
+  text-effect: shadow;
+}
+
+container { 
+	padding:0;
+}
+
+label { 
+
+}
+
+label-title {
+	text-align: right;
+}
+
+label-task {
+	text-align: left;
+}
+
+task-0 {
+  padding:0 0 0 10;
+}
+
+task-1 {
+  padding:0 0 0 20;
+}
+
+task-2 {
+  padding: 0 0 0 30;
+}
+
+

@@ -1,0 +1,23 @@
+root {
+	color: #FFFFFF;
+	font: "Arial" plain 12;
+	padding: 0;
+}
+
+container { 
+}
+label { }
+
+window {
+	background: image "data/hud/menu-back.png" centery;
+	size: 246 42;
+	padding: 5 27 11 27;
+}
+
+button {
+	size: 32 28;
+	border: 0 blank;
+	padding:0 2 0 2;
+}
+
+

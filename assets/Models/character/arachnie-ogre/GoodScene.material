@@ -1,0 +1,15 @@
+material SOLID/TEX/enemy_01.png/VertCol
+{
+	technique
+	{
+		pass
+		{
+			diffuse 0.800000 0.800000 0.800000
+			specular 0.500000 0.500000 0.500000 12.500000			
+			texture_unit
+			{
+				texture enemy_01.png
+			}
+		}
+	}
+}

@@ -64,6 +64,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.model.md5.controller.MD5Controller;
+import shared.variables.Variables;
 
 
 
@@ -157,7 +158,7 @@ GraphicShadowCaster, GraphicShadowed {
 	public AbstractCharacter(World world) {
 		this.world = world;
 		this.modelType = CharacterModel.unset;
-		//rebuild();
+	
 	}
 
 	/* ********************************************************** *
@@ -167,34 +168,31 @@ GraphicShadowCaster, GraphicShadowed {
 	/**
 	 * recharge l'apperence de l'objet dans une tache secondaire;
 	 */
-	protected void rebuild() {
-            
-            System.out.println("This is rebuilding AbstractCharacter, it s empty");
-		/*world.getGame().getTaskExecutor().execute(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					final Node newModel = CharacterLoader.loadNode(AbstractCharacter.this);
-					GameTaskQueueManager.getManager().update(
-							new Callable<Void>() {
-								@Override
-								public Void call() throws Exception {
-									rebuildApply(newModel);
-									return null;
-								}
-							});
+	   protected void rebuild() {
 
-				} catch (IOException e) {
-					logger.warning("IOException : "+e.getMessage());
-				} catch (ModelFormatException e) {
-					logger.warning("ModelFormatException : Je le savais !");
-					e.printStackTrace();
-				}
 
-			}
-		});
-                */
-	}
+        Variables.getTaskExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    final Node newModel = CharacterLoader.loadNode(AbstractCharacter.this);
+                    Variables.getLaGame().enqueue(
+                            new Callable<Void>() {
+                        @Override
+                        public Void call() throws Exception {
+                            rebuildApply(newModel);
+                            return null;
+                        }
+                    });
+
+                } catch (IOException e) {
+                    logger.warning("IOException : " + e.getMessage());
+                }
+
+            }
+        });
+
+    }
 
 	/**
 	 * 
@@ -205,6 +203,8 @@ GraphicShadowCaster, GraphicShadowed {
 	 * @param newControler
 	 */
 	protected void rebuildApply(Node newModel) {
+            
+            System.out.println("AbstractCharcter -> rebuildApply() !! new Model loaded");
 		if (characterNode != null) {
 			characterNode.removeFromParent();
 			removeFromRenderTask();
@@ -218,6 +218,8 @@ GraphicShadowCaster, GraphicShadowed {
 
 		characterNode = newModel;
 		characterNode.attachChild(onHead);
+                Variables.setPlayerModelLoaded(true);
+               
 /*
 		if (playerFont == null) {
 			playerFont = new Font3D(new Font("ARIAL", Font.BOLD, 16),0.04f,true,true,true);
@@ -481,10 +483,10 @@ GraphicShadowCaster, GraphicShadowed {
             return false;
 	}
 
-/*
+
 	public void requestApplyMaterial() {
 		final AbstractCharacter p = this;
-		GameTaskQueueManager.getManager().update(new Callable<Void>() {
+		Variables.getLaGame().enqueue(new Callable<Void>() {
 			@Override
 			public Void call() throws Exception {
 				CharacterLoader.applyMaterials(p,characterNode);
@@ -528,8 +530,8 @@ GraphicShadowCaster, GraphicShadowed {
 	 * 
 	 * @see client.interfaces.graphic.Graphic#getGraphic()
 	 */
-	@Override
-	public Spatial getGraphic() {
+	
+	public Node getGraphic() {
 		return characterNode;
 	}
 

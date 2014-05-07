@@ -1,0 +1,23 @@
+<?xml  version='1.0' encoding='UTF-8'?>
+        <com.jme.scene.TriMesh name='pile-document'>
+            <renderStateList size='16'>
+                <com.jme.scene.state.TextureState>
+                    <texture size='1'>
+                        <com.jme.image.Texture2D combineFuncAlpha='Modulate' combineFuncRGB='Modulate' imageLocation='file:/Users/loicmichea/Desktop/MonkEdy/data/texture/tex_document.jpg' magnificationFilter='Bilinear' minificationFilter='BilinearNearestMipMap' wrapS='Repeat' wrapT='Repeat'>
+                            <textureKey class='com.jme.util.TextureKey' file='tex_document.jpg' flipped='true' host='' protocol='file'/>
+                        </com.jme.image.Texture2D>
+                    </texture>
+                </com.jme.scene.state.TextureState>
+            </renderStateList>
+            <normBuf data='0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 -0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 -0.0 -1.4560091E-7 1.0 -3.0217885E-7 -1.4560091E-7 1.0 -3.0217885E-7 -1.4560091E-7 1.0 -3.0217885E-7 0.0 1.0 -0.0' size='48'/>
+            <vertBuf data='1.209842 -0.0 -1.817496 -0.790157 -0.0 -1.817496 -0.790158 0.0 1.16449 1.209842 0.0 1.16449 2.79856 0.006732 -0.925235 1.194363 0.006732 -2.119618 -0.586454 0.006732 0.272229 1.017744 0.006732 1.466612 -1.385139 0.006732 -1.509968 -3.186892 0.006732 -0.641817 -1.892485 0.006732 2.044584 -0.090732 0.006732 1.176433 -0.353654 0.028203 -2.135412 -2.155407 0.028203 -1.267261 -0.861 0.028204 1.41914 0.940753 0.028203 0.550989' size='48'/>
+            <texBuf size='1'>
+                <com.jme.scene.TexCoords perVert='2'>
+                    <coords data='1.005273 1.002649 0.005293 1.002649 0.005293 0.00358 1.005273 0.00358 1.005273 1.002649 0.005293 1.002649 0.005293 0.00358 1.005273 0.00358 1.005273 1.002649 0.005293 1.002649 0.005293 0.00358 1.005273 0.00358 1.005273 1.002649 0.005293 1.002649 0.005293 0.00358 1.005273 0.00358' size='32'/>
+                </com.jme.scene.TexCoords>
+            </texBuf>
+            <bound class='com.jme.bounding.BoundingBox' xExtent='2.9927258' yExtent='0.014102' zExtent='2.089998'>
+                <center class='com.jme.math.Vector3f' x='-0.19416606' y='0.014102' z='-0.04541397'/>
+            </bound>
+            <indexBuffer data='0 1 2 0 2 3 4 5 6 4 6 7 8 9 10 8 10 11 12 13 14 12 14 15' size='24'/>
+        </com.jme.scene.TriMesh>

@@ -7,6 +7,7 @@ package shared.variables;
 import client.LaGame;
 import client.NGUI_LA;
 import client.chat.ChatSystem;
+import client.hud.Hud;
 import client.hud3D.MoveCursor;
 import client.map.World;
 import client.map.character.Player;
@@ -100,7 +101,7 @@ public class Variables {
     private static de.lessvoid.nifty.controls.Console console;
     private static SimpleClientConnector clientConnecteur;
     private static  Player mainPlayer;
-    private static  Player playerMission;
+   /* private static  Player playerMission;
 
     public static Player getPlayerMission() {
         return playerMission;
@@ -108,7 +109,18 @@ public class Variables {
 
     public static void setPlayerMission(Player playerMission) {
         Variables.playerMission = playerMission;
+    }*/
+    
+    private static boolean playerModelLoaded=false;
+
+    public static boolean isPlayerModelLoaded() {
+        return playerModelLoaded;
     }
+
+    public static void setPlayerModelLoaded(boolean playerModelLoaded) {
+        Variables.playerModelLoaded = playerModelLoaded;
+    }
+    
     private static Spatial sceneModel;
 
     public static Spatial getSceneModel() {
@@ -244,5 +256,18 @@ private static String language;
             
             if(language ==null) language = props.getProperty("la.language","en");
 		return language;
+	}
+        
+        
+        /**
+	 * Affichage en tete d'ecran
+	 */
+	private static Hud hud;
+       /**
+	 * @return the hud
+	 */
+	public static Hud getHud() {
+            if(hud==null) hud = new Hud(laGame);
+		return hud;
 	}
 }

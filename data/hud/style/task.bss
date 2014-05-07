@@ -1,0 +1,109 @@
+root {
+	color: #000000;
+	font: "Arial" plain 13;
+	padding:0;
+}
+
+window {
+	background: image "data/hud/window-dialog-back.png";
+	size: 274 424;
+}
+
+container { 
+}
+
+label-title {
+	text-align: center;
+	size : 202 42;
+	font: "Arial" plain 12;
+	color: #FFFFFF;
+}
+
+objectiv-succes {
+	color: #999999;
+	font: "Arial" italic 13;
+	padding: 0 8 0 24;
+}
+
+objectiv {
+	color: #000000;
+	font: "Arial" plain 13;
+	padding: 0 8 0 24;
+}
+
+textarea {
+	padding: 2 8 5 16;
+}
+
+close {
+	size : 36 42;
+}
+
+container-middle {
+	padding: 6 5 11 8;
+}
+
+tab-container {
+	padding: 20 0 0 0;
+}
+
+tab {
+	color: #000000;
+}
+
+tab:selected {
+	color: #000000;
+}
+
+tab:disselected {
+	color: #999999;
+}
+
+quest-title {
+	padding:8 0 0 8;
+}
+
+checkbox{
+    icon: image "data/icon/lgpl/cross-12.png" centery;
+	text-align: right;
+	padding:0 8 0 0;
+}
+
+checkbox:disselected {
+  icon: image "data/icon/lgpl/cross-12.png" centery;
+}
+
+checkbox:selected {
+  icon: image "data/icon/lgpl/ok-12.png" centery;
+}
+
+
+scrollbar {
+	padding: 2;
+	border: 0 blank;
+	background: image "data/hud/scroll-bar.png";
+	size: 22 362;
+}
+
+scrollbar_vless {
+	icon: image "data/hud/scroll-up.png";
+	border: 0 blank;
+	size:16 16;
+}
+
+scrollbar_vmore {
+	icon: image "data/hud/scroll-down.png";
+	border: 0 blank;
+	size:16 16;
+}
+
+scrollbar_vwell {
+	border: 0 blank;
+	padding: 1;
+	size:16 16;
+}
+
+scrollbar_vthumb {
+	background: image "data/hud/scroll-well.png" centery;
+	size:16 16;
+}

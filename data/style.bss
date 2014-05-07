@@ -1,0 +1,68 @@
+
+/****** STYLE GLOBAUX ******/
+root {
+	color: #FFFFFF;
+	font: "Arial" plain 12;
+	padding: 1;
+}
+
+container { }
+label { }
+
+textfield {
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+}
+
+textarea {
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+}
+
+window {
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+}
+
+button {
+	padding: 2;
+	text-align: center;
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+}
+
+button:selected {
+	color:#FFFF00;
+}
+
+button:disselected {
+	color:#FF00FF;
+}
+
+checkbox {
+  icon: image "data/icon/lgpl/cross-12.png" centery;
+}
+
+checkbox:selected {
+  icon: image "data/icon/lgpl/ok-12.png" centery;
+}
+
+/****** STYLE generique ******/
+button-icon {
+	border: 0 blank;
+	background: blank;
+}
+
+window-hide {
+	border: 0 blank;
+	background: blank;
+}
+
+label-title {
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+	text-align: center;
+}
+
+
+

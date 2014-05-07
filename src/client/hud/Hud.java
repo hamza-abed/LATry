@@ -230,7 +230,7 @@ public class Hud  {
 	//	MainKeyInput.get().setHud(this);
 
 		// charge le style des interfaces pour les fenetres principales
-		BuiSystem.init(FileLoader.getResourceAsUrl(Variables.getProps().getProperty("hud.bui.file", "data/style.bss")));
+		//BuiSystem.init(FileLoader.getResourceAsUrl(Variables.getProps().getProperty("hud.bui.file", "data/style.bss")));
 
 		// charge la lang
 		lang = new Properties();
@@ -244,9 +244,9 @@ public class Hud  {
 		h = Display.getHeight();
 
 		// construction des divers fenetres
-		this.menu = new Menu(this);
+//		this.menu = new Menu(this);
 		initLogin();
-
+/*
 		this.bags = new BagWindow(this);
 		//this.boussole = new BoussoleWindow(this);
 		this.missionStatus = new MissionStatusWindow(this);
@@ -261,7 +261,7 @@ public class Hud  {
 		this.poll = new PollWindow(this);
 		this.group = new Group(this);
 		this.groupeditor = new GroupEditor(this);
-		this.playerEditor = new PlayerEditor(this);
+		this.playerEditor = new PlayerEditor(this); */
 // pas opérationnelle en v31	
 //		this.zonesActivites = new HudScenarizationDroppableZonesDActivites(this);
 //		this.elementsActivites = new HudScenarizationDroppableElementsDActivite(this);
@@ -269,19 +269,21 @@ public class Hud  {
 //		this.editeurDeButs = new HudScenarizationBut(this);
 //		this.editeurDActions = new HudScenarizationAction(this);
 		
-		this.populus = new HudPopulateurAnnotation(this);
-		
+//		this.populus = new HudPopulateurAnnotation(this);
+//		
 		this.loading = new LoadingScreen(this);
 //      pas opérationnelle en v31			
 //		this.scenarization_loading = new HudScenarizationChargementEnCours(this);
 		
 		updateVisibility();
 		
-		new Thread(menu).start();
+		//new Thread(menu).start();
 	}
 
 	private void initLogin() {
-		loginWindow = new BWindow("login", BStyleSheetUtil
+            
+            System.out.println("Hud -> initLogin() : vide !!!");
+/*		loginWindow = new BWindow("login", BStyleSheetUtil
 				.getStyleSheet(FileLoader.getResourceAsUrl("data/login.bss")),
 				new BorderLayout(SPACE, SPACE));
 
@@ -348,6 +350,7 @@ public class Hud  {
 
 		loginWindow.pack();
 		loginWindow.center();
+                */
 	}
 
 	/* ********************************************************** *
@@ -357,13 +360,17 @@ public class Hud  {
 	 * Met à jour la visibilité des interface
 	 */
 	public void updateVisibility() {
+            
+            System.out.println("Hud -> updateVisibility() : vide !!");
+            
+            /*
 		bags.setVisible(false);
 		chat.setVisible(visible && Variables.getClientConnecteur().isConnected());
 		followedTask.setVisible(visible && Variables.getClientConnecteur().isConnected());
 		image.setVisible(false);
 		loginWindow.setVisible(visible && !Variables.getClientConnecteur().isConnected());
 		mainMenu.setVisible(false);
-		menu.setVisible(visible && Variables.getClientConnecteur().isConnected());
+		//menu.setVisible(visible && Variables.getClientConnecteur().isConnected());
 		npcDialog.setVisible(false);
 		skill.setVisible(false);
 		slideshow.setVisible(false);
@@ -381,6 +388,7 @@ public class Hud  {
 		
 		//boussole.setVisible(visible && Variables.getClientConnecteur().isConnected());
 		missionStatus.setVisible(visible && Variables.getClientConnecteur().isConnected());
+                */
 	}
 	
 // pas opérationnelle en v31	
@@ -419,8 +427,9 @@ public class Hud  {
 	 * @param admin
 	 */
 	public void updateRights(boolean admin) {
-		getMenu().updateRights(admin);
-		getMainMenu().updateRights(admin);
+            System.out.println("Hud -> updateRights() : vide !!!");
+		/*getMenu().updateRights(admin);
+		getMainMenu().updateRights(admin); */
 	}
 
 
@@ -569,7 +578,8 @@ public class Hud  {
 	
 	@ScriptableMethod(description="affiche/masque le menu")
 	public void setMenuVisible(boolean visible) {
-		menu.setVisible(visible);
+		//menu.setVisible(visible);
+            System.out.println("Hud -> setMenuVisible() :  vide !!!");
 	}
 	
 	
@@ -823,7 +833,8 @@ public class Hud  {
 	 */
 	@ScriptableMethod(description="Active/Descative le clignotement du sac")
 	public void setBagBlink(boolean b) {
-		menu.bagBlink = b;
+		//menu.bagBlink = b;
+            System.out.println("Hud-> setBagBlink() : vide !!!");
 	}
 	
 	/**
@@ -832,7 +843,8 @@ public class Hud  {
 	 */
 	@ScriptableMethod(description="Active/Descative le clignotement du status")
 	public void setSkillBlink(boolean b) {
-		menu.skillBlink = b;
+		//menu.skillBlink = b;
+            System.out.println("Hud-> setSkillBlink");
 	}
 	
 	/**
@@ -841,7 +853,8 @@ public class Hud  {
 	 */
 	@ScriptableMethod(description="Active/Descative le clignotement du livre de quete")
 	public void setTaskBlink(boolean b) {
-		menu.todoBlink = b;
+		//menu.todoBlink = b;
+            System.out.println("Hud-> setTaskBlink");
 	}
 	
 	/* ********************************************************** *

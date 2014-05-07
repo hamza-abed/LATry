@@ -1,0 +1,21 @@
+<?xml  version='1.0' encoding='UTF-8'?>
+        <com.jme.scene.TriMesh name='road-line-pass'>
+            <renderStateList size='16'>
+                <com.jme.scene.state.TextureState>
+                    <texture size='1'>
+                        <com.jme.image.Texture2D combineFuncAlpha='Modulate' combineFuncRGB='Modulate' imageLocation='file:/home/shionn/workspace/MonkEdy/data/texture/road-line-pass.jpg' magnificationFilter='Bilinear' minificationFilter='BilinearNearestMipMap' wrapS='Repeat' wrapT='Repeat'>
+                            <textureKey class='com.jme.util.TextureKey' file='road-line-pass.jpg' flipped='true' host='' protocol='file'/>
+                        </com.jme.image.Texture2D>
+                    </texture>
+                </com.jme.scene.state.TextureState>
+            </renderStateList>
+            <normBuf data='0.0 0.0 -1.0 0.0 0.0 -1.0 0.0 0.0 -1.0 0.0 0.0 -1.0 0.0 1.0 -0.0 0.0 1.0 -0.0 0.0 1.0 -0.0 0.0 1.0 -0.0 -0.0 0.0 1.0 -0.0 0.0 1.0 -0.0 0.0 1.0 -0.0 0.0 1.0 -0.0 0.0 1.0 -0.0 0.0 1.0 -0.0 0.0 1.0 -0.0 0.0 1.0 0.0 1.0 -0.0 0.0 1.0 -0.0 0.0 1.0 -0.0 0.0 1.0 -0.0 0.0 0.0 -1.0 0.0 0.0 -1.0 0.0 0.0 -1.0 0.0 0.0 -1.0 0.0 1.0 -0.0 0.0 1.0 -0.0 0.0 1.0 -0.0 0.0 1.0 -0.0' size='84'/>
+            <vertBuf data='-2.999999 0.1 -1.995 3.0 0.1 -1.995 3.0 -0.1 -1.995 -2.999999 -0.1 -1.995 -2.999999 0.1 -1.330001 3.0 0.1 -1.33 3.0 0.1 -1.995 -2.999999 0.1 -1.995 -2.999999 -0.0 -1.330001 3.0 -0.0 -1.33 3.0 0.1 -1.33 -2.999999 0.1 -1.330001 3.0 0.1 1.995 -3.0 0.1 1.995 -3.0 -0.1 1.995 3.0 -0.1 1.995 3.0 0.1 1.33 -3.0 0.1 1.33 -3.0 0.1 1.995 3.0 0.1 1.995 3.0 0.0 1.33 -3.0 0.0 1.33 -3.0 0.1 1.33 3.0 0.1 1.33 3.0 -0.0 -1.33 -2.999999 -0.0 -1.330001 -3.0 0.0 1.33 3.0 0.0 1.33' size='84'/>
+            <texBuf size='1'>
+                <com.jme.scene.TexCoords perVert='2'>
+                    <coords data='1.0 0.002274 0.0 0.002274 -0.001563 -0.014825 0.998438 -0.014825 1.0 0.096527 0.0 0.096527 0.0 0.002274 1.0 0.002274 1.0 0.119082 0.0 0.119082 0.0 0.096527 1.0 0.096527 0.0 1.000488 1.0 1.000488 1.0 1.022249 0.0 1.022249 0.0 0.900086 1.0 0.900086 1.0 1.000488 0.0 1.000488 0.0 0.876005 1.0 0.876005 1.0 0.900086 0.0 0.900086 0.0 0.119082 1.0 0.119082 1.0 0.876005 0.0 0.876005' size='56'/>
+                </com.jme.scene.TexCoords>
+            </texBuf>
+            <indexBuffer data='0 1 2 0 2 3 4 5 6 4 6 7 8 9 10 8 10 11 12 13 14 12 14 15 16 17 18 16 18 19 20 21 22 20 22 23 24 25 26 24 26 27' size='42'/>
+        </com.jme.scene.TriMesh>
+

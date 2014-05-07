@@ -1,0 +1,5 @@
+<cursor>
+	<base x="0" y="31">arrow.png</base>
+	<npc x="0" y="31">help.png</npc>
+	<object x="15" y="31">hand.png</object>
+</cursor>

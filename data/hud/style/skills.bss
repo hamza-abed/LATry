@@ -1,0 +1,90 @@
+root {
+	color: #FFFFFF;
+	font: "Arial" plain 12;
+	padding:0;
+}
+
+window {
+	background: image "data/hud/window-back.png";
+	size: 274 424;
+}
+
+container { 
+}
+
+dialog-container { 
+	padding: 2 0 2 0;
+}
+
+container-middle {
+	padding: 8 5 11 8;
+}
+
+label-title {
+	text-align: center;
+	size : 202 42;
+}
+
+close {
+	size : 36 42;
+}
+
+categorie {
+	padding:8 0 0 8;
+}
+
+skill {
+	padding:0 0 0 22;
+}
+
+textarea {
+	font: "Dialog" plain 13;
+	color: #000000;
+	padding: 35 0 0 0;
+	/*background: solid #FF000044;*/
+	size: 229 -1;
+}
+
+button {
+	color: #333333;
+	icon: image "data/icon/gpl/chat-bubble-24.png";
+	font: "Dialog" italic 13;
+	padding: 2 2 2 10;
+	size: 229 -1;
+	text-align: left;
+}
+
+button:hover {
+	color: #000000;
+	font: "Dialog" bolditalic 13;
+}
+
+scrollbar {
+	padding: 2;
+	border: 0 blank;
+	background: image "data/hud/scroll-bar.png";
+	size: 22 362;
+}
+
+scrollbar_vless {
+	icon: image "data/hud/scroll-up.png";
+	border: 0 blank;
+	size:16 16;
+}
+
+scrollbar_vmore {
+	icon: image "data/hud/scroll-down.png";
+	border: 0 blank;
+	size:16 16;
+}
+
+scrollbar_vwell {
+	border: 0 blank;
+	padding: 1;
+	size:16 16;
+}
+
+scrollbar_vthumb {
+	background: image "data/hud/scroll-well.png" centery;
+	size:16 16;
+}

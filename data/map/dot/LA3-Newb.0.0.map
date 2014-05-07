@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dot-map name="LA3-Newb">
+    <map-elem id="20" name="half-border-dirt-grass" ry="180" s="2.0" x="16.0" y="0.0" z="144.0"/>
+    <map-elem id="21" name="half-border-dirt-grass" ry="180" s="2.0" x="48.0" y="0.0" z="144.0"/>
+    <map-elem id="22" name="half-border-dirt-grass" ry="180" s="2.0" x="80.0" y="0.0" z="144.0"/>
+    <map-elem id="23" name="half-border-dirt-grass" ry="180" s="2.0" x="112.0" y="0.0" z="144.0"/>
+    <map-elem id="28" name="half-border-dirt-grass" ry="270" s="2.0" x="144.0" y="0.0" z="16.0"/>
+    <map-elem id="29" name="half-border-dirt-grass" ry="270" s="2.0" x="144.0" y="0.0" z="48.0"/>
+    <map-elem id="30" name="half-border-dirt-grass" ry="270" s="2.0" x="144.0" y="0.0" z="80.0"/>
+    <map-elem id="31" name="half-border-dirt-grass" ry="270" s="2.0" x="144.0" y="0.0" z="112.0"/>
+    <map-elem id="33" name="half-border-outter-corner-dirt-grass" ry="270" s="2.0" x="144.0" y="0.0" z="144.0"/>
+    <map-elem id="36" name="ground-grass" ry="90" s="2.0" x="144.0" y="8.0" z="176.0"/>
+    <map-elem id="37" name="ground-grass" ry="90" s="2.0" x="144.0" y="8.0" z="208.0"/>
+    <map-elem id="38" name="ground-grass" ry="90" s="2.0" x="176.0" y="8.0" z="144.0"/>
+    <map-elem id="39" name="ground-grass" ry="90" s="2.0" x="208.0" y="8.0" z="144.0"/>
+    <map-elem id="40" name="ground-grass" ry="90" s="2.0" x="240.0" y="8.0" z="144.0"/>
+    <map-elem id="41" name="ground-grass" ry="90" s="2.0" x="240.0" y="8.0" z="176.0"/>
+    <map-elem id="42" name="ground-grass" ry="90" s="2.0" x="208.0" y="8.0" z="176.0"/>
+    <map-elem id="43" name="ground-grass" ry="90" s="2.0" x="176.0" y="8.0" z="176.0"/>
+    <map-elem id="44" name="ground-grass" ry="90" s="2.0" x="176.0" y="8.0" z="208.0"/>
+    <map-elem id="45" name="ground-grass" ry="90" s="2.0" x="208.0" y="8.0" z="208.0"/>
+    <map-elem id="46" name="ground-grass" ry="90" s="2.0" x="240.0" y="8.0" z="208.0"/>
+    <map-elem id="47" name="ground-grass" ry="90" s="2.0" x="240.0" y="8.0" z="240.0"/>
+    <map-elem id="48" name="ground-grass" ry="90" s="2.0" x="208.0" y="8.0" z="240.0"/>
+    <map-elem id="49" name="ground-grass" ry="90" s="2.0" x="176.0" y="8.0" z="240.0"/>
+    <map-elem id="50" name="ground-grass" ry="90" s="2.0" x="144.0" y="8.0" z="240.0"/>
+</dot-map>

@@ -1,0 +1,90 @@
+material Sinbad/Clothes/SOLID/TEX/sinbad_clothes.tga
+{
+	technique
+	{
+		pass
+		{
+			diffuse 0.800000 0.800000 0.800000
+			specular 0.500000 0.500000 0.500000 12.500000
+			texture_unit
+			{
+				texture sinbad_clothes.tga
+			}
+		}
+	}
+}
+material Sinbad/Eyes/SOLID/TEX/sinbad_body.tga
+{
+	technique
+	{
+		pass
+		{
+			diffuse 0.800000 0.800000 0.800000
+			specular 0.500000 0.500000 0.500000 12.500000
+			texture_unit
+			{
+				texture sinbad_body.tga
+			}
+		}
+	}
+}
+material Sinbad/Body/SOLID/TEX/sinbad_body.tga
+{
+	technique
+	{
+		pass
+		{
+			diffuse 0.800000 0.800000 0.800000
+			specular 0.500000 0.500000 0.500000 12.500000
+			texture_unit
+			{
+				texture sinbad_body.tga
+			}
+		}
+	}
+}
+material Sinbad/Spikes/SOLID/TEX/sinbad_clothes.tga
+{
+	technique
+	{
+		pass
+		{
+			diffuse 0.800000 0.800000 0.800000
+			specular 0.500000 0.500000 0.500000 12.500000
+			texture_unit
+			{
+				texture sinbad_clothes.tga
+			}
+		}
+	}
+}
+material Sinbad/Gold/SOLID/TEX/sinbad_clothes.tga
+{
+	technique
+	{
+		pass
+		{
+			diffuse 0.800000 0.800000 0.800000
+			specular 0.500000 0.500000 0.500000 12.500000
+			texture_unit
+			{
+				texture sinbad_clothes.tga
+			}
+		}
+	}
+}
+material Sinbad/Teeth/SOLID/TEX/sinbad_body.tga
+{
+	technique
+	{
+		pass
+		{
+			diffuse 0.800000 0.800000 0.800000
+			specular 0.500000 0.500000 0.500000 12.500000
+			texture_unit
+			{
+				texture sinbad_body.tga
+			}
+		}
+	}
+}

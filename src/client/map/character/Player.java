@@ -4,6 +4,7 @@
  */
 package client.map.character;
 
+import client.map.Map;
 import client.map.Region;
 import client.map.World;
 import client.map.Zone;
@@ -19,7 +20,10 @@ import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import java.util.Map;
+import java.nio.ByteBuffer;
+
+import shared.constants.PckCode;
+import shared.pck.Pck;
 import shared.variables.Variables;
 
 /**
@@ -141,7 +145,12 @@ implements AnimEventListener {
     }
 
     public void attachToScene() {
+        playerModel=getGraphic();
+        if(playerModel!=null)
         Variables.getLaGame().getRootNode().attachChild(playerModel);
+        else
+        System.out.println("Player -> attachToScene() : getGraphic retourne nulle !!!");
+        
 
     }
     //private float turned=0;
@@ -370,5 +379,81 @@ implements AnimEventListener {
     protected boolean testCollision(Vector3f newPos, Vector3f dir) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    /* ********************************************************** *
+	 * * 				Mise à jour	- Divers					* *
+	 * ********************************************************** */
+	/* (non-Javadoc)
+	 * @see client.map.character.PlayableCharacter#updateRights()
+	 */
+	
+	protected void updateRights() {
+		super.updateRights();
+		Variables.getHud().updateRights(isAdmin());
+	}
+
+	/* (non-Javadoc)
+	 * @see client.map.character.PlayableCharacter#receiveCommitPck(java.nio.ByteBuffer)
+	 */
+	
+	public void receiveCommitPck(ByteBuffer message) {
+		boolean update = x<0 || z<0;
+		super.receiveCommitPck(message);
+		if (update) {
+			System.out.println("first map @ "+getGraphicPosition());
+			checkZones();
+			mapUpdate();
+		}
+	}
+        
+        
+        
+        /**
+	 * Test si le joueur change de region et le cas échéant demande au 
+	 * serveur de se mettre à jour
+	 */
+	private void checkZones() {
+		Vector3f v = getGraphicPosition();
+		if (v == null) return;
+
+		Zone newZone = world.getZone(v.x, v.z);
+		if(newZone != currentZone) {
+			Variables.getChatSystem().debug(currentZone+" > "+newZone);
+			currentZone = newZone;
+			Pck pck = new Pck(PckCode.PLAYER_REQUEST_ZONE_UPDATE);
+			pck.putFloat(v.x,v.z);
+			Variables.getClientConnecteur().send(pck);
+		}
+	}
+        
+        	/* ********************************************************** *
+	 * * 				Gestion de la map courante				* *
+	 * ********************************************************** */
+
+	/**
+	 * met à jour la map courante
+	 */
+	public void mapUpdate() {
+		Vector3f v = getGraphicPosition();
+		Map map = world.getMapAt(v.x, v.z);
+		if (currentMap != map) {
+			Variables.getChatSystem().debug(currentMap+" > "+map);
+			enter(map);
+		}
+	}	
+
+	/**
+	 * execute le scrip d'entrer de carte 
+	 * @param map
+	 */
+	private void enter(Map map) {
+		if (map != null) {
+			
+			currentMap = map;
+		}
+
+	}
+
+
     
 }

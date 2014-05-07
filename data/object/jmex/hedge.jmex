@@ -1,0 +1,23 @@
+<?xml  version='1.0' encoding='UTF-8'?>
+        <com.jme.scene.TriMesh name='hedge'>
+            <renderStateList size='16'>
+                <com.jme.scene.state.TextureState>
+                    <texture size='1'>
+                        <com.jme.image.Texture2D combineFuncAlpha='Modulate' combineFuncRGB='Modulate' imageLocation='file:/home/shionn/workspace-perso/MonkEdy/data/texture/hedge.jpg' magnificationFilter='Bilinear' minificationFilter='BilinearNearestMipMap' wrapS='Repeat' wrapT='Repeat'>
+                            <textureKey class='com.jme.util.TextureKey' file='hedge.jpg' flipped='true' host='' protocol='file'/>
+                        </com.jme.image.Texture2D>
+                    </texture>
+                </com.jme.scene.state.TextureState>
+            </renderStateList>
+            <normBuf data='0.0 0.9999982 0.0019210004 0.0 0.9999982 0.0019210004 0.0 0.9999982 0.0019210004 1.0 -0.0 -3.2E-5 1.0 -0.0 -3.2E-5 1.0 -0.0 -3.2E-5 1.0 -0.0 -3.2E-5 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.9999982 0.0019210004 -1.0 0.0 0.0 -1.0 0.0 0.0 -1.0 0.0 0.0 0.0 -0.0 -1.0 0.0 -0.0 -1.0 0.0 -0.0 -1.0 0.0 -0.0 -1.0 0.0 -1.0 1.5E-5 0.0 -1.0 1.5E-5 0.0 -1.0 1.5E-5 0.0 -1.0 1.5E-5 -1.0 0.0 0.0' size='72'/>
+            <vertBuf data='-2.310028 0.885315 -0.283594 2.310028 0.884225 0.283594 2.310009 0.885315 -0.283594 2.310009 0.885315 -0.283594 2.310028 0.884225 0.283594 2.310009 -0.022357 -0.283594 2.310028 -0.022348 0.283594 2.310028 -0.022348 0.283594 2.310028 0.884225 0.283594 -2.310028 -0.022348 0.283594 -2.310028 0.884225 0.283594 -2.310028 0.884225 0.283594 -2.310028 0.884225 0.283594 -2.310028 0.885315 -0.283594 -2.310028 -0.022357 -0.283594 -2.310028 -0.022357 -0.283594 -2.310028 0.885315 -0.283594 2.310009 -0.022357 -0.283594 2.310009 0.885315 -0.283594 2.310009 -0.022357 -0.283594 2.310028 -0.022348 0.283594 -2.310028 -0.022357 -0.283594 -2.310028 -0.022348 0.283594 -2.310028 -0.022348 0.283594' size='72'/>
+            <texBuf size='1'>
+                <com.jme.scene.TexCoords perVert='2'>
+                    <coords data='0.99988 0.66396 -0.999868 0.999076 -0.999918 0.66396 1.236252 0.664529 1.000096 0.664529 1.236252 8.38E-4 1.000096 8.38E-4 -1.000042 8.38E-4 -1.000042 0.664529 0.99983 8.38E-4 0.99983 0.664529 1.000098 0.999077 1.236252 0.664529 1.000096 0.664529 1.000096 8.38E-4 0.999663 8.38E-4 0.99988 0.66396 -0.999764 8.38E-4 -0.999918 0.66396 -1.001011 0.143001 -1.002367 -1.72E-4 0.996979 0.143001 0.996979 -1.72E-4 1.236252 8.38E-4' size='48'/>
+                </com.jme.scene.TexCoords>
+            </texBuf>
+            <bound class='com.jme.bounding.BoundingBox' xExtent='2.310028' yExtent='0.453836' zExtent='0.283594'>
+                <center class='com.jme.math.Vector3f' y='0.431479'/>
+            </bound>
+            <indexBuffer data='0 1 2 3 4 5 5 4 6 7 8 9 9 8 10 11 1 0 12 13 14 15 16 17 16 18 17 19 20 21 21 20 22 12 14 23' size='36'/>
+        </com.jme.scene.TriMesh>

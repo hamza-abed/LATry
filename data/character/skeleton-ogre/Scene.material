@@ -1,0 +1,42 @@
+material ChitinArmor
+{
+	receive_shadows on
+	technique
+	{
+		pass
+		{
+			ambient 0.500000 0.500000 0.500000 1.000000
+			diffuse 0.933634 0.920322 0.814476 1.000000
+			specular 0.000000 0.000000 0.000000 1.000000 6.250000
+			emissive 0.000000 0.000000 0.000000 1.000000
+		}
+	}
+}
+material Fur
+{
+	receive_shadows on
+	technique
+	{
+		pass
+		{
+			ambient 0.500000 0.500000 0.500000 1.000000
+			diffuse 0.190207 0.141868 0.107139 1.000000
+			specular 0.000000 0.000000 0.000000 1.000000 2.500000
+			emissive 0.000000 0.000000 0.000000 1.000000
+		}
+	}
+}
+material Bone
+{
+	receive_shadows on
+	technique
+	{
+		pass
+		{
+			ambient 0.500000 0.500000 0.500000 1.000000
+			diffuse 0.603054 0.591508 0.422587 1.000000
+			specular 0.000000 0.000000 0.000000 1.000000 5.000000
+			emissive 0.000000 0.000000 0.000000 1.000000
+		}
+	}
+}

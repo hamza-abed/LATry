@@ -57,6 +57,7 @@ import com.jme3.scene.plugins.ogre.MaterialLoader;
 import com.model.md5.MD5Node;
 import com.model.md5.controller.MD5Controller;
 import com.model.md5.importer.MD5Importer;
+import shared.variables.Variables;
 
 /*
 import com.jme.animation.SkinNode;
@@ -116,7 +117,7 @@ public class CharacterLoader {
 	 * CHARGEMENT DU MESH GRAPHIQUE
 	 */
 
-	public static final Node loadNode(AbstractCharacter character) throws IOException {
+	public static Node loadNode(AbstractCharacter character) throws IOException {
 		Node node;
 		if (isMd5Model(character)) node = loadMd5(character);
 		else if (isJmexModel(character) || isDotModel(character)) node = loadJmex(character);
@@ -199,8 +200,8 @@ public class CharacterLoader {
 	 */
 
 	private static Node loadOgre(AbstractCharacter character) throws IOException {
-	System.out.println("CharacterLoader -> loadOgre() : vide !!");	
-            /*OgreLoader ol = new OgreLoader();
+	System.out.println("CharacterLoader -> loadOgre() : modifié !!");	
+          /* OgreLoader ol = new OgreLoader();
 		MaterialLoader ml = new MaterialLoader();
 
 		// tentative de resolution des bonhomme blanc
@@ -208,9 +209,11 @@ public class CharacterLoader {
 			ml.load(getOgreMaterialUrl(character));
 
 		ol.setMaterials(ml.getMaterials());
-		return ol.loadModel(getOgreMeshUrl(character));
                 */
-            return null;
+       Node playerModel = (Node) Variables.getLaGame().getAssetManager().loadModel(
+		getOgreMeshUrl(character));
+             
+            return playerModel;
 	}
 
 
@@ -285,18 +288,18 @@ public class CharacterLoader {
 	 * 
 	 * @return
 	 */
-	protected static URL getOgreMeshUrl(AbstractCharacter character) {
+	protected static String getOgreMeshUrl(AbstractCharacter character) {
 		switch (character.modelType) {
-		case arachnie: return FileLoader.getResourceAsUrl("data/character/arachnie-ogre/enemy_01.mesh.xml");
-		case synbad: return FileLoader.getResourceAsUrl("data/character/"+(high?"high":"low")+"-sinbad/Sinbad.mesh.xml");
-		case women: return FileLoader.getResourceAsUrl("data/character/"+(high?"high":"low")+"-women/LA3_girl.mesh.xml");
-		case men: return FileLoader.getResourceAsUrl("data/character/"+(high?"high":"low")+"-men/man.mesh.xml");
-		case robot: return FileLoader.getResourceAsUrl("data/character/robot-ogre/robot.mesh.xml");
-		case tank: return FileLoader.getResourceAsUrl("data/character/sc2-tank-ogre/tank.mesh.xml");
-		case hellion: return FileLoader.getResourceAsUrl("data/character/sc2-hellion-ogre/hellion.mesh.xml");
-		case skelet: return FileLoader.getResourceAsUrl("data/character/skeleton-ogre/Cube.004.mesh.xml");
-		case mage: return FileLoader.getResourceAsUrl("data/character/mage-md5/Cube.001.mesh.xml");
-		default: return FileLoader.getResourceAsUrl("data/character/spirit-ogre/Spirit.mesh.xml");
+		case arachnie: return"Models/character/arachnie-ogre/enemy_01.mesh.xml";
+		case synbad: return"Models/character/"+(high?"high":"low")+"-sinbad/Sinbad.mesh.xml";
+		case women: return"Models/character/"+(high?"high":"low")+"-women/LA3_girl.mesh.xml";
+		case men: return"Models/character/"+(high?"high":"low")+"-men/man.mesh.xml";
+		case robot: return"Models/character/robot-ogre/robot.mesh.xml";
+		case tank: return "Models/character/sc2-tank-ogre/tank.mesh.xml";
+		case hellion: return "Models/character/sc2-hellion-ogre/hellion.mesh.xml";
+		case skelet: return "Models/character/skeleton-ogre/Cube.004.mesh.xml";
+		case mage: return "Models/character/mage-md5/Cube.001.mesh.xml";
+		default: return "Models/character/spirit-ogre/Spirit.mesh.xml";
 		}
 	}
 

@@ -1,0 +1,37 @@
+root {
+	color: #FFFFFF;
+	font: "Arial" plain 12;
+	padding:1;
+}
+
+container { 
+	padding:0;
+}
+
+label { 
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+	padding: 0;
+}
+
+label-title {
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+	text-align: center;
+}
+
+window {
+	size: 250 -1;
+}
+
+textfield {
+  	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+}
+
+button {
+	text-align: center;
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+}
+

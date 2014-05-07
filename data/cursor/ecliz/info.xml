@@ -1,0 +1,6 @@
+<cursor>
+	<base x="8" y="38">default.tga</base>
+	<npc x="8" y="38" delay="64">help_000.tga;help_001.tga;help_002.tga;help_003.tga;help_004.tga;help_005.tga;help_006.tga;help_007.tga;help_008.tga;help_009.tga;help_008.tga;help_007.tga;help_006.tga;help_005.tga;help_004.tga;help_003.tga;help_002.tga;help_001.tga</npc>
+	<object x="8" y="38" delay="44">arrow_000.tga;arrow_001.tga;arrow_002.tga;arrow_003.tga;arrow_004.tga;arrow_005.tga;arrow_006.tga;arrow_007.tga;arrow_008.tga;arrow_009.tga</object>
+	<move x="8" y="38" delay="44">hand_000.png;hand_001.png;hand_002.png;hand_003.png;hand_004.png;hand_005.png;hand_006.png;hand_007.png;hand_008.png;hand_009.png</move>
+</cursor>

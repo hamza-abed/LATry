@@ -1,0 +1,85 @@
+root {
+	color: #FFFFFF;
+	font: "Arial" plain 12;
+}
+
+container { 
+
+}
+
+label { }
+
+textfield {
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+}
+
+textarea {
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+	padding:1;
+}
+
+combobox {
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+	padding:1;
+}
+
+popupmenu {
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+	padding:2;
+}
+
+menuitem { }
+
+window { 
+	size: 400 230;
+}
+
+scrollbar {
+	padding: 2;
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+}
+
+scrollbar_vless {
+	icon: image "data/icon/lgpl/uparrow-12.png";
+	background: blank;
+	border: 0 blank;
+}
+
+scrollbar_vmore {
+	icon: image "data/icon/lgpl/downarrow-12.png";
+	background: blank;
+	border: 0 blank;
+}
+
+scrollbar_vwell {
+	background: blank;
+	border: 1 solid #FFFFFF;
+	padding: 1;
+}
+
+scrollbar_vthumb {
+	background: solid #22BBFFFF;
+}
+
+tabbedpane { }
+
+tab {
+	background: solid #000000AA;
+	border: 1 solid #FFFFFF;
+	padding: 2;
+}
+
+tab:selected {
+	background: solid #606060AA;
+	border: 1 solid #FFFFFF;
+}
+
+tab:disselected {
+	background: solid #000000AA;
+	border: 1 solid #FFFFFF;
+}

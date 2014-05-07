@@ -1,0 +1,77 @@
+material corpo/TWOSIDE
+{
+	receive_shadows on
+	technique
+	{
+		pass
+		{
+			ambient 0.500000 0.500000 0.500000 1.000000
+			diffuse 0.800000 0.800000 0.800000 1.000000
+			specular 0.000000 0.000000 0.000000 1.000000 2.500000
+			emissive 0.000000 0.000000 0.000000 1.000000
+			cull_hardware none
+			cull_software none
+			texture_unit
+			{
+				texture uvUniPlane3.png
+				tex_address_mode wrap
+				filtering trilinear
+			}
+		}
+	}
+}
+material chemise/TWOSIDE
+{
+	receive_shadows on
+	technique
+	{
+		pass
+		{
+			ambient 0.500000 0.500000 0.500000 1.000000
+			diffuse 0.800000 0.800000 0.800000 1.000000
+			specular 0.000000 0.000000 0.000000 1.000000 2.500000
+			emissive 0.000000 0.000000 0.000000 1.000000
+			cull_hardware none
+			cull_software none
+		}
+	}
+}
+material chaussures/TWOSIDE
+{
+	receive_shadows on
+	technique
+	{
+		pass
+		{
+			ambient 0.500000 0.500000 0.500000 1.000000
+			diffuse 0.800000 0.800000 0.800000 1.000000
+			specular 0.000000 0.000000 0.000000 1.000000 2.500000
+			emissive 0.000000 0.000000 0.000000 1.000000
+			cull_hardware none
+			cull_software none
+		}
+	}
+}
+material pantalon/TWOSIDE
+{
+	receive_shadows on
+	technique
+	{
+		pass
+		{
+			ambient 0.500000 0.500000 0.500000 1.000000
+			diffuse 0.800000 0.800000 0.800000 1.000000
+			specular 0.000000 0.000000 0.000000 1.000000 2.500000
+			emissive 0.000000 0.000000 0.000000 1.000000
+			cull_hardware none
+			cull_software none
+			texture_unit
+			{
+				texture pantalon.jpg
+				tex_address_mode wrap
+				filtering trilinear
+				colour_op alpha_blend
+			}
+		}
+	}
+}

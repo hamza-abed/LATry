@@ -41,6 +41,7 @@
 package client;
 
 import client.editor.ServerEditor;
+import client.hud.Hud;
 import client.hud.boussole.Boussole;
 import client.hud3D.MoveCursor;
 import client.input.MainGameListener;
@@ -74,6 +75,7 @@ import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.niftygui.NiftyJmeDisplay;
+import com.jme3.post.Filter.Pass;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -279,6 +281,8 @@ public class LaGame extends SimpleApplication {
      
         }
   
+    
+    
   private Callable findWay;  
 
     public Callable getFindWay() {
@@ -350,12 +354,19 @@ inputManager.setCursorVisible( true );
 
     private void initPlayer() {
      
-    
-        joueur = new Player(Variables.getWorld(),"demo");
+        
+     //   joueur = new Player(Variables.getWorld(),"demo");
 
-     //   joueur = new Player();
+        
+    if(Variables.getMainPlayer()!=null && Variables.isPlayerModelLoaded())
+    {
+        System.out.println("LaGame -> initPlayer :  ça marche normale");
+        joueur = Variables.getMainPlayer();
         joueur.attachToScene();
-        Variables.setMainPlayer(joueur);
+    }else
+            System.out.println("LaGame-> initPlayer() : ERREUR !!");
+        
+       // Variables.setMainPlayer(joueur);
       
 
 
@@ -598,6 +609,8 @@ inputManager.setCursorVisible( true );
     
     public void initGameWorld()
     {
+        if(Variables.isPlayerModelLoaded())
+        {
         System.out.println("This is calling find way2 "+Thread.currentThread().getName()); 
         initSceneGame();
         initPlayer();
@@ -610,6 +623,15 @@ inputManager.setCursorVisible( true );
         bulletAppState.getPhysicsSpace().enableDebug(assetManager);
        
          setUpKeys();
+        }
+        else
+            try {
+            Thread.sleep(100);
+            initGameWorld();
+       //   isStartScreen=false;
+        } catch (InterruptedException ex) {
+                System.out.println("LaGame -> initGameWorld() :can't wait !!!!!");
+        }
        //   isStartScreen=false;
          
          
@@ -734,8 +756,7 @@ inputManager.setCursorVisible( true );
 		}
 		return serverEditor;
 	}
-        /**
-	 * @return the language
-	 */
        
+        
+        
 }

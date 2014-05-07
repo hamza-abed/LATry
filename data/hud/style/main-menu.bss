@@ -1,0 +1,31 @@
+root {
+	color: #FFFFFF;
+	font: "Arial" plain 12;
+	padding:1;
+}
+
+container { 
+	padding:0;
+}
+
+label { }
+
+label-title {
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+	text-align: center;
+}
+
+window { }
+
+button {
+	text-align: center;
+	border: 1 solid #FFFFFF;
+	background: solid #000000AA;
+}
+
+button:disabled {
+	font: "Arial" italic 12;
+	color:#606060AA;
+}
+

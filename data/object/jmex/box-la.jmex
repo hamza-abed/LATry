@@ -1,0 +1,21 @@
+<?xml  version='1.0' encoding='UTF-8'?>
+        <com.jme.scene.shape.Box name='box' xExtent='1.0' yExtent='1.0' zExtent='1.0'>
+            <renderStateList size='16'>
+                <com.jme.scene.state.TextureState>
+                    <texture size='1'>
+                        <com.jme.image.Texture2D combineFuncAlpha='Modulate' combineFuncRGB='Modulate' imageLocation='file:/home/shionn/workspaceperso/MonkEdy/data/texture/trak2_panel2e.tga' magnificationFilter='Bilinear' memReq='131072' minificationFilter='BilinearNoMipMaps'>
+                            <textureKey class='com.jme.util.TextureKey' file='trak2_panel2e.jpg' flipped='true' protocol='file'/>
+                        </com.jme.image.Texture2D>
+                    </texture>
+                </com.jme.scene.state.TextureState>
+            </renderStateList>
+            <normBuf data='0.0 0.0 -1.0 0.0 0.0 -1.0 0.0 0.0 -1.0 0.0 0.0 -1.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 -1.0 0.0 0.0 -1.0 0.0 0.0 -1.0 0.0 0.0 -1.0 0.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 -1.0 0.0 0.0 -1.0 0.0 0.0 -1.0 0.0 0.0 -1.0 0.0' size='72'/>
+            <vertBuf data='-1.0 -1.0 -1.0 1.0 -1.0 -1.0 1.0 1.0 -1.0 -1.0 1.0 -1.0 1.0 -1.0 -1.0 1.0 -1.0 1.0 1.0 1.0 1.0 1.0 1.0 -1.0 1.0 -1.0 1.0 -1.0 -1.0 1.0 -1.0 1.0 1.0 1.0 1.0 1.0 -1.0 -1.0 1.0 -1.0 -1.0 -1.0 -1.0 1.0 -1.0 -1.0 1.0 1.0 1.0 1.0 -1.0 1.0 1.0 1.0 -1.0 1.0 1.0 -1.0 1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 1.0 1.0 -1.0 1.0 1.0 -1.0 -1.0' size='72'/>
+            <texBuf size='1'>
+                <com.jme.scene.TexCoords perVert='2'>
+                    <coords data='1.0 0.0 0.0 0.0 0.0 1.0 1.0 1.0 1.0 0.0 0.0 0.0 0.0 1.0 1.0 1.0 1.0 0.0 0.0 0.0 0.0 1.0 1.0 1.0 1.0 0.0 0.0 0.0 0.0 1.0 1.0 1.0 1.0 0.0 0.0 0.0 0.0 1.0 1.0 1.0 1.0 0.0 0.0 0.0 0.0 1.0 1.0 1.0' size='48'/>
+                </com.jme.scene.TexCoords>
+            </texBuf>
+            <indexBuffer data='2 1 0 3 2 0 6 5 4 7 6 4 10 9 8 11 10 8 14 13 12 15 14 12 18 17 16 19 18 16 22 21 20 23 22 20' size='36'/>
+        </com.jme.scene.shape.Box>
+

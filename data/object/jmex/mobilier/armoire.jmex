@@ -1,0 +1,24 @@
+<?xml  version='1.0' encoding='UTF-8'?>
+        <com.jme.scene.TriMesh name='la-armoire'>
+            <renderStateList size='16'>
+                <com.jme.scene.state.TextureState>
+                    <texture size='1'>
+                        <com.jme.image.Texture2D combineFuncAlpha='Modulate' combineFuncRGB='Modulate' imageLocation='file:/home/shionn/workspaceperso/MonkEdy/data/texture/TEX_armchair_metal.jpg' magnificationFilter='Bilinear' minificationFilter='BilinearNearestMipMap' wrapS='Repeat' wrapT='Repeat'>
+                            <textureKey class='com.jme.util.TextureKey' file='TEX_armchair_metal.jpg' flipped='true' protocol='file'/>
+                        </com.jme.image.Texture2D>
+                    </texture>
+                </com.jme.scene.state.TextureState>
+            </renderStateList>
+            <normBuf data='0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 1.0 -0.0 1.0E-6 1.0 -0.0 1.0E-6 1.0 -0.0 1.0E-6 1.0 -0.0 1.0E-6 -0.0 -0.0 -1.0 -0.0 -0.0 -1.0 -0.0 -0.0 -1.0 -0.0 -0.0 -1.0 -1.0 -0.0 0.0 -1.0 -0.0 0.0 -1.0 -0.0 0.0 -1.0 0.0 -2.0E-6 -1.0 0.0 -2.0E-6 -1.0 0.0 -2.0E-6 0.0 1.0 -0.0 0.0 1.0 -0.0 0.0 1.0 -0.0 0.0 1.0 -0.0 0.0 -1.0 0.0 0.0 -1.0 0.0 0.0 -1.0 0.0 0.0 -1.0 0.0' size='78'/>
+            <vertBuf data='-0.966361 2.332165 0.264546 -0.96636 -0.003066 0.264546 0.96636 2.332165 0.264545 0.96636 -0.003066 0.264546 0.96636 -0.003066 -0.264546 0.96636 2.332165 -0.264546 0.96636 2.332165 0.264545 0.96636 -0.003066 0.264546 -0.96636 -0.003066 -0.264546 -0.96636 2.332165 -0.264546 0.96636 -0.003066 -0.264546 0.96636 2.332165 -0.264546 -0.96636 -0.003066 0.264546 -0.966361 2.332165 0.264546 -0.96636 -0.003066 -0.264546 -0.966361 2.332165 0.264546 -0.96636 2.332165 -0.264546 -0.96636 -0.003066 -0.264546 -0.966361 2.332165 0.264546 0.96636 2.332165 0.264545 -0.96636 2.332165 -0.264546 0.96636 2.332165 -0.264546 -0.96636 -0.003066 0.264546 -0.96636 -0.003066 -0.264546 0.96636 -0.003066 0.264546 0.96636 -0.003066 -0.264546' size='78'/>
+            <texBuf size='1'>
+                <com.jme.scene.TexCoords perVert='2'>
+                    <coords data='0.011367 0.909789 0.011367 0.462079 0.459078 0.909789 0.459078 0.462079 0.544359 0.462079 0.544359 0.909789 0.459078 0.909789 0.459078 0.462079 0.9149 0.462078 0.9149 0.909789 0.544359 0.462079 0.544359 0.909789 0.99112 0.462078 0.99112 0.909789 0.9149 0.462078 0.99112 0.909789 0.9149 0.909789 0.9149 0.462078 0.011367 0.909789 0.459078 0.909789 0.011367 0.991289 0.459078 0.991289 0.9149 0.389388 0.9149 0.462078 0.544359 0.389388 0.544359 0.462079' size='52'/>
+                </com.jme.scene.TexCoords>
+            </texBuf>
+            <bound class='com.jme.bounding.BoundingBox' xExtent='0.96636045' yExtent='1.1676155' zExtent='0.264546'>
+                <center class='com.jme.math.Vector3f' x='-5.066395E-7' y='1.1645495'/>
+            </bound>
+            <indexBuffer data='0 1 2 1 3 2 4 5 6 4 6 7 8 9 10 9 11 10 12 13 14 15 16 17 18 19 20 19 21 20 22 23 24 23 25 24' size='36'/>
+        </com.jme.scene.TriMesh>
+
