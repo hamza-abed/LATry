@@ -173,7 +173,7 @@ GraphicReflexEditable, GraphicCollidable, GraphicShadowCaster {
 		this.world = world;
 		this.id = id;
 
-		//	world.getGame().getLocalBdd().load(this);
+		
 		//world.getGame().getHud().getLoading().add(this);
 	}
 
@@ -182,15 +182,15 @@ GraphicReflexEditable, GraphicCollidable, GraphicShadowCaster {
 	 */
 	private void rebuildTask() {
           System.out.println("AbstractMapObject->rebuildTask() vide!!");
-           /*
+          
 		          Variables.getTaskExecutor().execute(new Runnable() {
 			@Override
 			public void run() {
 				final Spatial newModel;
 				newModel = ModelLoader.get().load(modelName);
-
+                            System.out.println("AbstaractMapObject -> rebuildTask() : modelName ="+modelName);
 				// newModel.setIsCollidable(collidable);
-				newModel.setModelBound(new OrientedBoundingBox());
+				//newModel.setModelBound(new OrientedBoundingBox());
 				//newModel.updateRenderState();
 
 				if (isBuilding() && newModel instanceof Node)
@@ -200,10 +200,10 @@ GraphicReflexEditable, GraphicCollidable, GraphicShadowCaster {
 
 				if (ground != null) {
 					ground.setCullHint(CullHint.Always);
-					ground.updateRenderState();
+					//ground.updateRenderState();
 				}
 
-				GameTaskQueueManager.getManager().update(new Callable<Void>() {
+				Variables.getLaGame().enqueue(new Callable<Void>() {
 					@Override
 					public Void call() throws Exception {
 						rebuildApply(newModel);
@@ -213,7 +213,7 @@ GraphicReflexEditable, GraphicCollidable, GraphicShadowCaster {
 
 			}
 		});
-                */
+                
 	}
 
 	/**
@@ -332,14 +332,14 @@ GraphicReflexEditable, GraphicCollidable, GraphicShadowCaster {
 
 		if (reloadModel)
 			rebuildTask();
-		//else
+		else
 			//addToRenderTask();
-		/*	GameTaskQueueManager.getManager().update(new Callable<Void>() {
+			Variables.getLaGame().enqueue(new Callable<Void>() {
 				public Void call() throws Exception {
 					rebuildGeometrics();
 					return null;
 				}
-			});//*/
+			});
 		this.versionCode = newVersionCode;
 	}
 

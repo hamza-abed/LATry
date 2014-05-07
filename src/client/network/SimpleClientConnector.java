@@ -211,9 +211,10 @@ public class SimpleClientConnector implements SimpleClientListener{
         	        connecting=false;
                         Connected=true;
         	    
-                    //cela affichera le progressBar    
+                    //cela affichera le progressBar 
+                       
                         Variables.getNiftyGUI().startloadingTheGame();
-                        startLoadingTheGame();
+                         startLoadingTheGame();
                        
         	    }
                 public void startLoadingTheGame()
@@ -230,7 +231,15 @@ public class SimpleClientConnector implements SimpleClientListener{
                         Variables.getNiftyGUI().progress();
         	   //   Variables.getConsole().output("ping pong task has just started !");
                         setStatus("ping pong task has just started !");
-                        Variables.getNiftyGUI().movetoGameScreen();
+                        Variables.getLaGame().getSchedulerTaskExecutor()
+                        .submit(new Runnable() {
+                          public void run() {
+                             System.out.println("this is Thread ="+Thread.currentThread().getName());
+                              Variables.getNiftyGUI().movetoGameScreen();
+                                        }
+                                       });
+
+                        
                 }
                 
 

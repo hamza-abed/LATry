@@ -38,9 +38,15 @@
  */
 package client.utils;
 
+import com.jme3.export.xml.XMLImporter;
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Box;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.Logger;
+import shared.variables.Variables;
 /*
 import com.jme.animation.SkinNode;
 import com.jme.math.Vector3f;
@@ -97,28 +103,35 @@ public class ModelLoader {
 	 * @return
 	 */
 	/*
+         * Modifié Hamza ABED
+         * il suffit de recharger le modéle à partir de l'assets MAnager
+         */
+       
         public Spatial load(String model) {
-		try {
-			Spatial s = (Spatial) XMLImporter.getInstance().load(
+		//try {
+	Spatial s = Variables.getLaGame().getAssetManager().loadModel(model);
+                /*(Spatial) XMLImporter.getInstance().load(
 					ResourceLocatorTool.locateResource(
-							ResourceLocatorTool.TYPE_MODEL, model));
-			if (!(s instanceof SkinNode))
+							ResourceLocatorTool.TYPE_MODEL, model)); */
+			/*if (!(s instanceof SkinNode))
 				if (bumb) reloadShader(s);
 				else removeBumb(s);
 			
-			normalizeMaterials(s);
+			normalizeMaterials(s); */
 			//s.updateRenderState();
 			return s;
-		} catch (IOException e) {
+	/*	} catch (IOException e) {
 			logger.warning("IOException : Je le savais !");
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
 			logger.severe(e.getClass().getName()+" lors du chargeemnt de "+model);
 		}
-		return new Box("not-found", new Vector3f(), 1, 1, 1);
+		return new Box(1, 1, 1); */
+                        
+                       
 	}
-*/
+
 	/**
 	 * @param s
 	 */
@@ -166,7 +179,7 @@ public class ModelLoader {
 	 * applique les shader à un objet charger
 	 * @param s
 	 */
-        /*
+       /*
 	private void reloadShader(Spatial s) {
 		GLSLShaderObjectsState shader = (GLSLShaderObjectsState) s.getRenderState(StateType.GLSLShaderObjects);
 		if (shader !=null) try {

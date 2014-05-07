@@ -609,8 +609,8 @@ inputManager.setCursorVisible( true );
     
     public void initGameWorld()
     {
-        if(Variables.isPlayerModelLoaded())
-        {
+        if(!Variables.isPlayerModelLoaded())
+                 System.out.println("LaGame -> initGameWorld() :player not loaded yet !!!!!");
         System.out.println("This is calling find way2 "+Thread.currentThread().getName()); 
         initSceneGame();
         initPlayer();
@@ -623,16 +623,9 @@ inputManager.setCursorVisible( true );
         bulletAppState.getPhysicsSpace().enableDebug(assetManager);
        
          setUpKeys();
-        }
-        else
-            try {
-            Thread.sleep(100);
-            initGameWorld();
-       //   isStartScreen=false;
-        } catch (InterruptedException ex) {
-                System.out.println("LaGame -> initGameWorld() :can't wait !!!!!");
-        }
-       //   isStartScreen=false;
+       
+       
+       
          
          
     }

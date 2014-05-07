@@ -159,10 +159,8 @@ public void startloadingTheGame()
      Variables.setConsole(nifty.getScreen("chatbar").
       findNiftyControl("textfield2",Console.class));
         System.out.println("This is calling find way "+Thread.currentThread().getName());
-        try{
-        if(Variables.getLaGame().getFindWay()==null)
-                System.out.println("\n findway=null !!");
         
+        if(Variables.isPlayerModelLoaded())
          Variables.getLaGame().enqueue(
                  new Callable<Void>() {
 		@Override
@@ -173,10 +171,16 @@ public void startloadingTheGame()
               return null;
 		}
 		});
-        }catch(Exception ex)
+        else 
+            try{
+                Thread.sleep(100);
+                movetoGameScreen();
+            }
+        catch(Exception ex)
         {
-            System.out.println("\n exception = "+ex.getMessage());
+            
         }
+       
         
        nifty.gotoScreen("chatbar"); 
       // Variables.getLaGame().initGameWorld();

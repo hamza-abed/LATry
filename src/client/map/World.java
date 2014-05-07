@@ -406,6 +406,7 @@ public  class World  implements ClientChannelListener,Sharable {
 	 * @param s
 	 */
 	public void addGraphics(Graphic s) {
+            System.out.println("World -> addGraphics() : vide !!");
           /*
            * ce n'est pas un grand problème aussi
            */ 

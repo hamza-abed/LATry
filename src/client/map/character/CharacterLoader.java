@@ -122,7 +122,9 @@ public class CharacterLoader {
 		if (isMd5Model(character)) node = loadMd5(character);
 		else if (isJmexModel(character) || isDotModel(character)) node = loadJmex(character);
 		else node = loadOgre(character);
-		node.setLocalScale(getModelScale(character));
+		
+                if(node==null) System.out.println("CharacterLoader->loadNode() : node =null !!");
+                node.setLocalScale(getModelScale(character));
 
 		/*if (character.isPlayer())
 			for (Spatial s :node.getChildren())
