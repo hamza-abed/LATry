@@ -54,6 +54,8 @@ import client.script.ScriptableMethod;
 import client.task.GraphicsAddRemoveSceneTask;
 import client.utils.ModelLoader;
 import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
@@ -181,16 +183,17 @@ GraphicReflexEditable, GraphicCollidable, GraphicShadowCaster {
 	 * recharge l'objet dans une tache dedier
 	 */
 	private void rebuildTask() {
-          System.out.println("AbstractMapObject->rebuildTask() vide!!");
-          
-		          Variables.getTaskExecutor().execute(new Runnable() {
+            
+            
+            Variables.getLaGame().getSchedulerTaskExecutor()
+                        .submit(new Runnable() {
 			@Override
 			public void run() {
 				final Spatial newModel;
 				newModel = ModelLoader.get().load(modelName);
-                            System.out.println("AbstaractMapObject -> rebuildTask() : modelName ="+modelName);
+
 				// newModel.setIsCollidable(collidable);
-				//newModel.setModelBound(new OrientedBoundingBox());
+	//newModel.setModelBound(new OrientedBoundingBox());
 				//newModel.updateRenderState();
 
 				if (isBuilding() && newModel instanceof Node)
@@ -213,7 +216,6 @@ GraphicReflexEditable, GraphicCollidable, GraphicShadowCaster {
 
 			}
 		});
-                
 	}
 
 	/**
@@ -224,7 +226,7 @@ GraphicReflexEditable, GraphicCollidable, GraphicShadowCaster {
 	private void rebuildApply(Spatial newModel) {
 	
             System.out.println("AbstractMapObject->rebuildApply(s) : vide!!");
-            /*	
+         
             if (model != null) {
 			world.removeGraphics(this);
 			//removeFromRenderTask();
@@ -234,32 +236,29 @@ GraphicReflexEditable, GraphicCollidable, GraphicShadowCaster {
 
 		model = newModel;
 
-		model.lockBounds();
-		model.lockShadows();
+		//model.lockBounds();
+		//model.lockShadows();
 		//model.lockTransforms();
-		model.lockMeshes();
+		//model.lockMeshes();
 
 		logger.fine("rebuild Apply end");
 
-		world.getGame().getHud().getLoading().remove(this);
+		//Variables.getHud().getLoading().remove(this);
 		addToRenderTask();
 		rebuildGeometrics();
-                */
+                
 	}
 
 	/**
 	 * met à jour la position de l'objet
 	 */
 	private void rebuildGeometrics() {
-            
-            System.out.println("AbstractMapObject->rebuildGeometrics() : vide!!");
-            /*
-		GameTaskQueueManager.getManager().update(new Callable<Void>() {
+		Variables.getLaGame().enqueue(new Callable<Void>() {
 			public Void call() throws Exception {
 				if (model != null) {
-					int l = model.getLocks();
-					if (l != 0)
-						model.unlock();
+					//int l = model.getLocks();
+					//if (l != 0)
+					//	model.unlock();
 
 					model.setLocalTranslation(x, world.getHeightAt(x, z) + y, z);
 					model.setLocalScale(s);
@@ -270,10 +269,10 @@ GraphicReflexEditable, GraphicCollidable, GraphicShadowCaster {
 					q.multLocal(new Quaternion().fromAngleNormalAxis(rz,
 							Vector3f.UNIT_Z));
 					model.setLocalRotation(q);
-					model.updateGeometricState(0, true);
-					model.updateWorldData(0);
-					model.updateWorldVectors(true);
-					model.updateRenderState();
+					model.updateGeometricState();
+					//model.updateWorldData(0);
+					//model.updateWorldVectors(true);
+					//model.updateRenderState();
 
 					/*model.updateWorldData(0);
 				model.updateWorldVectors(true);
@@ -281,11 +280,12 @@ GraphicReflexEditable, GraphicCollidable, GraphicShadowCaster {
 /*
 					if (l != 0)
 						model.setLocks(l);
+                                                */
 				}
 				return null;
 			}
 		});
-*/
+
 	}
 
 	/**
@@ -303,7 +303,7 @@ GraphicReflexEditable, GraphicCollidable, GraphicShadowCaster {
 	 */
 	@Override
 	public void receiveCommitPck(ByteBuffer message) {
-            System.out.println("AbstarctMapObject->receiveCommitPck(BB) : manquante !!");
+          //  System.out.println("AbstarctMapObject->receiveCommitPck(BB) : manquante !!");
 		int newVersionCode = message.getInt();
 
 		if (newVersionCode == versionCode) {

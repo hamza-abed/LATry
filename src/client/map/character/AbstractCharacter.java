@@ -55,6 +55,9 @@ import client.interfaces.graphic.GraphicShadowed;
 import client.interfaces.network.Sharable;
 import client.map.World;
 import client.task.GraphicsAddRemoveSceneTask;
+import com.jme3.animation.AnimChannel;
+import com.jme3.animation.AnimControl;
+import com.jme3.animation.AnimEventListener;
 import com.jme3.math.ColorRGBA;
 
 import com.jme3.math.Matrix3f;
@@ -257,6 +260,7 @@ GraphicShadowCaster, GraphicShadowed {
 
 		addToRenderTask();
                 */
+                initControlers();
 	}
 
 	/**
@@ -288,43 +292,21 @@ GraphicShadowCaster, GraphicShadowed {
 		}
 	}
 
+        private AnimControl control;
 	/**
 	 * initialise les controler d'animation en fonction du model
 	 */
 	private void initControlers() {
-		/*if (isPlayer()) {
-			for (Controller c : characterNode.getControllers()) {
-				System.out.println(c.getClass().getName());
-			}
-		}//*/
+		
 
 		//controlerOgre = null;
-		controlerMD5 = null;
-/*
-		try {
-			if (CharacterLoader.isJmexModel(this))
-				logger.fine("pas de controller sur les model jmex");
-		/*
-                        else if (CharacterLoader.isMd5Model(this)) {
-				controlerMD5 = (MD5Controller)characterNode.getController(0);
-				/*if (isPlayer())
-					for (IMD5Animation anim :controlerMD5.getAnimations()) 
-						System.out.println(anim.getName());//*/
-                        /*
-			} else { 
-				controlerOgre = (MeshAnimationController) characterNode.getController(0);
-				/*if (isPlayer())
-					for (Animation f : controlerOgre.getAnimations())
-						System.out.println(f.getName());//*/
-                        /*
-			}
-		} catch (Exception e) {
-			logger.warning("Exception : " + e + "\nsur " + modelType);
-			controlerOgre = null;
-			controlerMD5 = null;
-		}
-		startAnimation(CharacterAnimation.idle);
-*/
+		//controlerMD5 = null;
+        control = characterNode.getControl(AnimControl.class);
+        control.addListener((AnimEventListener) this);
+            channel = control.createChannel();
+
+	startAnimation(CharacterAnimation.idle);
+
 	}
 
 
@@ -362,6 +344,8 @@ GraphicShadowCaster, GraphicShadowed {
 	 * @param anim
 	 */
 	private void startAnimation(CharacterAnimation anim) {
+            
+            System.out.println("AbstaractCharacter -> startAnimation() : vide!!!");
 		/* if (CharacterLoader.isJmexModel(this))
 			return;
 		else if (CharacterLoader.isMd5Model(this))
@@ -369,6 +353,7 @@ GraphicShadowCaster, GraphicShadowed {
 		/*else 
 			startOgreAnim(anim); 
                         */
+            startOgreAnim(anim); 
 	}
 
 	/**
@@ -379,27 +364,28 @@ GraphicShadowCaster, GraphicShadowed {
 	/*
             if (controlerMD5 != null)  
 			controlerMD5.fadeTo(getAnimationName(anim), .1f, false);
+                        */
 	}
 
 	/**
 	 * execute une animation sur un model ogre
 	 * @param anim
 	 */
-            /*
+          private AnimChannel channel;  
 	private void startOgreAnim(final CharacterAnimation anim) {
-		if (controlerOgre != null) {
+		/*if (controlerOgre != null) {
 			controlerOgre.setAnimation(getAnimationName(anim));
 			controlerOgre.setSpeed(getAnimSpeed(anim));
 			controlerOgre.setRepeatType(getRepeatType(anim));
-		}
-		/*GameTaskQueueManager.getManager().update(new Callable<Void>() {
+		}*/
+		Variables.getLaGame().enqueue(new Callable<Void>() {
 			@Override
 			public Void call() throws Exception {
-		if (controlerOgre != null)
-			controlerOgre.setAnimation(getAnimationName(anim));
+		if (channel != null)
+			channel.setAnim(getAnimationName(anim));
 		return null;
 			}
-		});//*/
+		});
 	}
 
 	/**
@@ -480,6 +466,7 @@ GraphicShadowCaster, GraphicShadowed {
 			return controlerOgre.getActiveAnimations()[0].equalsIgnoreCase(getAnimationName(anim));
 		}
                 */
+            
             return false;
 	}
 

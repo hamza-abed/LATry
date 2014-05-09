@@ -48,6 +48,7 @@ import shared.enums.CharacterModel;
 import client.map.character.AbstractCharacter.CharacterAnimation;
 import client.utils.FileLoader;
 import client.utils.ModelLoader;
+import com.jme3.bounding.BoundingBox;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -57,6 +58,7 @@ import com.jme3.scene.plugins.ogre.MaterialLoader;
 import com.model.md5.MD5Node;
 import com.model.md5.controller.MD5Controller;
 import com.model.md5.importer.MD5Importer;
+import static shared.enums.CharacterModel.synbad;
 import shared.variables.Variables;
 
 /*
@@ -119,12 +121,25 @@ public class CharacterLoader {
 
 	public static Node loadNode(AbstractCharacter character) throws IOException {
 		Node node;
-		if (isMd5Model(character)) node = loadMd5(character);
-		else if (isJmexModel(character) || isDotModel(character)) node = loadJmex(character);
-		else node = loadOgre(character);
+		if (isMd5Model(character))
+                {
+                    System.out.println("model is Md5Model mais on l a remplacé par synbad !!");
+                  //  node = loadMd5(character);
+                    node = loadOgre(character);
+                
+                }
+		else if (isJmexModel(character) || isDotModel(character)) 
+                {System.out.println("model is Jmex Model !!");
+                    node = loadJmex(character);
+                }
+		else 
+                {System.out.println("model is Ogre !!");
+                    node = loadOgre(character);
+                }
 		
                 if(node==null) System.out.println("CharacterLoader->loadNode() : node =null !!");
                 node.setLocalScale(getModelScale(character));
+                
 
 		/*if (character.isPlayer())
 			for (Spatial s :node.getChildren())
@@ -147,8 +162,8 @@ public class CharacterLoader {
 
         private static Node loadMd5(AbstractCharacter character) throws IOException {
 	           System.out.println("CharacterLoader -> loadMd5() : vide !!");	
-            /*MD5Importer importer = new MD5Importer();
-		MD5Node body;
+         /*  MD5Importer importer = new MD5Importer();
+           MD5Node body;
 
 		switch (character.modelType) {
 		case marine:
@@ -168,14 +183,14 @@ public class CharacterLoader {
 			importer.cleanup();
 
 			importer.loadAnim(getMd5Anim(character,CharacterAnimation.idle), IDLE_ANIM_NAME);
-			((MD5Controller)body.getController(0)).addAnimation(importer.getAnimation());
+			//body.addAnimation(importer.getAnimation());
 			importer.cleanup();
 			return body;
 		        default:
 			importer.load(
 					getMd5MeshUrl(character), BODY_NAME, 
 					getMd5Anim(character,CharacterAnimation.idle), IDLE_ANIM_NAME,
-					Controller.RT_WRAP);
+					1);
 			body = (MD5Node) importer.getMD5Node();
 			importer.cleanup();
 
@@ -189,7 +204,7 @@ public class CharacterLoader {
 
 			return body;
 		}
-                */
+               */
             return null;
 	}
 
@@ -221,9 +236,9 @@ public class CharacterLoader {
 
 	private static Node loadJmex(AbstractCharacter character) {
             System.out.println("CharacterLoader -> loadJmex() : vide !!");
-            /*
+            
 		Spatial s = ModelLoader.get().load(character.modelType.name()+".jmex");
-		if (s instanceof Node || s instanceof SkinNode) {
+		if (s instanceof Node ) {
 			s.setModelBound(new BoundingBox());
 			
 			return (Node)s;
@@ -232,9 +247,9 @@ public class CharacterLoader {
 		//s.setLocalTranslation(0, getModelTranslation(character), 0);
 		n.attachChild(s);
 		n.setModelBound(new BoundingBox());
-		return n;*
-                */
-            return null;
+		return n;
+                
+           // return null;
 	}
 	
 	/**
@@ -278,7 +293,11 @@ public class CharacterLoader {
 		case hellion: return FileLoader.getResourceAsUrl("data/character/sc2-hellion-ogre/Scene.material");
 		case skelet: return FileLoader.getResourceAsUrl("data/character/skeleton-ogre/Scene.material");
 		
-		case mage: return FileLoader.getResourceAsUrl("data/character/mage-md5/mage.material");
+		//case mage: return FileLoader.getResourceAsUrl("data/character/mage-md5/mage.material");  
+                    /*
+                     * ICI on remplace le "mage" par "synbad"
+                     */
+                case mage: return FileLoader.getResourceAsUrl("data/character/"+(high?"high":"low")+"-sinbad/Sinbad.material");
 		
 		default: return FileLoader.getResourceAsUrl("data/character/spirit-ogre/Spirit.material");
 		
@@ -300,7 +319,11 @@ public class CharacterLoader {
 		case tank: return "Models/character/sc2-tank-ogre/tank.mesh.xml";
 		case hellion: return "Models/character/sc2-hellion-ogre/hellion.mesh.xml";
 		case skelet: return "Models/character/skeleton-ogre/Cube.004.mesh.xml";
-		case mage: return "Models/character/mage-md5/Cube.001.mesh.xml";
+		//case mage: return "Models/character/mage-md5/Cube.001.mesh.xml";
+                    /*
+                     * ICI on remplace "mage" par "synbad"
+                     */
+                case mage: return"Models/character/"+(high?"high":"low")+"-sinbad/Sinbad.mesh.xml";
 		default: return "Models/character/spirit-ogre/Spirit.mesh.xml";
 		}
 	}
@@ -373,7 +396,8 @@ public class CharacterLoader {
 		case women:	return 1.7f / 21.70007f;
 		case skelet: return 1.6f / 0.9554205f;
 		
-		case mage: return 1.75f/9.56f;
+		//case mage: return 1.75f/9.56f;
+                case mage: return 2 / 4.47f;
 		case hardyBlue:
 		case hardyRed:
 		case hardyYellow: return 2f/2.0874596f;
@@ -399,7 +423,8 @@ public class CharacterLoader {
 		case women : return 1.7f*2;
 		case skelet: return 1.6f*2;
 		
-		case mage: return 1.75f*2;
+		//case mage: return 1.75f*2;
+                case mage: return 2*2;
 		case hardyBlue:
 		case hardyRed:
 		case hardyYellow: return 4; // 2*2
@@ -422,7 +447,7 @@ public class CharacterLoader {
 	protected static Quaternion getModelOrient(AbstractCharacter character) {
 		switch (character.modelType) {
 		case robot: return new Quaternion().fromAngleNormalAxis(-FastMath.HALF_PI,Vector3f.UNIT_Y); 
-		case mage: return new Quaternion().fromAngleNormalAxis(-FastMath.HALF_PI,Vector3f.UNIT_Z); 
+		//case mage: return new Quaternion().fromAngleNormalAxis(-FastMath.HALF_PI,Vector3f.UNIT_Z); 
 		}
 		return null;
 	}

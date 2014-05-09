@@ -17,8 +17,11 @@ import com.jme3.scene.Spatial;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Console;
 import de.lessvoid.nifty.controls.Label;
+import java.util.ArrayList;
 import java.util.Properties;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 /**
@@ -86,7 +89,15 @@ public class Variables {
         Variables.connectionStatusLabel = connectionStatusLabel;
     }
 
-   
+    /*
+     * Ensemble de contenus des Threads de l'exécuteur
+     */
+    private static ArrayList<Future> futures=new ArrayList<Future>();
+    
+    /*
+     * Ensemble de méthodes à exécuter dans un thread simultanné
+     */
+    private static ArrayList<Callable> findWay=new ArrayList<Callable>();
     private static LaGame laGame;
     public static MoveCursor moveCursor;
     private static World world;
@@ -270,4 +281,22 @@ private static String language;
             if(hud==null) hud = new Hud(laGame);
 		return hud;
 	}
+        
+     
+    public static ArrayList<Future> getFutures() {
+        return futures;
+    }
+
+    public static void setFutures(ArrayList<Future> futures) {
+        Variables.futures = futures;
+    }
+
+    public static ArrayList<Callable> getFindWay() {
+        return findWay;
+    }
+
+    public static void setFindWay(ArrayList<Callable> findWay) {
+        Variables.findWay = findWay;
+    }
+         
 }

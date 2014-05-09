@@ -136,6 +136,7 @@ public class Zone implements ClientChannelListener, SharableGroup {
 			world.receiveSharedDel(message);
 			break;
 		case PckCode.PLAYER_START_MOVE:
+                    System.out.println("Zone -> receivedMessage() : startMove");
 			world.receivePlayerMove(message);
 			break;
 		case PckCode.PLAYER_END_MOVE:

@@ -57,6 +57,7 @@ import client.interfaces.graphic.GraphicWalkOver;
 import client.interfaces.graphic.GraphicWithGround;
 import client.interfaces.network.Sharable;
 import client.interfaces.network.SharableGroup;
+import client.map.character.AbstractCharacter.Moving;
 import client.map.character.Dialog;
 import client.map.character.Group;
 import client.map.character.NonPlayableCharacter;
@@ -102,6 +103,7 @@ import com.jme3.scene.Node;
 import com.sun.sgs.client.ClientChannel;
 import com.sun.sgs.client.ClientChannelListener;
 import java.util.Collection;
+import java.util.concurrent.Callable;
 
 import shared.variables.Variables;
 
@@ -229,7 +231,7 @@ public  class World  implements ClientChannelListener,Sharable {
 	public void clean() {
             /*
              * pour vider le game
-             * il suffit d edétacher tout de la superbe
+             * il suffit de détacher tout de la superbe
              * rootNode de jme3
              * 
              * Hamza ABED
@@ -709,19 +711,22 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 * @param message
 	 */
 	public void receivePlayerMove(final ByteBuffer message) {
+            
+            System.out.println("World -> receivePlayerMove");
 		String key = Pck.readString(message);
 		final PlayableCharacter player = getPlayerBuildIfAbsent(key);
 		if (player.isPlayer())
 			return;
-                /*
-		GameTaskQueueManager.getManager().update(new Callable<Void>() {
+               
+		game.enqueue(new Callable<Void>() {
 			@Override
 			public Void call() throws Exception {
 				float x1 = message.getFloat();
 				float z1 = message.getFloat();
 				Moving m = Pck.readEnum(Moving.class, message);
 				if (!player.isConnected())
-					game.updateFromServer(player);					
+					Variables.getClientConnecteur()
+                                                .updateFromServer(player);					
 
 				if (m == Moving.target) {
 					player.moveFromTo(x1, z1,
@@ -735,7 +740,7 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 				return null;
 			}
 		});
-                * */
+              
 	}
 
 	/**
@@ -743,19 +748,20 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 * @param message
 	 */
 	public void receivePlayerEndMove(final ByteBuffer message) {
+            System.out.println("World -> receivePlayerEndMove() : appelé !!");
 		String key = Pck.readString(message);
 		final PlayableCharacter player = getPlayerBuildIfAbsent(key);
 		if (player.isPlayer())
 			return;
-                /*
-		GameTaskQueueManager.getManager().update(new Callable<Void>() {
+                
+		Variables.getLaGame().enqueue(new Callable<Void>() {
 			@Override
 			public Void call() throws Exception {
 				player.endMoveAt(message.getFloat(), message.getFloat());
 				return null;
 			}
 		});
-                */
+                
 	}
 
 	/**
@@ -764,9 +770,10 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 * @param message
 	 */
 	public void receivePlayerDisconnect(ByteBuffer message) {
+            System.out.println("World -> receivePlayerDisconnect() : appelé !!");
 		final PlayableCharacter p = getPlayer(Pck.readString(message));
-		/* if (p != null)
-			GameTaskQueueManager.getManager().update(new Callable<Void>() {
+		 if (p != null)
+			Variables.getLaGame().enqueue(new Callable<Void>() {
 				@Override
 				public Void call() throws Exception {
 					p.disconnected();
@@ -774,7 +781,7 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 					return null;
 				}
 			});
-                        */
+                        
 	}
 
 	/**
@@ -1487,7 +1494,7 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 		
             switch (LaComponent.type(key)) {
 		case table: System.out.println("\nWORLD table \n"); return getTableBuildIfAbsent(key);
-		case building:System.out.println("\nWORLD building \n"); break; //return getMapObject(key);
+		case building:System.out.println("\nWORLD building \n"); return getMapObject(key);
 		case dialog:System.out.println("\nWORLD dialog \n"); break;//return getDialogBuildIfAbsent(key);
 		case gamedata:System.out.println("\nWORLD gamedata \n"); break;//return getGameDataBuildIfAbsent(key);
 		case group:return getGroupBuildIfAbsent(key);

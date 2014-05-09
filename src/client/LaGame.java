@@ -41,7 +41,6 @@
 package client;
 
 import client.editor.ServerEditor;
-import client.hud.Hud;
 import client.hud.boussole.Boussole;
 import client.hud3D.MoveCursor;
 import client.input.MainGameListener;
@@ -75,7 +74,6 @@ import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.niftygui.NiftyJmeDisplay;
-import com.jme3.post.Filter.Pass;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -91,13 +89,10 @@ import com.jme3.texture.plugins.AWTLoader;
 import com.sun.sgs.client.simple.SimpleClient;
 import de.lessvoid.nifty.Nifty;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import shared.variables.Variables;
 
@@ -217,7 +212,7 @@ public class LaGame extends SimpleApplication {
     @Override
     public void simpleInitApp() {
 
-         System.out.println("This is calling find way0 "+Thread.currentThread().getName()); 
+        System.out.println("This is calling find way0 "+Thread.currentThread().getName()); 
         app.setDisplayFps(false);
         app.setDisplayStatView(false);
         bulletAppState = new BulletAppState(); //Ceci c'est pour spécifier 
@@ -253,11 +248,11 @@ public class LaGame extends SimpleApplication {
         bulletAppState.getPhysicsSpace().enableDebug(assetManager);
         */
      
-        findWay = new Callable(){
+    findWay = new Callable(){
     public Object call() throws Exception {
  
         //Read or write data from the scene graph -- via the execution queue:
-         enqueue(new Callable() {
+            enqueue(new Callable() {
             public Object call() throws Exception {
                System.out.println("This is calling find way1 "+Thread.currentThread().getName()); 
                initGameWorld();
@@ -302,29 +297,29 @@ private static final float INCLINAISON = FastMath.HALF_PI;
     ChaseCamera chaseCam;
 
     private void initCamera() {
-      //  Variables.getConsole().output("initCamera()"); 
-        viewPort.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
-        flyCam.setMoveSpeed(150);
-        // cam.setLocation(lightDirection);
-        // channel.reset(true); // this stop the animation
+      //Variables.getConsole().output("initCamera()"); 
+      viewPort.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
+      flyCam.setMoveSpeed(150);
+      // cam.setLocation(lightDirection);
+      // channel.reset(true); // this stop the animation
 
-        //***** DISABLING THE FLYING CAMERA  ******///
-        flyCam.setEnabled(false);
-        chaseCam = new ChaseCamera(cam, joueur.getPlayerModel(), inputManager);
+      //***** DISABLING THE FLYING CAMERA  ******///
+      flyCam.setEnabled(false);
+      chaseCam = new ChaseCamera(cam, joueur.getPlayerModel(), inputManager);
         
-         //chaseCam.setDefaultDistance(350);
-        chaseCam.setEnabled(true);
-        Variables.getConsole().output("end of initCamera()"); 
+      //chaseCam.setDefaultDistance(350);
+      chaseCam.setEnabled(true);
+    //  Variables.getConsole().output("end of initCamera()"); 
         
-        
-inputManager.deleteMapping("CHASECAM_Left");
-inputManager.deleteMapping("CHASECAM_Right");
-inputManager.deleteMapping("CHASECAM_Up");
-inputManager.deleteMapping("CHASECAM_Down");
-inputManager.deleteMapping("CHASECAM_ZoomIn");
-inputManager.deleteMapping("CHASECAM_ZoomOut");
-
-inputManager.setCursorVisible( true );
+        /*
+          inputManager.deleteMapping("CHASECAM_Left");
+          inputManager.deleteMapping("CHASECAM_Right");
+          inputManager.deleteMapping("CHASECAM_Up");
+          inputManager.deleteMapping("CHASECAM_Down");
+          inputManager.deleteMapping("CHASECAM_ZoomIn");
+          inputManager.deleteMapping("CHASECAM_ZoomOut");
+*/
+          inputManager.setCursorVisible( true );
     }
     
     
@@ -364,7 +359,7 @@ inputManager.setCursorVisible( true );
         joueur = Variables.getMainPlayer();
         joueur.attachToScene();
     }else
-            System.out.println("LaGame-> initPlayer() : ERREUR !!");
+    System.out.println("LaGame-> initPlayer() : ERREUR !!");
         
        // Variables.setMainPlayer(joueur);
       
@@ -406,7 +401,48 @@ inputManager.setCursorVisible( true );
        
        }else
          if( Variables.getConsole()!=null)  Variables.getConsole().output("is not updating");
+       
+       /*
+        * Gestion des Thread
+        * Ceci pour optimiser l'espace mémoire occupé par les Thread
+        */
+       gestionThread();
 
+    }
+    
+    
+       /*
+        * Gestion des Thread
+        * Ceci pour optimiser l'espace mémoire occupé par les Thread
+        * @author Hamza ABED
+        */
+    private void gestionThread()
+    {
+        boolean listeThreadVide=true;
+       for(int i=0;i<Variables.getFutures().size();i++)
+       {
+           System.out.println("update !!");
+           Future future=Variables.getFutures().get(i);
+           if(future != null){
+               listeThreadVide=false;
+            //Get the waylist when its done
+            if(future.isDone()){
+                System.out.println("future is done !!");
+                //future = null;
+                Variables.getFutures().set(i, null);
+                
+            }
+            else if(future.isCancelled()){
+                System.out.println("future is cancelled !!");
+                //Set future to null. Maybe we succeed next time...
+                Variables.getFutures().set(i, null);
+            }
+       }
+    }
+       if(listeThreadVide) {
+           Variables.setFutures(new ArrayList<Future>());
+           Variables.setFindWay(new ArrayList<Callable>());
+       }
     }
 
     /**
@@ -612,7 +648,11 @@ inputManager.setCursorVisible( true );
         if(!Variables.isPlayerModelLoaded())
                  System.out.println("LaGame -> initGameWorld() :player not loaded yet !!!!!");
         System.out.println("This is calling find way2 "+Thread.currentThread().getName()); 
-        initSceneGame();
+        this.enqueue(
+                        new Callable<Void>() {
+                        @Override
+                        public Void call() throws Exception {
+                            initSceneGame();
         initPlayer();
         gameListener = new MainGameListener(sceneModel);
 
@@ -623,6 +663,10 @@ inputManager.setCursorVisible( true );
         bulletAppState.getPhysicsSpace().enableDebug(assetManager);
        
          setUpKeys();
+         return null;
+                        }
+                    });
+       
        
        
        

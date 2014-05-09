@@ -27,7 +27,9 @@ import java.nio.ByteBuffer;
 import java.nio.channels.UnresolvedAddressException;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -231,16 +233,23 @@ public class SimpleClientConnector implements SimpleClientListener{
                         Variables.getNiftyGUI().progress();
         	   //   Variables.getConsole().output("ping pong task has just started !");
                         setStatus("ping pong task has just started !");
-                        Variables.getLaGame().getSchedulerTaskExecutor()
-                        .submit(new Runnable() {
-                          public void run() {
-                             System.out.println("this is Thread ="+Thread.currentThread().getName());
-                              Variables.getNiftyGUI().movetoGameScreen();
-                                        }
-                                       });
-
+                        
+Variables.getFindWay().add(findWay);
+future=Variables.getLaGame().getSchedulerTaskExecutor().submit(findWay);
+Variables.getFutures().add(future);
+                    
                         
                 }
+                
+        private Future future;
+        private Callable findWay = new Callable(){
+        
+        public Object call() throws Exception {
+           System.out.println("this is Thread ="+Thread.currentThread().getName());
+                              Variables.getNiftyGUI().movetoGameScreen();
+                              return null;
+                                       };
+                };
                 
 
         	    /**

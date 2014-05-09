@@ -153,12 +153,12 @@ public void startloadingTheGame()
   
    
    }
-
+int callThread=0;
  public void movetoGameScreen()
- {
+ {callThread++;
      Variables.setConsole(nifty.getScreen("chatbar").
       findNiftyControl("textfield2",Console.class));
-        System.out.println("This is calling find way "+Thread.currentThread().getName());
+        System.out.println("This is calling find way niftyCallThread="+callThread+" threadName="+Thread.currentThread().getName());
         
         if(Variables.isPlayerModelLoaded())
          Variables.getLaGame().enqueue(

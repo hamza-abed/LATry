@@ -113,7 +113,7 @@ implements AnimEventListener {
     private CapsuleCollisionShape capsuleShape;
 
     private void initPlayer() {
-
+        System.out.println("Player ->initPlayer() : !!");
         playerModel = (Node) Variables.getLaGame().getAssetManager().loadModel("Models/high-sinbad/Sinbad.mesh.xml");
         playerModel.setLocalScale(0.5f);
         // rootNode.attachChild(playerModel);
