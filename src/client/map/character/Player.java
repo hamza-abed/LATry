@@ -8,6 +8,7 @@ import client.map.Map;
 import client.map.Region;
 import client.map.World;
 import client.map.Zone;
+import client.script.ScriptableMethod;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.AnimEventListener;
@@ -16,6 +17,7 @@ import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
+import com.jme3.math.FastMath;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -54,18 +56,12 @@ implements AnimEventListener {
     
     
     
-    private AnimChannel channel;
+    //private AnimChannel channel;
     private boolean left = false, right = false, up = false, down = false;
     private Vector3f camDir = new Vector3f();
     private Vector3f camLeft = new Vector3f();
 
-    public AnimChannel getChannel() {
-        return channel;
-    }
-
-    public void setChannel(AnimChannel channel) {
-        this.channel = channel;
-    }
+ 
 
     public AnimControl getControl() {
         return control;
@@ -112,18 +108,22 @@ implements AnimEventListener {
   
     private CapsuleCollisionShape capsuleShape;
 
-    private void initPlayer() {
+    public void initPlayer() {
         System.out.println("Player ->initPlayer() : !!");
-        playerModel = (Node) Variables.getLaGame().getAssetManager().loadModel("Models/high-sinbad/Sinbad.mesh.xml");
-        playerModel.setLocalScale(0.5f);
-        // rootNode.attachChild(playerModel);
-        playerModel.move(10, 5, -10);
+      //  playerModel = (Node) Variables.getLaGame().getAssetManager().loadModel("Models/high-sinbad/Sinbad.mesh.xml");
+      //  playerModel.setLocalScale(0.5f);
+        
+        
+      //  playerModel=Variables.getMainPlayer().getGraphic();
+      //  playerModel.move(10, 5, -10);
 
-        control = playerModel.getControl(AnimControl.class);
-        control.addListener((AnimEventListener) this);
-        channel = control.createChannel();
-        channel.setAnim("idle");
-
+      //  control = playerModel.getControl(AnimControl.class);
+//        control.addListener((AnimEventListener) this);
+  //      channel = control.createChannel();
+    //    channel.setAnim("idle");
+        super.startAnimation(CharacterAnimation.idle);
+        //super.startAnimation(super.CharacterAnimation.idle);
+        //startAnimation
         capsuleShape =
                 new CapsuleCollisionShape(2f, 1f, 1);
 
@@ -134,12 +134,12 @@ implements AnimEventListener {
         player.setGravity(50);
 
         player.setPhysicsLocation(new Vector3f(-10, 5, -10));
-        // playerModel.addControl(control);
-        playerModel.setName("playerModel");
+        ///playerModel.addControl(control);
+        //playerModel.setName("playerModel");
 
 
         Variables.getLaGame().getBulletAppState().getPhysicsSpace().add(player);
-        // Variables.setMainPlayer(sinbadPlayer);
+       
 
 
     }
@@ -167,9 +167,9 @@ implements AnimEventListener {
     }
 
     public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
-        System.out.println("this is on animcycleDone");
+    //    System.out.println("this is on animcycleDone");
 
-        if (animName.equals("walk") && !up && !moving) {
+        if (animName.equals("walk") && !up && moving!=Moving.target && moving!=Moving.directionnal) {
             channel.setAnim("idle");
         } else if (animName.equals("walk")) {
             channel.setAnim("walk");
@@ -190,7 +190,7 @@ implements AnimEventListener {
         } else if (binding.equals("Right")) {
             right = true;
 
-        } else if (binding.equals("Up") || moving) {
+        } else if (binding.equals("Up") || moving==Moving.target) {
             up = true;
             verifyUpAnalog1++;
             // sinbadPlayer.rotateUpTo(new Vector3f(player.getViewDirection().x,cam.getRotation().getY(),sinbadPlayer.getLocalRotation().getZ()));
@@ -203,18 +203,17 @@ implements AnimEventListener {
         }
 
         // System.out.println("walk "+ isPressed +" "+ binding);
-        if ((up || moving) && !channel.getAnimationName().equals("walk")) {
-            channel.setAnim("walk", 0.5f);
-            channel.setLoopMode(LoopMode.Loop);
-        }
-        if (!(up || moving)) {
-            channel.setAnim("idle");
-        }
+      //  if ((up || moving==Moving.target) && !channel.getAnimationName().equals("walk")) {
+           // channel.setAnim("walk", 0.5f);
+           // channel.setLoopMode(LoopMode.Loop);
+            
+        //}
+       
 
     }
     Vector3f lastWalkDirection = new Vector3f(0, 0, 0);
     Vector3f nullVector = new Vector3f(0, 0, 0);
-    private boolean moving = false;
+    //private Moving moving = Moving.stop;
     private Vector3f target;
 
     public Vector3f getTarget() {
@@ -223,43 +222,57 @@ implements AnimEventListener {
 
     public void setTarget(Vector3f target) {
         this.target = target;
-        // moving =true;
+       
     }
 
     public void moveTo(Vector3f to) {
-        i1 = 1;
+       
 
         target = new Vector3f(to);
-        moving = true;
+        moving = Moving.target;
     }
 
     public void endMoving() {
-        moving = false;
-        channel.setAnim("idle");
+        moving = Moving.stop;
+        //channel.setAnim("idle");
+        
+        super.startAnimation(CharacterAnimation.idle);
         Variables.getMoveCursor().removeArrow();
     }
-    int i1 = 0;
-
+    
+boolean lastStateIsStop=true;
     public void update() {
         //System.out.println("this is update from the player class");
 
         camDir.set(Variables.getCam().getDirection()).multLocal(0.6f);
         camLeft.set(Variables.getCam().getLeft()).multLocal(0.4f);
         walkDirection.set(0, 0, 0);
+        float a=Variables.getCam().getRotation().getY();
 
-
+        if(!(up||left||right||down|| moving==Moving.target|| moving==Moving.stop))
+        {
+            System.out.println("stop called !!");
+            stop();
+            lastStateIsStop=true;
+        }
 
         if (left) {
             walkDirection.addLocal(camLeft);
+            moveDirectionnal(a+FastMath.HALF_PI);
             left = false;
+         if(lastStateIsStop)   lastStateIsStop=false;
         }
         if (right) {
             walkDirection.addLocal(camLeft.negate());
+            moveDirectionnal(a-FastMath.HALF_PI);
             right = false;
+         if(lastStateIsStop)   lastStateIsStop=false;
         }
         if (up) {
+            System.out.println("this is up !!");
             walkDirection.addLocal(camDir);
-
+          if(lastStateIsStop)  moveDirectionnal(a);
+            lastStateIsStop=false;
             if (verifyUpAnalog1 == verifyUpAnalog2) {
                 up = false;
                 verifyUpAnalog1 = verifyUpAnalog2 = 0;
@@ -269,6 +282,8 @@ implements AnimEventListener {
         }
         if (down) {
             walkDirection.addLocal(camDir.negate());
+           if(lastStateIsStop) moveDirectionnal(a);
+            lastStateIsStop=false;
             down = false;
         }
 
@@ -284,22 +299,12 @@ implements AnimEventListener {
             lastWalkDirection = new Vector3f(walkDirection.x, walkDirection.y, walkDirection.z);
         }
 
-        if (moving) {
+        if (moving==Moving.target) {
             player.setViewDirection(target);
             player.setWalkDirection(target);
         }
 
-        //  System.err.println("walkdirection= "+walkDirection.toString());
-        // playerModel.rotate(5, 0, 0);
-        //player.setViewDirection(walkDirection);
-        // modification de l'emplacement du character
-
-        /*
-         playerModel.move(new Vector3f(
-         player.getPhysicsLocation().x, player.getPhysicsLocation().y-10,
-         player.getPhysicsLocation().z-10));
-         */
-
+        
         CollisionResults results = new CollisionResults();
         if (Variables.getMoveCursor() != null && Variables.getMoveCursor().getNodeGostCursor() != null) {
             playerModel.collideWith(Variables.getMoveCursor().getNodeGostCursor().getWorldBound(), results);
@@ -307,11 +312,9 @@ implements AnimEventListener {
 
         // Use the results
         if (results.size() > 0) {
-          //  System.err.println("Collision detected ");
+         
             CollisionResult closest = results.getClosestCollision();
-            /*System.out.println("What was hit? " + closest.getGeometry().getName());
-            System.out.println("Where was it hit? " + closest.getContactPoint());
-            System.out.println("Distance? " + closest.getDistance());*/
+            
             endMoving();
         }
     }
@@ -323,12 +326,13 @@ implements AnimEventListener {
     public void moveTo(float x, float z) {
         //this.moving = Moving.target;
         //moveAnimation();
-        moving = true;
+        moving = Moving.target;
 
 
-        channel.setAnim("walk", 0.5f);
-        channel.setLoopMode(LoopMode.Loop);
+       // channel.setAnim("walk", 0.5f);
+       // channel.setLoopMode(LoopMode.Loop);
 
+        super.startAnimation(CharacterAnimation.walk);
         Vector3f o = playerModel.getLocalTranslation();
 
         Vector3f t = new Vector3f(x, o.y, z);
@@ -426,7 +430,70 @@ implements AnimEventListener {
 		}
 	}
         
-        	/* ********************************************************** *
+        /***********************************************************
+         *               Deplacement
+         ***********************************************************/
+        
+        /* (non-Javadoc)
+	 * @see client.map.character.AbstractCharacter#moveDirectionnal(float)
+	 */
+	@Override
+	public void moveDirectionnal(float alpha) {
+		if (characterNode != null && canMove()) {
+			Pck pck = new Pck(PckCode.PLAYER_START_MOVE);
+			pck.putString(getKey());
+			pck.putFloat(characterNode.getLocalTranslation().x, characterNode.getLocalTranslation().z);
+			pck.putEnum(Moving.directionnal);
+			pck.putFloat(alpha);
+			pck.putBoolean(walk);
+			Variables.getClientConnecteur().send(pck);
+
+                super.moveDirectionnal(alpha);
+                }
+	}
+        /**
+	 * permet d'arreter le deplacement du joueur
+	 */
+	@ScriptableMethod
+	public void stop() {
+            System.err.println("this is STOP!!");
+            if (moving != Moving.stop) {
+                super.endMoveAt(getGraphic().getLocalTranslation().x,
+                        getGraphic().getLocalTranslation().z);
+            }
+	}
+        
+        /*
+	 * (non-Javadoc)
+	 * 
+	 * @see client.character.PlayableCharacter#endMove()
+	 */
+	@Override
+	protected void endMove() {
+		super.endMove();
+		Pck pck = new Pck(PckCode.PLAYER_END_MOVE);
+		pck.putString(getKey());
+		pck.putFloat(x, z);
+		Variables.getClientConnecteur().send(pck);
+		//world.getGame().getUserInterface3D().getMoveCursor().hide();
+	}
+        /**
+	 * @param canMove the canMove to set
+	 */
+	@ScriptableMethod(description="permet au joueur de se déplacer ou non")
+	public void setCanMove(boolean canMove) {
+		this.canMove = canMove;
+	}
+
+	/**
+	 * indique si le joueur peu bouger
+	 */
+	@ScriptableMethod(description="indique si le joueur peu se déplacer ou non")
+	public boolean canMove() {
+		return canMove;
+	}
+        
+         /* ********************************************************** *
 	 * * 				Gestion de la map courante				* *
 	 * ********************************************************** */
 

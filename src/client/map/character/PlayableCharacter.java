@@ -265,6 +265,7 @@ public abstract class PlayableCharacter extends AbstractCharacter {
 		moveDirectionnal(alpha);
 	}
 
+       
 
 	/**
 	 * arrete le deplacement et position le joueur à ces point
@@ -276,6 +277,11 @@ public abstract class PlayableCharacter extends AbstractCharacter {
 		setXZ(x, z);
 		endMove();
 	}
+        
+        public void startAnimation(CharacterAnimation ca)
+        {
+            super.startAnimation(ca);
+        }
 
 	/**
 	 * Deplace instantanément le joueur à ces point sans prendre en compte
@@ -397,7 +403,7 @@ public abstract class PlayableCharacter extends AbstractCharacter {
 	 */
 	@Override
 	public void update(float interpolation, Matrix3f cameraMatrix) {
-		
+		          System.out.println("PlayableCharacter -> @update() !!");
 		super.update(interpolation, cameraMatrix);
 		if (characterNode !=null) {
 			Vector3f v = characterNode.getLocalTranslation();

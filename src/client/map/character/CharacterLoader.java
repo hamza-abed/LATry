@@ -49,6 +49,8 @@ import client.map.character.AbstractCharacter.CharacterAnimation;
 import client.utils.FileLoader;
 import client.utils.ModelLoader;
 import com.jme3.bounding.BoundingBox;
+import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
+import com.jme3.bullet.control.CharacterControl;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -135,6 +137,7 @@ public class CharacterLoader {
 		else 
                 {System.out.println("model is Ogre !!");
                     node = loadOgre(character);
+          
                 }
 		
                 if(node==null) System.out.println("CharacterLoader->loadNode() : node =null !!");

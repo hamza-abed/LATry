@@ -303,7 +303,7 @@ GraphicShadowCaster, GraphicShadowed {
 		//controlerMD5 = null;
         control = characterNode.getControl(AnimControl.class);
         control.addListener((AnimEventListener) this);
-            channel = control.createChannel();
+        channel = control.createChannel();
 
 	startAnimation(CharacterAnimation.idle);
 
@@ -343,9 +343,9 @@ GraphicShadowCaster, GraphicShadowed {
 	 * lancement des animation
 	 * @param anim
 	 */
-	private void startAnimation(CharacterAnimation anim) {
+	public void startAnimation(CharacterAnimation anim) {
             
-            System.out.println("AbstaractCharacter -> startAnimation() : vide!!!");
+          
 		/* if (CharacterLoader.isJmexModel(this))
 			return;
 		else if (CharacterLoader.isMd5Model(this))
@@ -371,7 +371,7 @@ GraphicShadowCaster, GraphicShadowed {
 	 * execute une animation sur un model ogre
 	 * @param anim
 	 */
-          private AnimChannel channel;  
+        private AnimChannel channel;  
 	private void startOgreAnim(final CharacterAnimation anim) {
 		/*if (controlerOgre != null) {
 			controlerOgre.setAnimation(getAnimationName(anim));
@@ -466,8 +466,9 @@ GraphicShadowCaster, GraphicShadowed {
 			return controlerOgre.getActiveAnimations()[0].equalsIgnoreCase(getAnimationName(anim));
 		}
                 */
+           
             
-            return false;
+            return channel.getAnimationName()==getAnimationName(anim);
 	}
 
 
@@ -650,6 +651,7 @@ GraphicShadowCaster, GraphicShadowed {
 			characterNode.setLocalRotation(q);
 			onHead.setLocalRotation(q2);
 		}
+                
 	}
 
 
@@ -658,7 +660,10 @@ GraphicShadowCaster, GraphicShadowed {
 	 * 
 	 * @param interpolation
 	 */
+        private float lastInterpolation=0f;
 	protected void updateMoving(float interpolation) {
+            if(lastInterpolation!=interpolation)
+            {lastInterpolation=interpolation;
 		float v = walk ? velocity / 2f : velocity;
 
 		if (moving == Moving.target) {
@@ -700,6 +705,7 @@ GraphicShadowCaster, GraphicShadowed {
 
 			characterNode.setLocalTranslation(newPos);
 		}
+            }/// fin if
 	}
 
 	/**
@@ -723,6 +729,7 @@ GraphicShadowCaster, GraphicShadowed {
 	 * Met fin au déplacement
 	 */
 	protected void endMove() {
+            System.err.println("AbstractCharacter-> endMove() !!");
 		moving = Moving.stop;
 		if (characterNode != null) {
 			startAnimation(CharacterAnimation.idle);
@@ -732,7 +739,7 @@ GraphicShadowCaster, GraphicShadowed {
 	}
 
 	/* ********************************************************** *
-	 * * 					GETTERS 							* * 
+	 * * 				GETTERS 							* * 
 	 * ********************************************************** */
 
 	/*

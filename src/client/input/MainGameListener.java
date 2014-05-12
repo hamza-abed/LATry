@@ -8,6 +8,7 @@ import client.map.character.Player;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
+import com.jme3.input.event.KeyInputEvent;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -40,9 +41,14 @@ isLeftClickForScene();
 
 }
     }
+    
+    public void onKeyRelease(KeyInputEvent evt)
+    {
+        System.err.println("key released !! "+evt.getKeyCode());
+    }
 
     public void onAnalog(String name, float value, float tpf) {
-       //System.out.println("this is analog from mouse listener "+name);
+       System.out.println("this is analog from mouse listener "+name);
        if(!name.equals("LClick"))
         player.freeMovePlayer(name);
        else // Dans le cas oui en tient un clic sur le bouton gauche de la sourie

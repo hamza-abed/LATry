@@ -235,41 +235,8 @@ public class LaGame extends SimpleApplication {
         initStartingScene();
        
         initStartingCamera();
-        /*
-         * 
-         *
-         * 
-        initScene();
-
-        initPlayer();
-        gameListener = new MainGameListener(sceneModel);
-        initCamera();
-        setUpKeys();
-        bulletAppState.getPhysicsSpace().enableDebug(assetManager);
-        */
+       
      
-    findWay = new Callable(){
-    public Object call() throws Exception {
- 
-        //Read or write data from the scene graph -- via the execution queue:
-            enqueue(new Callable() {
-            public Object call() throws Exception {
-               System.out.println("This is calling find way1 "+Thread.currentThread().getName()); 
-               initGameWorld();
-                
-                return null;
-            }
-        }).get();
- 
-        // This world class allows safe access via synchronized methods
-        // Data data = myWorld.getData(); 
- 
-        //... Now process data and find the way ...
- 
-        return null;
-    }
-
-        };
         
         
            
@@ -295,13 +262,18 @@ private static final float INCLINAISON = FastMath.HALF_PI;
         this.bulletAppState = bulletAppState;
     }
     ChaseCamera chaseCam;
+    ChaseCamera chaseCamIntro;
 
     private void initCamera() {
+        this.enqueue(
+                new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                chaseCamIntro.setEnabled(false);
       //Variables.getConsole().output("initCamera()"); 
       viewPort.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
       flyCam.setMoveSpeed(150);
-      // cam.setLocation(lightDirection);
-      // channel.reset(true); // this stop the animation
+    
 
       //***** DISABLING THE FLYING CAMERA  ******///
       flyCam.setEnabled(false);
@@ -309,17 +281,9 @@ private static final float INCLINAISON = FastMath.HALF_PI;
         
       //chaseCam.setDefaultDistance(350);
       chaseCam.setEnabled(true);
-    //  Variables.getConsole().output("end of initCamera()"); 
-        
-        /*
-          inputManager.deleteMapping("CHASECAM_Left");
-          inputManager.deleteMapping("CHASECAM_Right");
-          inputManager.deleteMapping("CHASECAM_Up");
-          inputManager.deleteMapping("CHASECAM_Down");
-          inputManager.deleteMapping("CHASECAM_ZoomIn");
-          inputManager.deleteMapping("CHASECAM_ZoomOut");
-*/
-          inputManager.setCursorVisible( true );
+   return null;
+            }
+                });
     }
     
     
@@ -336,11 +300,11 @@ private static final float INCLINAISON = FastMath.HALF_PI;
                     rootNode.attachChild(fireCamp);
                     fireCamp.setLocalTranslation(50,20,0);
         //chaseCam = new ChaseCamera(cam, joueur.getPlayerModel(), inputManager);
-         chaseCam = new ChaseCamera(cam, fireCamp, inputManager);
-         chaseCam.setDefaultDistance(500);
-         chaseCam.setLookAtOffset(sceneModel1.getLocalTranslation());
+         chaseCamIntro = new ChaseCamera(cam, fireCamp, inputManager);
+         chaseCamIntro.setDefaultDistance(500);
+         chaseCamIntro.setLookAtOffset(sceneModel1.getLocalTranslation());
          //chaseCam.set
-         chaseCam.setEnabled(paused);
+         chaseCamIntro.setEnabled(paused);
          
         
         // Material m=fireCamp.get
@@ -349,19 +313,26 @@ private static final float INCLINAISON = FastMath.HALF_PI;
 
     private void initPlayer() {
      
-        
-     //   joueur = new Player(Variables.getWorld(),"demo");
+  this.enqueue(
+                new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
 
-        
+    System.out.println("initPlayer()");
     if(Variables.getMainPlayer()!=null && Variables.isPlayerModelLoaded())
     {
         System.out.println("LaGame -> initPlayer :  ça marche normale");
         joueur = Variables.getMainPlayer();
+        joueur.initPlayer();
         joueur.attachToScene();
+        
+        
     }else
     System.out.println("LaGame-> initPlayer() : ERREUR !!");
         
-       // Variables.setMainPlayer(joueur);
+    return null;
+            }
+                });
       
 
 
@@ -421,19 +392,19 @@ private static final float INCLINAISON = FastMath.HALF_PI;
         boolean listeThreadVide=true;
        for(int i=0;i<Variables.getFutures().size();i++)
        {
-           System.out.println("update !!");
+           //System.out.println("update !!");
            Future future=Variables.getFutures().get(i);
            if(future != null){
                listeThreadVide=false;
             //Get the waylist when its done
             if(future.isDone()){
-                System.out.println("future is done !!");
+               // System.out.println("future is done !!");
                 //future = null;
                 Variables.getFutures().set(i, null);
                 
             }
             else if(future.isCancelled()){
-                System.out.println("future is cancelled !!");
+                //System.out.println("future is cancelled !!");
                 //Set future to null. Maybe we succeed next time...
                 Variables.getFutures().set(i, null);
             }
@@ -451,6 +422,10 @@ private static final float INCLINAISON = FastMath.HALF_PI;
      */
     private void setUpKeys() {
     
+        this.enqueue(
+                new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
         inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_LEFT));
         inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_RIGHT));
         inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_UP));
@@ -470,6 +445,9 @@ private static final float INCLINAISON = FastMath.HALF_PI;
         inputManager.addListener(gameListener, "Jump");
         inputManager.addListener(gameListener, "LClick");
         inputManager.addListener(actionListener, "addObject");
+        return null;
+            }
+                });
     }
 
     private void initLight() {
@@ -503,43 +481,47 @@ private static final float INCLINAISON = FastMath.HALF_PI;
     
     
     private void initSceneGame() {
-      //  Variables.getConsole().output("initSceneGame()"); 
-        
-      //  guiNode.detachAllChildren();
-      //  guiNode.updateGeometricState();
-        boussole=new Boussole();
-       // sceneModel1.updateGeometricState();
-       // rootNode.updateGeometricState();
-        rootNode.detachAllChildren();
-       
-        sceneModel1.updateGeometricState();
-        rootNode.updateGeometricState();
-        
-        sceneModel = assetManager.loadModel("Scenes/scene1.j3o");
-        sceneModel.updateGeometricState();
-        sceneModel.setName("Scene of the main game");
-         //sceneModel = assetManager.loadModel("Scenes/starting.j3o");
-          rootNode.attachChild(sceneModel);
-          //rootNode.updateGeometricState();
-          sceneModel.setLocalTranslation(0, 2, 0);
-        
-        
-        CollisionShape sceneShape =
-        CollisionShapeFactory.createMeshShape((Node) sceneModel);
-        landscape = new RigidBodyControl(sceneShape, 0);
-        sceneModel.addControl(landscape);  //define the scene as a rigid body
-           //bulletAppState.getPhysicsSpace().clearForces();
-        Variables.getLaGame().getBulletAppState()
-        .getPhysicsSpace().add(landscape);
-         //bulletAppState.update(0);
-     //  stateManager.
-        Variables.setSceneModel(sceneModel);
-        
-        waterPlan=new WaterPlan(sceneModel);
-        
-     //   waterPlan.setWaterOnTheGame();
-       // waterPlan.setSimpleWaterOnTheGame();
-      //   Variables.getConsole().output("end initSceneGame()"); 
+     
+        this.enqueue(
+                new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                
+                System.out.println("initSceneGame()");
+                boussole = new Boussole();
+                // sceneModel1.updateGeometricState();
+                // rootNode.updateGeometricState();
+                rootNode.detachAllChildren();
+
+                sceneModel1.updateGeometricState();
+                rootNode.updateGeometricState();
+
+                sceneModel = assetManager.loadModel("Scenes/scene1.j3o");
+                sceneModel.updateGeometricState();
+                sceneModel.setName("Scene of the main game");
+                //sceneModel = assetManager.loadModel("Scenes/starting.j3o");
+                rootNode.attachChild(sceneModel);
+                //rootNode.updateGeometricState();
+                sceneModel.setLocalTranslation(0, 2, 0);
+
+
+                CollisionShape sceneShape =
+                        CollisionShapeFactory.createMeshShape((Node) sceneModel);
+                landscape = new RigidBodyControl(sceneShape, 0);
+                sceneModel.addControl(landscape);  //define the scene as a rigid body
+
+
+              bulletAppState
+                        .getPhysicsSpace().add(landscape);
+
+                Variables.setSceneModel(sceneModel);
+
+                waterPlan = new WaterPlan(sceneModel);
+
+                return null;
+            }
+        });
+
     }
 
     @Override
@@ -645,27 +627,23 @@ private static final float INCLINAISON = FastMath.HALF_PI;
     
     public void initGameWorld()
     {
-        if(!Variables.isPlayerModelLoaded())
-                 System.out.println("LaGame -> initGameWorld() :player not loaded yet !!!!!");
-        System.out.println("This is calling find way2 "+Thread.currentThread().getName()); 
-        this.enqueue(
-                        new Callable<Void>() {
-                        @Override
-                        public Void call() throws Exception {
-                            initSceneGame();
-        initPlayer();
-        gameListener = new MainGameListener(sceneModel);
+        if (!Variables.isPlayerModelLoaded()) {
+            System.out.println("LaGame -> initGameWorld() :player not loaded yet !!!!!");
+        }
+        System.out.println("This is calling find way2 " + Thread.currentThread().getName());
+        
+                initSceneGame();
+                initPlayer();
+                gameListener = new MainGameListener(sceneModel);
 
-        initCamera();
-       
-        isStartScreen=false;
+                initCamera();
 
-        bulletAppState.getPhysicsSpace().enableDebug(assetManager);
-       
-         setUpKeys();
-         return null;
-                        }
-                    });
+                isStartScreen = false;
+
+                bulletAppState.getPhysicsSpace().enableDebug(assetManager);
+
+                setUpKeys();
+          
        
        
        

@@ -84,17 +84,17 @@ public class UserModel implements Runnable {
 	 * @param playableCharacter
 	 */
 	public UserModel(PlayableCharacter playableCharacter) {
-		
+
             this.player = playableCharacter;
-		this.server = Variables.getProps().getProperty("la.usermodel.server", "http://google.fr");
-		int refresh = Integer.parseInt(Variables.getProps().getProperty("la.usermodel.refreshtime","30"));
-		//this.prefCatName = player.getWorld().getGame().getHud().getLocalText("la.usermodel.preference.cat", "préférence");
-		//this.groupCatName = player.getWorld().getGame().getHud().getLocalText("la.usermodel.group.cat", "group");
-		this.client = new Client();
-		this.task = executor.scheduleAtFixedRate(this, 0, player.isPlayer()?refresh:refresh*10, TimeUnit.SECONDS);
-                
-		
-		// FIXME close l'executor à la sortie
+            this.server = Variables.getProps().getProperty("la.usermodel.server", "http://google.fr");
+            int refresh = Integer.parseInt(Variables.getProps().getProperty("la.usermodel.refreshtime", "30"));
+            //this.prefCatName = player.getWorld().getGame().getHud().getLocalText("la.usermodel.preference.cat", "préférence");
+            //this.groupCatName = player.getWorld().getGame().getHud().getLocalText("la.usermodel.group.cat", "group");
+            this.client = new Client();
+            this.task = executor.scheduleAtFixedRate(this, 0, player.isPlayer() ? refresh : refresh * 10, TimeUnit.SECONDS);
+
+
+            // FIXME close l'executor à la sortie
 	}
 
 
@@ -135,35 +135,40 @@ public class UserModel implements Runnable {
 	 * @param list
 	 */
 	private void applyNewList(HashMap<String, HashMap<String, DataType>> list) {
-		if (!player.isPlayer()) {
-			this.list = list;
-			return;
-		}
-		
-		// TODO ajouter un test de cheangement dans les data.
-				
-		// application des nouveau Group
-		HashMap<String, DataType> actuals = this.list==null?null:this.list.get(groupCatName);
-		HashMap<String, DataType> news = list.get(groupCatName);
-		if (news!=null) 
-			for (String gr : news.keySet()) {
-				if (actuals==null || actuals.get(gr)==null) {
-					if (!gr.startsWith(LaComponent.group.prefix()))
-						gr=LaComponent.group.prefix()+gr;
-					player.getWorld().getGroupBuildIfAbsent(gr).addPlayer(player);
-				}
-			}
-		
-		if (actuals!=null) 
-			for (String gr : actuals.keySet())
-				if (news==null || !news.containsKey(gr)) {
-					if (!gr.startsWith(LaComponent.group.prefix()))
-						gr=LaComponent.group.prefix()+gr;
-					player.getWorld().getGroupBuildIfAbsent(gr).delPlayer(player);
-				}
-				
-		this.list = list;
-		refreshHud();
+	        if (!player.isPlayer()) {
+                this.list = list;
+                return;
+            }
+
+            // TODO ajouter un test de cheangement dans les data.
+
+            // application des nouveau Group
+            HashMap<String, DataType> actuals = this.list == null ? null : this.list.get(groupCatName);
+            HashMap<String, DataType> news = list.get(groupCatName);
+            if (news != null) {
+                for (String gr : news.keySet()) {
+                    if (actuals == null || actuals.get(gr) == null) {
+                        if (!gr.startsWith(LaComponent.group.prefix())) {
+                            gr = LaComponent.group.prefix() + gr;
+                        }
+                        player.getWorld().getGroupBuildIfAbsent(gr).addPlayer(player);
+                    }
+                }
+            }
+
+            if (actuals != null) {
+                for (String gr : actuals.keySet()) {
+                    if (news == null || !news.containsKey(gr)) {
+                        if (!gr.startsWith(LaComponent.group.prefix())) {
+                            gr = LaComponent.group.prefix() + gr;
+                        }
+                        player.getWorld().getGroupBuildIfAbsent(gr).delPlayer(player);
+                    }
+                }
+            }
+
+            this.list = list;
+            refreshHud();
 	}
 
 	/**
@@ -250,23 +255,23 @@ public class UserModel implements Runnable {
 	public void sendCharacterPreference() {
 		
             Variables.getTaskExecutor().execute(new Runnable() {
-			@Override
-			public void run() {
-				setValue(prefCatName, "model", player.getModelType().toString(),"1");
-				setValue(prefCatName, "skin-color", player.getSkin().toString(),"1");
-				setValue(prefCatName, "skin-ambient", Float.toString(player.getSkinAmbient()),"1");
-				setValue(prefCatName, "cloth-top-color", player.getTopCloth().toString(),"1");
-				setValue(prefCatName, "cloth-top-ambient", Float.toString(player.getTopClothAmbient()),"1");
-				setValue(prefCatName, "cloth-bottom-color", player.getBottomCloth().toString(),"1");
-				setValue(prefCatName, "cloth-bottom-ambient", Float.toString(player.getBottomClothAmbient()),"1");
-				setValue(prefCatName, "cloth-shoes-color", player.getShoes().toString(),"1");
-				setValue(prefCatName, "cloth-shoes-ambient", Float.toString(player.getShoesAmbient()),"1");
-				setValue(prefCatName, "hair-cut", Integer.toString(player.getHairCut()),"1");
-				setValue(prefCatName, "hair-color", player.getHair().toString(),"1");
-				setValue(prefCatName, "hair-ambient", Float.toString(player.getHairAmbient()),"1");
-			}
-		});
-               
+                @Override
+                public void run() {
+                    setValue(prefCatName, "model", player.getModelType().toString(), "1");
+                    setValue(prefCatName, "skin-color", player.getSkin().toString(), "1");
+                    setValue(prefCatName, "skin-ambient", Float.toString(player.getSkinAmbient()), "1");
+                    setValue(prefCatName, "cloth-top-color", player.getTopCloth().toString(), "1");
+                    setValue(prefCatName, "cloth-top-ambient", Float.toString(player.getTopClothAmbient()), "1");
+                    setValue(prefCatName, "cloth-bottom-color", player.getBottomCloth().toString(), "1");
+                    setValue(prefCatName, "cloth-bottom-ambient", Float.toString(player.getBottomClothAmbient()), "1");
+                    setValue(prefCatName, "cloth-shoes-color", player.getShoes().toString(), "1");
+                    setValue(prefCatName, "cloth-shoes-ambient", Float.toString(player.getShoesAmbient()), "1");
+                    setValue(prefCatName, "hair-cut", Integer.toString(player.getHairCut()), "1");
+                    setValue(prefCatName, "hair-color", player.getHair().toString(), "1");
+                    setValue(prefCatName, "hair-ambient", Float.toString(player.getHairAmbient()), "1");
+                }
+            });
+
 	}
 
 	/* ********************************************************** *
