@@ -232,6 +232,9 @@ implements AnimEventListener {
         moving = Moving.target;
     }
 
+    /*
+     * etteinte du flèche de positionnement
+     */
     public void endMoving() {
         moving = Moving.stop;
         //channel.setAnim("idle");
@@ -249,7 +252,7 @@ boolean lastStateIsStop=true;
         walkDirection.set(0, 0, 0);
         float a=Variables.getCam().getRotation().getY();
 
-        if(!(up||left||right||down|| moving==Moving.target|| moving==Moving.stop))
+        if(!(up||left||right||down|| moving==Moving.target|| moving==Moving.stop || lastStateIsStop))
         {
             System.out.println("stop called !!");
             stop();
@@ -491,6 +494,16 @@ boolean lastStateIsStop=true;
 	@ScriptableMethod(description="indique si le joueur peu se déplacer ou non")
 	public boolean canMove() {
 		return canMove;
+	}
+        
+        /*
+	 * (non-Javadoc)
+	 * 
+	 * @see client.character.AbstractCharacter#isPlayer()
+	 */
+	@Override
+	public boolean isPlayer() {
+		return true;
 	}
         
          /* ********************************************************** *

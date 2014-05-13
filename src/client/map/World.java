@@ -371,10 +371,7 @@ public  class World  implements ClientChannelListener,Sharable {
 	 */
 	public void removeGraphics(Graphic s) {
             
-            /*
-             * Cela aussi peut être plus simple que sa
-             */
-            /*
+           /*
 		if (s.getGraphic() == null)
 			return;
 

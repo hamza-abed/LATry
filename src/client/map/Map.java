@@ -58,16 +58,19 @@ import client.editor.annotation.Editable;
 import client.interfaces.graphic.GraphicShadowed;
 import client.interfaces.network.SharableReflexEditable;
 import client.utils.FileLoader;
+import com.jme3.material.Material;
 import com.jme3.math.Ray;
 import com.jme3.math.Triangle;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.terrain.geomipmap.TerrainQuad;
 import com.jme3.terrain.heightmap.AbstractHeightMap;
 import com.jme3.terrain.heightmap.ImageBasedHeightMap;
 import com.jme3.terrain.heightmap.RawHeightMap;
 import com.jme3.texture.plugins.AWTLoader;
 import java.awt.image.BufferedImage;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import shared.variables.Variables;
 
@@ -221,25 +224,27 @@ public class Map implements SharableReflexEditable, GraphicShadowed {
 	 * @return
 	 */
 	private Future<Void> launchRebuild() {
-            /*
-		return GameTaskQueueManager.getManager().update(new Callable<Void>() {
+           
+		return Variables.getLaGame().enqueue(new Callable<Void>() {
 			@Override
 			public Void call() throws Exception {
 				rebuild();
 				return null;
 			}
 		});
-                */
-            System.err.println("Map-> launchRebuild() : GameTaskQueueManager !!");
-            return null;
+                
+           
+          
 	}
 
 	/**
 	 * Reconstruit la carte
 	 */
 	private void rebuild() {
+            
+            System.out.println("Map -> rebuild()");
 		if (loaded) {
-			world.removeGraphics(this);
+			world.removeGraphics(this);// méthode vide !!
 			//super.clearAll();
 			//terrain.removeFromParent();
 		}
@@ -278,81 +283,84 @@ public class Map implements SharableReflexEditable, GraphicShadowed {
          * établir en JME3 par 
          */
         private AbstractHeightMap heightMap;
-        
+        private TerrainQuad terrain;
+    Material mat_terrain;
 	private void loadHeightMap() {
-		try {
-			
-			@SuppressWarnings("unused")
-			boolean flipTexture = false;
-        
-                        
-			if (height.endsWith("raw")) {
-				heightMap = new RawHeightMap(FileLoader
-						.getResourceAsUrl(LaConstants.DIR_MAP_DATA + height),
-						129, RawHeightMap.FORMAT_16BITBE, false);
-				flipTexture = true;
-			} else
-                        {
-                        /* ceci charge une image en BuffredImage et la converte en jme3.Image
-                         * Hamza ABED
-                         */
-                         BufferedImage bImg =ImageIO.read(FileLoader
-						.getResourceAsUrl(LaConstants.DIR_MAP_DATA + height));
-                         AWTLoader loader = new AWTLoader();
-        com.jme3.texture.Image load = loader.load(bImg, true);
-                            heightMap = new ImageBasedHeightMap(load);
-                            heightMap.load();
-                        }
-   
-			size = heightMap.getSize();
-			Vector3f scale = new Vector3f(world.getMapSize() / (size - 1f),
-					world.getWorldScaleY(), world.getMapSize() / (size - 1f));
+		          try {
+
+                @SuppressWarnings("unused")
+                boolean flipTexture = false;
+
+
+                if (height.endsWith("raw")) {
+                    heightMap = new RawHeightMap(FileLoader
+                            .getResourceAsUrl(LaConstants.DIR_MAP_DATA + height),
+                            129, RawHeightMap.FORMAT_16BITBE, false);
+                    flipTexture = true;
+                } else {
+                    /* ceci charge une image en BuffredImage et la converte en jme3.Image
+                     * Hamza ABED
+                     */
+                    BufferedImage bImg = ImageIO.read(FileLoader
+                            .getResourceAsUrl(LaConstants.DIR_MAP_DATA + height));
+                    AWTLoader loader = new AWTLoader();
+                    com.jme3.texture.Image load = loader.load(bImg, true);
+                    heightMap = new ImageBasedHeightMap(load);
+                    heightMap.load();
+                }
+
+                size = heightMap.getSize();
+                Vector3f scale = new Vector3f(world.getMapSize() / (size - 1f),
+                        world.getWorldScaleY(), world.getMapSize() / (size - 1f));
+                int patchSize = 65;
+                //terrain = new TerrainQuad("my terrain", patchSize, 513, heightMap.getHeightMap());
+                terrain = new TerrainQuad("my terrain", 33, size,scale ,heightMap.getHeightMap());
+
+
+                //terrain = new TerrainPage(toString(), 33, size, scale, heightMap.getHeightMap());
 /*
-			terrain = new TerrainPage(toString(), 33, size, scale, heightMap
-					.getHeightMap());
+                 shadowed = new TerrainPage(toString(), 33, size, scale, heightMap
+                 .getHeightMap());
 
-			shadowed = new TerrainPage(toString(), 33, size, scale, heightMap
-					.getHeightMap());
+                 shadowed.setLocalTranslation(this.getLocalTranslation());
+                 shadowed.setRenderState(zs);
+                 shadowed.updateRenderState();
+                 shadowed.setCullHint(CullHint.Dynamic);
+                 shadowed.lock();
 
-			shadowed.setLocalTranslation(this.getLocalTranslation());
-			shadowed.setRenderState(zs);
-			shadowed.updateRenderState();
-			shadowed.setCullHint(CullHint.Dynamic);
-			shadowed.lock();
+                 terrain.setDetailTexture(1, 1);
 
-			terrain.setDetailTexture(1, 1);
+                 this.attachChild(terrain);
 
-			this.attachChild(terrain);
+                 PassNodeState pns = new PassNodeState();
+                 pns.setPassState(createTextureLayer(textures.get(0), null, true));
+                 this.addPass(pns);
 
-			PassNodeState pns = new PassNodeState();
-			pns.setPassState(createTextureLayer(textures.get(0), null, true));
-			this.addPass(pns);
+                 int nbSplat = Math.min(textures.size() - 1, alphas.size());
+                 for (int i = 0; i < nbSplat; i++) {
+                 pns = new PassNodeState();
+                 pns.setPassState(createTextureLayer(textures.get(i + 1), alphas
+                 .get(i), false));
+                 pns.setPassState(bs);
+                 pns.setPassState(zs);
+                 this.addPass(pns);
+                 }
 
-			int nbSplat = Math.min(textures.size() - 1, alphas.size());
-			for (int i = 0; i < nbSplat; i++) {
-				pns = new PassNodeState();
-				pns.setPassState(createTextureLayer(textures.get(i + 1), alphas
-						.get(i), false));
-				pns.setPassState(bs);
-				pns.setPassState(zs);
-				this.addPass(pns);
-			}
+                 debugPns = new PassNodeState();
+                 debugPns.setPassState(createTextureLayer("basic/red.jpg","basic/zone.png", true));
+                 debugPns.setPassState(bs);
+                 debugPns.setPassState(zs);
+                 debugPns.setEnabled(false);
+                 this.addPass(debugPns);
 
-			debugPns = new PassNodeState();
-			debugPns.setPassState(createTextureLayer("basic/red.jpg","basic/zone.png", true));
-			debugPns.setPassState(bs);
-			debugPns.setPassState(zs);
-			debugPns.setEnabled(false);
-			this.addPass(debugPns);
-
-			// this.updateRenderState();
-			terrain.lock();
-                        */
-		} catch (IOException e) {
-			throw new RuntimeException("Putain de too Many Exception");
-		} catch (ArrayIndexOutOfBoundsException e) {
-			logger.warning("Il manque un alpha ou une texture ");
-		} catch (Exception ex) {
+                 // this.updateRenderState();
+                 terrain.lock();
+                 */
+            } catch (IOException e) {
+                throw new RuntimeException("Putain de too Many Exception");
+            } catch (ArrayIndexOutOfBoundsException e) {
+                logger.warning("Il manque un alpha ou une texture ");
+            } catch (Exception ex) {
                 Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
             }
 	}
