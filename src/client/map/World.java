@@ -91,6 +91,9 @@ import client.map.tool.Tool;
 import client.script.Script;
 import client.script.ScriptExecutor;
 import client.script.ScriptableMethod;
+import com.jme3.app.state.ScreenshotAppState;
+import com.jme3.asset.plugins.ZipLocator;
+import com.jme3.material.Material;
 
 //import com.jme.intersection.PickResults;
 //import com.jme.intersection.TrianglePickResults;
@@ -98,6 +101,13 @@ import client.script.ScriptableMethod;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import com.jme3.terrain.geomipmap.TerrainGrid;
+import com.jme3.terrain.geomipmap.TerrainGridLodControl;
+import com.jme3.terrain.geomipmap.TerrainLodControl;
+import com.jme3.terrain.geomipmap.grid.ImageTileLoader;
+import com.jme3.terrain.geomipmap.lodcalc.DistanceLodCalculator;
+import com.jme3.terrain.heightmap.Namer;
+import com.jme3.texture.Texture;
 //import com.jme.system.DisplaySystem;
 //import com.jme.util.GameTaskQueueManager;
 import com.sun.sgs.client.ClientChannel;
@@ -218,6 +228,7 @@ public  class World  implements ClientChannelListener,Sharable {
             System.out.println("instantiation de World");
 		//super("world");
 		this.game = game;
+                sceneModel=new Node("Scene of the main game");
 		//sky = new Sky(this);
 		//water = new WaterPlan(sky, game.getProps());
 		//shadow = new Shadow(game.getProps(),light);
@@ -268,26 +279,118 @@ public  class World  implements ClientChannelListener,Sharable {
 		this.versionCode = -1;
                 
 	}
+        /**********************************************************************/
+        /*********************CREATION D'UN TERRAIN GRID **********************/
+        /**********************************************************************/
+        
+    TerrainGrid terrain;
+    private Material mat_terrain;
+     private float grassScale = 64;
+    private float dirtScale = 16;
+    private float rockScale = 128;
+   
+    void createTerrainGrid()
+    {
+        
+        System.out.println("CreateTerrainGrid() :  called !!");
+ 
+        // TERRAIN TEXTURE material
+        mat_terrain = new Material(Variables.getLaGame().getAssetManager(), "Common/MatDefs/Terrain/HeightBasedTerrain.j3md");
 
+        // Parameters to material:
+        // regionXColorMap: X = 1..4 the texture that should be appliad to state X
+        // regionX: a Vector3f containing the following information:
+        //      regionX.x: the start height of the region
+        //      regionX.y: the end height of the region
+        //      regionX.z: the texture scale for the region
+        //  it might not be the most elegant way for storing these 3 values, but it packs the data nicely :)
+        // slopeColorMap: the texture to be used for cliffs, and steep mountain sites
+        // slopeTileFactor: the texture scale for slopes
+        // terrainSize: the total size of the terrain (used for scaling the texture)
+        // GRASS texture
+        Texture grass = Variables.getLaGame().getAssetManager().loadTexture("Textures/Terrain/splat/grass.jpg");
+        grass.setWrap(Texture.WrapMode.Repeat);
+        this.mat_terrain.setTexture("region1ColorMap", grass);
+        this.mat_terrain.setVector3("region1", new Vector3f(88, 200, this.grassScale));
+
+        // DIRT texture
+        Texture dirt = Variables.getLaGame().getAssetManager().loadTexture("Textures/Terrain/splat/dirt.jpg");
+        dirt.setWrap(Texture.WrapMode.Repeat);
+        this.mat_terrain.setTexture("region2ColorMap", dirt);
+        this.mat_terrain.setVector3("region2", new Vector3f(0, 90, this.dirtScale));
+
+        // ROCK texture
+        Texture rock = Variables.getLaGame().getAssetManager().loadTexture("Textures/Terrain/Rock2/rock.jpg");
+        rock.setWrap(Texture.WrapMode.Repeat);
+        this.mat_terrain.setTexture("region3ColorMap", rock);
+        this.mat_terrain.setVector3("region3", new Vector3f(198, 260, this.rockScale));
+
+        this.mat_terrain.setTexture("region4ColorMap", rock);
+        this.mat_terrain.setVector3("region4", new Vector3f(198, 260, this.rockScale));
+
+        this.mat_terrain.setTexture("slopeColorMap", rock);
+        this.mat_terrain.setFloat("slopeTileFactor", 32);
+
+        this.mat_terrain.setFloat("terrainSize", 129);
+      
+       
+        
+        this.terrain = new TerrainGrid("terrain", 65, 257, new ImageTileLoader(Variables.getLaGame().getAssetManager(), new Namer() {
+
+       public String getName(int x, int y) {
+         System.out.println("Scenes/TerrainMountains/terrain_" + x + "_" + y + ".png");
+         if(x==2 && y==2)  Variables.setMapsLoaded(true);
+                return "Scenes/TerrainMountains/terrain_" + x + "_" + y + ".png";
+            }
+        }));
+        
+        this.terrain.setMaterial(mat_terrain);
+        
+
+       
+        
+    //  Variables.getLaGame().getRootNode().attachChild(terrain);
+       Variables.setSceneModel(terrain);
+        
+           
+            
+            System.out.println("CreateTerrainGrid() :  END !!");
+    }
+        
+        
+        
+        
 	/**
 	 * Construit les cartes Elle ne sont pas encore construite graphiquement car
 	 * voila
 	 */
 	private void build() {
             
-            System.out.println("World-> build() : vide !!");
+           
 	/*
-         * J'en sais rien encore à propos de sa
+         * Détails : charge les map en fonction des dimetions du World
          * Hamza ABED
          */
-         /*
+       createTerrainGrid();
+       /*
             for (int x = 0; x < worldSizeX; x++)
 			for (int z = 0; z < worldSizeZ; z++)
 				if (!maps.containsKey(LaComponent.map.prefix() + x + ":" + z)) {
+                                    System.err.println("ajout map "+z+" worldSizeX="+worldSizeX
+                                            +" worldSizeZ="+worldSizeZ);
 					Map map = new Map(this, x, z);
 					this.maps.put(map.getKey(), map);
 				}
+            
+            if(this.maps.size()==(worldSizeX*worldSizeZ))              
+              Variables.setMapsLoaded(true);
+            Variables.setSceneModel(sceneModel); //cette sceneModel est un lot de maps 
+            //construites lors de la boucle à l'aide de la méthode addGraphic de World$
+            //appelé depuis Map
+          
           */
+            
+         
 	}
 
 	/* ********************************************************** *
@@ -404,22 +507,29 @@ public  class World  implements ClientChannelListener,Sharable {
 	 * 
 	 * @param s
 	 */
+        Node sceneModel;
 	public void addGraphics(Graphic s) {
-            System.out.println("World -> addGraphics() : vide !!");
-          /*
-           * ce n'est pas un grand problème aussi
-           */ 
+            System.out.println("World -> addGraphics() : en construction !!");
+         
             
-            /*
+           
 		if (s == null || s.getGraphic() == null)
 			return;
-		logger.fine("ajout de "+s);
+		//logger.fine("ajout de "+s);
+                System.out.println("ajout de "+s);
 
-		int l = s.getGraphic().getLocks();
-		s.getGraphic().unlock();
+		//int l = s.getGraphic().getLocks();
+		//s.getGraphic().setLocked 
+                
+                /*
+                 * Peut être on aura besoin de débloquer le terrain !!!
+                 */
 
-		this.attachChild(s.getGraphic());
-		if (s instanceof GraphicShadowed)
+		//this.attachChild(s.getGraphic());
+                // on va supposer que le world ajoute tout au scène 
+                sceneModel.attachChild(s.getGraphic());
+		/*
+                if (s instanceof GraphicShadowed)
 			for (Spatial c : ((GraphicShadowed) s).getShadowed())
 				shadow.addShadowed(c);
 		if (s instanceof GraphicShadowCaster)
@@ -449,10 +559,10 @@ public  class World  implements ClientChannelListener,Sharable {
 		if (s instanceof Map)
 			updateMapObjectY((Map) s);
                         
+                  */      
                         
                         
-                        
-                        */
+                       
 	}
 
 	/**
@@ -593,7 +703,7 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
         + " ftpUser= "+ftpUser+"\n "
         + " ftpPass= "+ftpPass+"\n "
         + "***********\n\n");
-		//build();
+		build();
                 
 	}
 
@@ -603,9 +713,10 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 * @param message
 	 */
 	public void receivedMapDataPck(ByteBuffer message) {
+            System.out.println("received");
 		String mapKey = Pck.readString(message);
 		Map map = getMapBuildIfAbsent(mapKey);
-		//map.receiveCommitPck(message);
+		map.receiveCommitPck(message);
 	}
 
 	/**
@@ -675,8 +786,9 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 */
 	//@Override
 	public void leftChannel(ClientChannel arg0) {
-		logger.warning("Mouarf le client quitte le channel world, ca reviens à être deconnecter");
-		//game.disconnect("World Channel Leave");
+	 System.out.println("Mouarf le client quitte le channel world, ca reviens à être deconnecter");
+                Variables.getClientConnecteur().disconnect("World Channel Leave");
+		
 	}
 
 	/*
@@ -790,7 +902,7 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 		String key = Pck.readString(message);
 		Sharable shared = getSharable(key);
 		if (shared == null) {
-			logger.warning(key + " n'existe pas");
+			                 System.err.println(key + " n'existe pas");
 			return;
 		}
 
@@ -919,15 +1031,15 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 */
 	public float getHeightAt(float x, float z) {
 		Map map = getMapAt(x, z);
-		//if (map == null)
-			//return worldWaterDeep;
-		//float h = map.getHeightAt(x, z);
-	/*
+		if (map == null)
+			return worldWaterDeep;
+	   float h = map.getHeightAt(x, z);
+	
                     if (Float.isNaN(h))
 			return worldWaterDeep;
 		return h;
-                */
-                    return 0;
+                
+                   
 	}
 
 	/**
@@ -963,13 +1075,13 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 * acces à la carte et la construit si ca existe pas
 	 */
 	private Map getMapBuildIfAbsent(String key) {
-            /*
+            
 		if (!maps.containsKey(key)) {
 			throw new RuntimeException("Pas encore prevu : getMapBuildIfAbsent");
 		}
 		return maps.get(key);
-                */
-            return null;
+               
+            
 	}
 
 	/**
@@ -979,8 +1091,8 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 * @return
 	 */
 	private Map getMap(String key) {
-		//return maps.get(key);
-            return null;
+	return maps.get(key);
+           
 	}
 
 	/**
@@ -1003,6 +1115,7 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 */
 	public Map getMapAt(int x, int z) {
 		if (x<0 || z<0) return null;
+                System.out.println("world->getMapAt->return "+LaComponent.map.prefix() + x + ":" + z);
 		return maps.get(LaComponent.map.prefix() + x + ":" + z);
                 
 	}
@@ -1498,9 +1611,8 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 		case groupToken: return getGroupToken(key);
 		case item:System.out.println("\nWORLD item \n"); break; // return getItemBuildIfAbsent(key);
 		case light:System.out.println("\nWORLD light \n"); break;// return getLightBuiltIfAbsent(key);
-		//pas opérationnel en v31
-		//case lgf: return getLgfBuildIfAbsent(key);
-		case map:System.out.println("\nWORLD map \n"); break;// return getMap(key);
+		
+		case map:System.out.println("\nWORLD map \n"); return getMap(key);
 		case npc: System.out.println("\nWORLD NPC \n key= "+key); return getNpcBuildIfAbsent(key);
 		case object: System.out.println("\nWORLD object \n"); return getMapObject(key);
 		case particul:System.out.println("\nWORLD particul \n"); break;// return getMapObject(key);
@@ -1608,8 +1720,8 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 */
 	@ScriptableMethod(description="Test si le monde a ce token dans la cat indiqué")
 	public boolean hasToken(String cat, String token) {
-		//return getWorldToken().hasToken(cat, token);
-            return true;
+		return getWorldToken().hasToken(cat, token);
+            
 	}
 
 	/**
@@ -1620,9 +1732,9 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 */
 	@ScriptableMethod(description="Test si le monde a ce token dans la cat par defaut")
 	public boolean hasToken(String token) {
-		//return getWorldToken().hasToken(token);
+		return getWorldToken().hasToken(token);
             
-            return true;
+            
 	}
 
 	/**
@@ -1635,12 +1747,12 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 */
 	@ScriptableMethod(description="change la valeur du token dans la categorie indiqué")
 	public void setToken(String cat, String token, String value) {
-		//getWorldToken().addToken(cat, token, value);
+		getWorldToken().addToken(cat, token, value);
 	}
 
 	@ScriptableMethod(description="change la valeur du token dans la categorie indiqué en long")
 	public void setToken(String cat, String token, long value) {
-		//getWorldToken().addToken(cat, token, Long.toString(value));
+		getWorldToken().addToken(cat, token, Long.toString(value));
 	}
 	
 	/**
@@ -1878,7 +1990,7 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 */
 	public ArrayList<GraphicCollidable> getCollidables() {
 		return collidables;
-           //return null;
+           
 	}
 
 	/**
@@ -1921,7 +2033,7 @@ System.out.println("\n\n world class**************\n worldSizeX="+worldSizeX+"\n
 	 */
 	public boolean isIdenObjectVisible() {
 		return idenObjectVisible;
-            //return true;
+           
 	}
 
 	/**

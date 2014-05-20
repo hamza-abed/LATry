@@ -150,7 +150,7 @@ public class Region implements GraphicScenarizedEditableRegion, GraphicReflexEdi
 	 * recharge l'apperence de la region dans un thread synchronisé dans l'update
 	 */
 	private void rebuildTask() {
-		//GameTaskQueueManager.getManager().update(this);
+            //GameTaskQueueManager.getManager().update(this);
             /*
              * à enlever
              * 

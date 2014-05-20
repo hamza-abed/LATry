@@ -234,12 +234,23 @@ public class SimpleClientConnector implements SimpleClientListener{
         	   //   Variables.getConsole().output("ping pong task has just started !");
                         setStatus("ping pong task has just started !");
                         
-Variables.getFindWay().add(findWay);
-future=Variables.getLaGame().getSchedulerTaskExecutor().submit(findWay);
-Variables.getFutures().add(future);
-                    
+
+                    callMoveToGameScreen();
                         
                 }
+               
+                
+        public void callMoveToGameScreen()
+        {
+ 
+future=Variables.getLaGame().getSchedulerTaskExecutor().submit(findWay);
+if(!Variables.findWayExist(findWay))
+{
+Variables.getFindWay().add(findWay);
+Variables.getFutures().add(future);
+}
+        }
+                
                 
         private Future future;
         private Callable findWay = new Callable(){

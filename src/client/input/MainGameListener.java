@@ -37,6 +37,7 @@ public class MainGameListener implements ActionListener, AnalogListener{
     public void onAction(String name, boolean isPressed, float tpf) {
        if(name.equals("LClick"))
 {
+   
 isLeftClickForScene();
 
 }
@@ -56,8 +57,11 @@ isLeftClickForScene();
            if(!leftClickForScene) // si ce n'est pas un click pour la scène
                //alors il s'agit de glisser un objet
            {
-
- draggingNode(previousCollided);
+               if(previousCollided!=null)
+               { System.out.println("PreviousCollidedName="+previousCollided.getName());
+ draggingNode(previousCollided);}
+               else
+                   System.err.println("Vous avez sélectionné le vide !!");
            
            }
        }
@@ -114,6 +118,7 @@ Variables.getConsole().clear();
           
   private boolean isLeftClickForScene()
   {  
+      System.out.println("verifying if leftClickForScene");
       if(!isClicking && !isDragging)
       {
           isClicking=true;
@@ -140,8 +145,10 @@ Variables.getConsole().clear();
          String hit="";
          Node collided=results.getCollision(i).getGeometry().getParent();
          previousCollided=collided;
+         System.out.println("collided1="+collided.getName());
          while(!collided.getName().equals("Root Node"))
          {
+             System.out.println("collided="+collided.getName());
          previousCollided=collided;
          collided=collided.getParent();
                 

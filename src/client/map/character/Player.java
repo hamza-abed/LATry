@@ -14,7 +14,10 @@ import com.jme3.animation.AnimControl;
 import com.jme3.animation.AnimEventListener;
 import com.jme3.animation.LoopMode;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
+import com.jme3.bullet.collision.shapes.CollisionShape;
+import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.CharacterControl;
+import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.FastMath;
@@ -79,14 +82,14 @@ implements AnimEventListener {
         this.walkDirection = walkDirection;
     }
     private AnimControl control;
-    private CharacterControl player;
+    private CharacterControl playerControl;
 
-    public CharacterControl getPlayer() {
-        return player;
+    public CharacterControl getplayerControl() {
+        return playerControl;
     }
 
     public void setPlayer(CharacterControl player) {
-        this.player = player;
+        this.playerControl = player;
     }
     private Node playerModel;
 
@@ -101,13 +104,13 @@ implements AnimEventListener {
 
     public Player(World world, String login) {
         super(world, login);
-               initPlayer();
+          //     initPlayer();
        //  Variables.getLaGame().getPhysicsSpace().addCollisionListener(this);
     }
     
   
     private CapsuleCollisionShape capsuleShape;
-
+CollisionShape pShape;
     public void initPlayer() {
         System.out.println("Player ->initPlayer() : !!");
       //  playerModel = (Node) Variables.getLaGame().getAssetManager().loadModel("Models/high-sinbad/Sinbad.mesh.xml");
@@ -126,19 +129,23 @@ implements AnimEventListener {
         //startAnimation
         capsuleShape =
                 new CapsuleCollisionShape(2f, 1f, 1);
+        if(Variables.getMainPlayer().getGraphic()!=null)
+ pShape =CollisionShapeFactory.createMeshShape((Node) Variables.getMainPlayer().getGraphic());
+        else 
+            System.out.println("pShape=null!!!");
 
+        playerControl = new CharacterControl(capsuleShape, 0.1f);
+        playerControl.setJumpSpeed(30);
+        playerControl.setFallSpeed(600);
+        playerControl.setGravity(50);
+      //  playerControl.setCcdMotionThreshold(getCcdMotionThreshold());
 
-        player = new CharacterControl(capsuleShape, 0.1f);
-        player.setJumpSpeed(30);
-        player.setFallSpeed(600);
-        player.setGravity(50);
-
-        player.setPhysicsLocation(new Vector3f(-10, 5, -10));
-        ///playerModel.addControl(control);
+        playerControl.setPhysicsLocation(new Vector3f(-10, 5, -10));
+//        playerModel.addControl(control);
         //playerModel.setName("playerModel");
 
 
-        Variables.getLaGame().getBulletAppState().getPhysicsSpace().add(player);
+        Variables.getLaGame().getBulletAppState().getPhysicsSpace().add(playerControl);
        
 
 
@@ -199,7 +206,7 @@ implements AnimEventListener {
             down = true;
         } else if (binding.equals("Jump")) {
 
-            player.jump();
+            playerControl.jump();
         }
 
         // System.out.println("walk "+ isPressed +" "+ binding);
@@ -291,25 +298,25 @@ boolean lastStateIsStop=true;
         }
 
 
-        player.setWalkDirection(walkDirection);
+        playerControl.setWalkDirection(walkDirection);
 
         if (walkDirection.equals(nullVector)) {
-            player.setViewDirection(new Vector3f(lastWalkDirection.x, 0, lastWalkDirection.z));
+            playerControl.setViewDirection(new Vector3f(lastWalkDirection.x, 0, lastWalkDirection.z));
         } else {
 
             //System.err.println("walkDirection= "+walkDirection.toString());
-            player.setViewDirection(new Vector3f(walkDirection.x, 0, walkDirection.z));
+            playerControl.setViewDirection(new Vector3f(walkDirection.x, 0, walkDirection.z));
             lastWalkDirection = new Vector3f(walkDirection.x, walkDirection.y, walkDirection.z);
         }
 
         if (moving==Moving.target) {
-            player.setViewDirection(target);
-            player.setWalkDirection(target);
+            playerControl.setViewDirection(target);
+            playerControl.setWalkDirection(target);
         }
 
         
         CollisionResults results = new CollisionResults();
-        if (Variables.getMoveCursor() != null && Variables.getMoveCursor().getNodeGostCursor() != null) {
+        if (Variables.getMoveCursor() != null && Variables.getMoveCursor().getNodeGostCursor() != null && playerModel!= null) {
             playerModel.collideWith(Variables.getMoveCursor().getNodeGostCursor().getWorldBound(), results);
         }
 
@@ -528,7 +535,7 @@ boolean lastStateIsStop=true;
 	 */
 	private void enter(Map map) {
 		if (map != null) {
-			
+		System.err.println("Player-> EnterMap!!");
 			currentMap = map;
 		}
 

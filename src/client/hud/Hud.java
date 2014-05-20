@@ -954,6 +954,7 @@ public class Hud  {
 	 * @param y
 	 * @return
 	 */
+        /*
 	public boolean isMouseOver(int x, int y) {
 		for (BWindow win : BuiSystem.getRootNode().getAllWindows())
 			if (win == followedTask && win.isVisible() && followedTask.isMouseOver(x,y))
@@ -968,12 +969,12 @@ public class Hud  {
 	 * test si le hud a le focus (utile pour empeché les event clavier)
 	 * @return
 	 */
-	public boolean hasFocus() {
+/*	public boolean hasFocus() {
 		for (BWindow win : BuiSystem.getRootNode().getAllWindows())
 			if (win.hasFocus())
 				return true;
 		return chat.getInput().hasFocus();
-	}
+	}*/
 	
 	
 	/**

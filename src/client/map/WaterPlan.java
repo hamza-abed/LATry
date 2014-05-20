@@ -56,12 +56,15 @@ public class WaterPlan {
     waterProcessor.setWaveSpeed(0.05f); // speed of waves Quad 
     quad = new Quad(800,800); 
     quad.scaleTextureCoordinates(new Vector2f(6f,6f)); 
-    Geometry water=new Geometry("water", quad); 
-    water.setLocalRotation(new Quaternion().fromAngleAxis(FastMath.HALF_PI, Vector3f.UNIT_X)); 
-    water.setLocalTranslation(-400, 0.32f, 400); 
-    water.setShadowMode(RenderQueue.ShadowMode.Receive); 
-    water.setMaterial(waterProcessor.getMaterial()); 
-    Variables.getLaGame().getRootNode().attachChild(water); } 
+    waterGeom=new Geometry("water", quad); 
+    waterGeom.setLocalRotation(new Quaternion().fromAngleAxis(FastMath.HALF_PI, Vector3f.UNIT_X)); 
+    waterGeom.setLocalTranslation(-400, 0.32f, 400); 
+    waterGeom.setShadowMode(RenderQueue.ShadowMode.Receive); 
+    waterGeom.setMaterial(waterProcessor.getMaterial()); 
+    Variables.getLaGame().getRootNode().attachChild(waterGeom); 
+   }
+   private Geometry waterGeom;
+   
    
    
    public void initSimpleWaterOfBegining()
@@ -83,9 +86,9 @@ public class WaterPlan {
     water.setMaterial(waterProcessor.getMaterial()); 
     Variables.getLaGame().getRootNode().attachChild(water);
    }
-   
+   FilterPostProcessor fpp;
    public void initPPcWater(){ 
-       FilterPostProcessor fpp = new FilterPostProcessor(Variables.getLaGame().getAssetManager()); 
+       fpp = new FilterPostProcessor(Variables.getLaGame().getAssetManager()); 
        water = new WaterFilter(Variables.getLaGame().getRootNode(), lightDirection); 
        water.setCenter(Vector3f.ZERO); 
        water.setRadius(2600); 
@@ -98,6 +101,13 @@ public class WaterPlan {
        Variables.getLaGame().getViewPort().addProcessor(fpp); }
 
 
+   
+   public void removeWater()
+   {
+       System.out.println("this removeWater");
+       Variables.getLaGame().getRootNode().detachChild(waterGeom);
+       Variables.getLaGame().getViewPort().removeProcessor(fpp);
+   }
 
 public void setWaterOnTheGame()
 {

@@ -49,6 +49,7 @@ import client.map.World;
 import client.map.character.Player;
 import client.map.tool.viewer.PDFViewer;
 import client.network.SimpleClientConnector;
+import client.utils.FileLoader;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.TextureKey;
 import com.jme3.bullet.BulletAppState;
@@ -80,9 +81,14 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
+import com.jme3.terrain.Terrain;
+import com.jme3.terrain.geomipmap.TerrainGridLodControl;
+import com.jme3.terrain.geomipmap.TerrainLodControl;
 import com.jme3.terrain.geomipmap.TerrainQuad;
+import com.jme3.terrain.geomipmap.lodcalc.DistanceLodCalculator;
 import com.jme3.terrain.heightmap.AbstractHeightMap;
 import com.jme3.terrain.heightmap.ImageBasedHeightMap;
+import com.jme3.terrain.heightmap.RawHeightMap;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture.WrapMode;
 import com.jme3.texture.plugins.AWTLoader;
@@ -93,6 +99,9 @@ import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import shared.constants.LaConstants;
 
 import shared.variables.Variables;
 
@@ -169,7 +178,7 @@ public class LaGame extends SimpleApplication {
                     fireCamp.setName("fireCamp");
                     rootNode.attachChild(fireCamp);
 
-                    fireCamp.setLocalTranslation(new Vector3f(joueur.getPlayer().getPhysicsLocation().x + 30, joueur.getPlayer().getPhysicsLocation().y, joueur.getPlayer().getPhysicsLocation().z));
+                    fireCamp.setLocalTranslation(new Vector3f(joueur.getplayerControl().getPhysicsLocation().x + 30, joueur.getplayerControl().getPhysicsLocation().y, joueur.getplayerControl().getPhysicsLocation().z));
                     System.out.println("child attached !!");
                     
                     //Geometry fire=new Geometry("fireCamp")
@@ -310,7 +319,7 @@ private static final float INCLINAISON = FastMath.HALF_PI;
         // Material m=fireCamp.get
          
     }
-
+private boolean playerInitialized=false;
     private void initPlayer() {
      
   this.enqueue(
@@ -326,7 +335,7 @@ private static final float INCLINAISON = FastMath.HALF_PI;
         joueur.initPlayer();
         joueur.attachToScene();
         
-        
+        playerInitialized=true;
     }else
     System.out.println("LaGame-> initPlayer() : ERREUR !!");
         
@@ -358,16 +367,30 @@ private static final float INCLINAISON = FastMath.HALF_PI;
        if(!isStartScreen)
        {
            //Variables.getConsole().output("updating");
+        if(boussole ==null )boussole=new Boussole(); 
         boussole.update();
         
+        if(playerInitialized)
+        {
+        this.enqueue(
+                new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
         joueur.update();
+        return null; }
+                });
+        
+              
         //joueur.getPlayerModel().removeFromParent();
         joueur.getPlayerModel().setLocalTranslation(new Vector3f(
-                joueur.getPlayer().getPhysicsLocation().x, joueur.getPlayer().getPhysicsLocation().y - 2.5f,
-                joueur.getPlayer().getPhysicsLocation().z));
+                joueur.getplayerControl().getPhysicsLocation().x, joueur.getplayerControl().getPhysicsLocation().y - 2.5f,
+                joueur.getplayerControl().getPhysicsLocation().z));
+        
+        }
        // joueur.attachToScene();
         //walkDirection.set(0, 0, 0);
-        if(!chaseCam.isEnabled())
+        
+        if(chaseCam !=null && !chaseCam.isEnabled())
         chaseCam.setEnabled(true);
        
        }else
@@ -495,7 +518,7 @@ private static final float INCLINAISON = FastMath.HALF_PI;
 
                 sceneModel1.updateGeometricState();
                 rootNode.updateGeometricState();
-
+/*
                 sceneModel = assetManager.loadModel("Scenes/scene1.j3o");
                 sceneModel.updateGeometricState();
                 sceneModel.setName("Scene of the main game");
@@ -504,19 +527,44 @@ private static final float INCLINAISON = FastMath.HALF_PI;
                 //rootNode.updateGeometricState();
                 sceneModel.setLocalTranslation(0, 2, 0);
 
+*/                 
+             //  initTerrain();
 
-                CollisionShape sceneShape =
-                        CollisionShapeFactory.createMeshShape((Node) sceneModel);
+//if(Variables.isMapsLoaded())
+//{
+//    System.out.println("all maps loaded !!");
+    sceneModel=Variables.getSceneModel();
+//}
+//else
+//    System.out.println("maps not loaded !!");
+                sceneModel.setName("Scene of the main game");
+                if(Variables.getSceneModel()==null) System.out.println("scene not setted!!");
+                
+                //sceneModel=Variables.getSceneModel();
+               
+                
+                
+                 TerrainLodControl control = new TerrainGridLodControl((Terrain) sceneModel, getCamera());
+        control.setLodCalculator( new DistanceLodCalculator(65, 2.7f) ); // patch size, and a multiplier
+           sceneModel.addControl(control);
+                
+                
+               
+                CollisionShape sceneShape =CollisionShapeFactory.createMeshShape((Node) sceneModel);
+                System.out.println("Collision for scene created !!");
                 landscape = new RigidBodyControl(sceneShape, 0);
-                sceneModel.addControl(landscape);  //define the scene as a rigid body
+               // sceneModel.addControl(landscape);  //define the scene as a rigid body
+                System.err.println("name="+sceneModel.getName());
 
+             
+               sceneModel.setLocalTranslation(joueur.getGraphic().getLocalTranslation());
+               rootNode.attachChild(sceneModel);
+             //   bulletAppState.getPhysicsSpace().add(landscape);
 
-              bulletAppState
-                        .getPhysicsSpace().add(landscape);
+              //  Variables.setSceneModel(sceneModel);
 
-                Variables.setSceneModel(sceneModel);
-
-                waterPlan = new WaterPlan(sceneModel);
+                //waterPlan = new WaterPlan(sceneModel);
+              waterPlan.removeWater();
 
                 return null;
             }
@@ -541,20 +589,18 @@ private static final float INCLINAISON = FastMath.HALF_PI;
         /**
          * 1. Create terrain material and load four textures into it.
          */
-        mat_terrain = new Material(assetManager,
-                "Common/MatDefs/Terrain/Terrain.j3md");
+        mat_terrain = new Material(assetManager,"Common/MatDefs/Terrain/Terrain.j3md");
 
         /**
          * 1.1) Add ALPHA map (for red-blue-green coded splat textures)
          */
-        mat_terrain.setTexture("Alpha", assetManager.loadTexture(
-                "Textures/Terrain/splat/alphamap.png"));
+        mat_terrain.setTexture("Alpha", assetManager.loadTexture("Textures/Terrain/splat/alphamap.png"));
 
         /**
          * 1.2) Add GRASS texture into the red layer (Tex1).
          */
         Texture grass = assetManager.loadTexture(
-                "Textures/Terrain/splat/dirt.jpg");//grass
+                "Textures/Terrain/splat/grass.jpg");//grass
         grass.setWrap(WrapMode.Repeat);
         mat_terrain.setTexture("Tex1", grass);
         mat_terrain.setFloat("Tex1Scale", 64f);
@@ -582,7 +628,7 @@ private static final float INCLINAISON = FastMath.HALF_PI;
          */
         AbstractHeightMap heightmap = null;
         Texture heightMapImage = assetManager.loadTexture(
-                "Textures/Terrain/splat/scene4.png");
+                "Textures/Terrain/splat/mountain.png");
         heightmap = new ImageBasedHeightMap(heightMapImage.getImage());
         heightmap.load();
 
@@ -594,18 +640,31 @@ private static final float INCLINAISON = FastMath.HALF_PI;
          * 3.4) As LOD step scale we supply Vector3f(1,1,1). 3.5) We supply the
          * prepared heightmap itself.
          */
+        AbstractHeightMap heightMap=null;
+        try {
+            heightMap = new RawHeightMap(FileLoader
+                           .getResourceAsUrl("data/map/demo/demo.raw"),
+                           129, RawHeightMap.FORMAT_16BITBE, false);
+        } catch (Exception ex) {
+            Logger.getLogger(LaGame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        heightMap.load();
         int patchSize = 65;
-        terrain = new TerrainQuad("my terrain", patchSize, 513, heightmap.getHeightMap());
+        //terrain = new TerrainQuad("my terrain", patchSize, 513, heightmap.getHeightMap());
+        terrain = new TerrainQuad("my terrain", patchSize, 129, heightMap.getHeightMap());
 
         /**
          * 4. We give the terrain its material, position & scale it, and attach
          * it.
-         */
+         **/
         terrain.setMaterial(mat_terrain);
-        terrain.setLocalTranslation(0, -100, 0);
-        terrain.setLocalScale(2f, 1f, 2f);
+        terrain.setLocalTranslation(0, 0, 0);
+        //terrain.setLocalScale(2f, 1f, 2f);
+        terrain.setLocalScale(8f, 0.2f, 8f);
         rootNode.attachChild(terrain);
         sceneModel = terrain;
+      // Variables.setSceneModel(sceneModel);
+              
     }
 
     
@@ -633,10 +692,46 @@ private static final float INCLINAISON = FastMath.HALF_PI;
         System.out.println("This is calling find way2 " + Thread.currentThread().getName());
         
                 initSceneGame();
+                
+                scheduledExecutor.submit(
+                 new Callable<Void>() {
+             @Override
+             public Void call() {
+                 
+                 if(Variables.isMapsLoaded())
                 initPlayer();
+                 else
+                     try {
+                         System.out.println("Player attend le chargement du terrain!!");
+                     Thread.sleep(100);
+                     initPlayer();
+                 } catch (InterruptedException ex) {
+                     Logger.getLogger(LaGame.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+                return null;
+             }
+                 });
                 gameListener = new MainGameListener(sceneModel);
 
+                
+             scheduledExecutor.submit(
+                 new Callable<Void>() {
+             @Override
+             public Void call() {
+                 
+                 if(playerInitialized)   
                 initCamera();
+                  else
+                     try {
+                         System.out.println("Camera attend le chargement du player!!");
+                     Thread.sleep(100);
+                      initCamera();
+                 } catch (InterruptedException ex) {
+                     Logger.getLogger(LaGame.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+                return null;
+             }
+                 });
 
                 isStartScreen = false;
 

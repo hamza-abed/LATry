@@ -122,6 +122,18 @@ public class Variables {
         Variables.playerMission = playerMission;
     }*/
     
+    
+    private static boolean mapsLoaded=false;
+
+    public static boolean isMapsLoaded() {
+        return mapsLoaded;
+    }
+
+    public static void setMapsLoaded(boolean mapsLoaded) {
+        Variables.mapsLoaded = mapsLoaded;
+    }
+    
+    
     private static boolean playerModelLoaded=false;
 
     public static boolean isPlayerModelLoaded() {
@@ -291,6 +303,14 @@ private static String language;
         Variables.futures = futures;
     }
 
+    public static boolean findWayExist(Callable c)
+    {
+        for(int i=0;i<findWay.size();i++)
+            if(findWay.get(i).equals(c)) return true;
+        
+        return false;
+    }
+    
     public static ArrayList<Callable> getFindWay() {
         return findWay;
     }

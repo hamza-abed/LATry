@@ -155,35 +155,33 @@ public void startloadingTheGame()
    }
 int callThread=0;
  public void movetoGameScreen()
- {callThread++;
+ {
+     callThread++;
      Variables.setConsole(nifty.getScreen("chatbar").
-      findNiftyControl("textfield2",Console.class));
-        System.out.println("This is calling find way niftyCallThread="+callThread+" threadName="+Thread.currentThread().getName());
-        
-        if(Variables.isPlayerModelLoaded())
-         Variables.getLaGame().enqueue(
+             findNiftyControl("textfield2", Console.class));
+     System.out.println("This is calling find way niftyCallThread=" + callThread + " threadName=" + Thread.currentThread().getName());
+        Variables.getLaGame().enqueue(
                  new Callable<Void>() {
-		@Override
-		public Void call(){
-        // Variables.getLaGame().getSchedulerTaskExecutor().submit(Variables.getLaGame().getFindWay());
-        System.out.println("This is calling find way from nifty "+Thread.currentThread().getName()); 
-              Variables.getLaGame().initGameWorld();
-              return null;
-		}
-		});
-        else 
-            try{
-                Thread.sleep(100);
-                movetoGameScreen();
-            }
-        catch(Exception ex)
-        {
-            
-        }
-       
-        
-       nifty.gotoScreen("chatbar"); 
-      // Variables.getLaGame().initGameWorld();
+             @Override
+             public Void call() {
+                 // Variables.getLaGame().getSchedulerTaskExecutor().submit(Variables.getLaGame().getFindWay());
+                 System.out.println("This is calling find way from nifty " + Thread.currentThread().getName());
+                 if (Variables.isPlayerModelLoaded())
+                 Variables.getLaGame().initGameWorld();
+                 else 
+                     try {
+             Thread.sleep(100);
+             Variables.getClientConnecteur().callMoveToGameScreen();
+         } catch (Exception ex) {
+         }
+                 return null;
+             }
+         });
+    
+
+
+     nifty.gotoScreen("chatbar");
+     // Variables.getLaGame().initGameWorld();
  }
  
   
