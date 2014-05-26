@@ -51,7 +51,7 @@ public class MissionStatus extends Node{
                 "Common/MatDefs/Misc/Unshaded.j3md");
               
         mat1.setTexture("ColorMap", Variables.getLaGame().getAssetManager().
-                loadTexture("Textures/box.png"));
+                loadTexture("Textures/cage.png"));
         mat1.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
    
     statusBoxGeo.setMaterial(mat1);
@@ -67,14 +67,15 @@ public class MissionStatus extends Node{
                 "Common/MatDefs/Misc/Unshaded.j3md");
               
         mat2.setTexture("ColorMap", Variables.getLaGame().getAssetManager().
-                loadTexture("Textures/redBox.png"));
+                loadTexture("Textures/box.jpg"));
         mat2.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
     
         mat2.setColor("GlowColor", ColorRGBA.Red);
       centerOfStatusBoxGeo.setMaterial(mat2);
         
-    this.attachChild(statusBoxGeo);
+  
     this.attachChild(centerOfStatusBoxGeo);
+      this.attachChild(statusBoxGeo);
     initialScale=centerOfStatusBoxGeo.getLocalScale().x;
     
     /*************************************************************************/
@@ -86,7 +87,7 @@ public class MissionStatus extends Node{
        text.setSize(Variables.getLaGame().getGuiFont().getCharSet().getRenderedSize());
        text.setText(txt);
        text.setLocalTranslation(statusBoxGeo.getLocalTranslation().x - boxHeight*1.3f,
-               -boxHeight, 0);
+               -boxHeight*1.3f, 0);
 
        
        
@@ -95,10 +96,12 @@ public class MissionStatus extends Node{
    }
     
     private float variation=0.000f;
-   
+    private int retardeurDeuxFrames =0;
     public void update(float tpf) {
 
         
+        if(retardeurDeuxFrames==0)retardeurDeuxFrames=1;
+        else retardeurDeuxFrames=0;
         if (ROTATION > 10) {
             ROTATION = 0.1f;
 
@@ -108,7 +111,7 @@ public class MissionStatus extends Node{
         //	Matrix3f m=new Matrix3f(0, 0, ROTATION, 0, 0, 0, 0, 0, 0);
         statusBoxGeo.setLocalRotation(new Quaternion(ROTATION, 0.1f, 0.2f, 0.8f));
         centerOfStatusBoxGeo.setLocalRotation(new Quaternion(ROTATION, 0.1f, 0.2f, 0.8f));
-        variation += 0.0001f;
+        variation += 0.0001f*retardeurDeuxFrames;
         
         if (variation > 0.005f) {
             variation = 0.001f;
@@ -116,6 +119,7 @@ public class MissionStatus extends Node{
 
 
         }
+        
         centerOfStatusBoxGeo.setLocalScale(centerOfStatusBoxGeo.getLocalScale().x+variation);
         centerOfStatusBoxGeo.setLocalRotation(new Quaternion(ROTATION, 0.1f, 0.2f, 0.8f));
     }
