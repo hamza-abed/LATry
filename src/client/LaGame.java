@@ -60,6 +60,7 @@ import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.collision.CollisionResults;
+import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.KeyInput;
@@ -355,6 +356,11 @@ private boolean playerInitialized=false;
         return helloText;
     }
     
+    public BitmapFont getGuiFont()
+    {
+        return guiFont;
+    }
+    
     
     private ActionListener actionListener;
     Quaternion q=new Quaternion();
@@ -365,6 +371,8 @@ private boolean playerInitialized=false;
        {
            //Variables.getConsole().output("updating");
         if(boussole ==null )boussole=new Boussole(); 
+        
+        if(missionStatus!=null) missionStatus.update(tpf);
         boussole.update();
         
         if(playerInitialized)
@@ -568,7 +576,7 @@ else
               /***********ATTACH MISSION STATUS *********/
               /******************************************/
               missionStatus =new MissionStatus();
-              missionStatus.setLocalTranslation(850, 660, 2);
+              missionStatus.setLocalTranslation(150, 660, 2);
               guiNode.attachChild(missionStatus);
               
               
