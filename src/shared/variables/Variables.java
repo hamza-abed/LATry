@@ -122,7 +122,7 @@ public class Variables {
         Variables.playerMission = playerMission;
     }*/
     
-    
+    public static int mapN=0;
     private static boolean mapsLoaded=false;
 
     public static boolean isMapsLoaded() {

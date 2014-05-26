@@ -42,6 +42,8 @@ package client;
 
 import client.editor.ServerEditor;
 import client.hud.boussole.Boussole;
+import client.hud.missionStatus.MissionStatus;
+
 import client.hud3D.MoveCursor;
 import client.input.MainGameListener;
 import client.map.WaterPlan;
@@ -81,11 +83,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
-import com.jme3.terrain.Terrain;
-import com.jme3.terrain.geomipmap.TerrainGridLodControl;
-import com.jme3.terrain.geomipmap.TerrainLodControl;
 import com.jme3.terrain.geomipmap.TerrainQuad;
-import com.jme3.terrain.geomipmap.lodcalc.DistanceLodCalculator;
 import com.jme3.terrain.heightmap.AbstractHeightMap;
 import com.jme3.terrain.heightmap.ImageBasedHeightMap;
 import com.jme3.terrain.heightmap.RawHeightMap;
@@ -101,7 +99,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import shared.constants.LaConstants;
 
 import shared.variables.Variables;
 
@@ -501,7 +498,8 @@ private boolean playerInitialized=false;
         waterPlan.setWaterOnTheGame();
        
     }
-    
+  
+    MissionStatus missionStatus;
     
     private void initSceneGame() {
      
@@ -518,7 +516,7 @@ private boolean playerInitialized=false;
 
                 sceneModel1.updateGeometricState();
                 rootNode.updateGeometricState();
-/*
+/* */
                 sceneModel = assetManager.loadModel("Scenes/scene1.j3o");
                 sceneModel.updateGeometricState();
                 sceneModel.setName("Scene of the main game");
@@ -527,16 +525,16 @@ private boolean playerInitialized=false;
                 //rootNode.updateGeometricState();
                 sceneModel.setLocalTranslation(0, 2, 0);
 
-*/                 
+//*/                 
              //  initTerrain();
 
-//if(Variables.isMapsLoaded())
-//{
-//    System.out.println("all maps loaded !!");
-    sceneModel=Variables.getSceneModel();
-//}
-//else
-//    System.out.println("maps not loaded !!");
+if(Variables.isMapsLoaded())
+{
+    System.out.println("all maps loaded !!");
+   // sceneModel=Variables.getSceneModel();
+}
+else
+    System.out.println("maps not loaded !!");
                 sceneModel.setName("Scene of the main game");
                 if(Variables.getSceneModel()==null) System.out.println("scene not setted!!");
                 
@@ -544,27 +542,36 @@ private boolean playerInitialized=false;
                
                 
                 
-                 TerrainLodControl control = new TerrainGridLodControl((Terrain) sceneModel, getCamera());
-        control.setLodCalculator( new DistanceLodCalculator(65, 2.7f) ); // patch size, and a multiplier
-           sceneModel.addControl(control);
+             //    TerrainLodControl control = new TerrainGridLodControl((Terrain) sceneModel, getCamera());
+             //control.setLodCalculator( new DistanceLodCalculator(65, 2.7f) ); // patch size, and a multiplier
+             // sceneModel.addControl(control);
                 
                 
                
                 CollisionShape sceneShape =CollisionShapeFactory.createMeshShape((Node) sceneModel);
                 System.out.println("Collision for scene created !!");
                 landscape = new RigidBodyControl(sceneShape, 0);
-               // sceneModel.addControl(landscape);  //define the scene as a rigid body
+                sceneModel.addControl(landscape);  //define the scene as a rigid body
                 System.err.println("name="+sceneModel.getName());
 
              
-               sceneModel.setLocalTranslation(joueur.getGraphic().getLocalTranslation());
-               rootNode.attachChild(sceneModel);
-             //   bulletAppState.getPhysicsSpace().add(landscape);
+               sceneModel.setLocalTranslation(0, 0, 0);
+                rootNode.attachChild(sceneModel);
+                bulletAppState.getPhysicsSpace().add(landscape);
 
-              //  Variables.setSceneModel(sceneModel);
+                Variables.setSceneModel(sceneModel);
 
-                //waterPlan = new WaterPlan(sceneModel);
+              //  waterPlan = new WaterPlan(sceneModel);
               waterPlan.removeWater();
+              
+              /*******************************************/
+              /***********ATTACH MISSION STATUS *********/
+              /******************************************/
+              missionStatus =new MissionStatus();
+              missionStatus.setLocalTranslation(850, 660, 2);
+              guiNode.attachChild(missionStatus);
+              
+              
 
                 return null;
             }

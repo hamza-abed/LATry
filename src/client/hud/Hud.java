@@ -69,7 +69,7 @@ import client.hud.editor.EditWindow;
 //import client.hud.editor.EditWindow;
 import client.hud.editor.HudPopulateurAnnotation;
 import client.hud.editor.annotation.EditAnnotationWindow;
-import client.hud.missionStatus.MissionStatusWindow;
+
 //pas opérationnelle en v31
 //import client.hud.scenarization.HudScenarizationAction;
 //import client.hud.scenarization.HudScenarizationBut;
@@ -202,7 +202,7 @@ public class Hud  {
 
 	//private BoussoleWindow boussole;
 
-	private MissionStatusWindow missionStatus;
+//	private MissionStatusWindow missionStatus;
 	
 	private BComboBox serverSelector;
 
@@ -419,7 +419,7 @@ public class Hud  {
 	
 	
 	public void refreshMissionStatus() {
-		missionStatus.requestRefresh();
+		//missionStatus.requestRefresh();
 	}
 	
 	/**

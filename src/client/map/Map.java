@@ -293,7 +293,7 @@ public class Map  implements SharableReflexEditable, GraphicShadowed {
                 System.out.println("Map->Raw!!");
                 System.out.println("chemin height="+LaConstants.DIR_MAP_DATA + height);
                 heightMap = new RawHeightMap(FileLoader
-                        .getResourceAsUrl(LaConstants.DIR_MAP_DATA + height),
+                            .getResourceAsUrl(LaConstants.DIR_MAP_DATA + height),
                         129, RawHeightMap.FORMAT_16BITBE, false);
                 flipTexture = true;
             } else {
@@ -322,29 +322,35 @@ public class Map  implements SharableReflexEditable, GraphicShadowed {
             System.out.println("HeightMap loaded!!!");
             mat_terrain = new Material(Variables.getLaGame().getAssetManager(),
                     "Common/MatDefs/Terrain/Terrain.j3md");
-
-            Texture dirt = Variables.getLaGame().getAssetManager().loadTexture(
+            Texture dirt = null;
+       if(Variables.mapN==0)
+             dirt = Variables.getLaGame().getAssetManager().loadTexture(
                     "Textures/Terrain/splat/dirt.jpg");//grass
+
+       else
+       dirt = Variables.getLaGame().getAssetManager().loadTexture(
+                    "Textures/Terrain/splat/grass.jpg");
             dirt.setWrap(Texture.WrapMode.Repeat);
             mat_terrain.setTexture("Tex1", dirt);
             mat_terrain.setFloat("Tex1Scale", 64f);
             terrain.setMaterial(mat_terrain);
            
-           // terrain.addControl(new RigidBodyControl(0));
+            terrain.addControl(new RigidBodyControl(0));
+             System.out.println("Map -> heigth="+height+"  x="+x+" y="+z);
             terrain.setLocalTranslation(x,0, z);
             terrain.setLocked(false);
             
             
-            CollisionShape sceneShape =CollisionShapeFactory.createMeshShape((Node) terrain);
-             RigidBodyControl   landscape = new RigidBodyControl(sceneShape,0);
+             //CollisionShape sceneShape =CollisionShapeFactory.createMeshShape((Node) terrain);
+             //RigidBodyControl   landscape = new RigidBodyControl(sceneShape,0);
             
-             terrain.addControl(landscape);  
-             Variables.getLaGame().getBulletAppState().getPhysicsSpace().add(landscape);
+           //  terrain.addControl(landscape);  
+             Variables.getLaGame().getBulletAppState().getPhysicsSpace().add(terrain);
            // Variables.getLaGame().getBulletAppState().getPhysicsSpace().add(terrain);
              
           
             /*
-         Variables.getLaGame().enqueue(new Callable<Void>() {
+             Variables.getLaGame().enqueue(new Callable<Void>() {
 			@Override
 			public Void call() throws Exception {
             
@@ -402,6 +408,8 @@ public class Map  implements SharableReflexEditable, GraphicShadowed {
         } catch (Exception ex) {
             Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
         }
+         
+         Variables.mapN++;
     }
 
 	/**

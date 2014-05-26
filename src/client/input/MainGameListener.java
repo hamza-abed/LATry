@@ -41,6 +41,7 @@ public class MainGameListener implements ActionListener, AnalogListener{
 isLeftClickForScene();
 
 }
+       
     }
     
     public void onKeyRelease(KeyInputEvent evt)
@@ -59,7 +60,7 @@ isLeftClickForScene();
            {
                if(previousCollided!=null)
                { System.out.println("PreviousCollidedName="+previousCollided.getName());
- draggingNode(previousCollided);}
+          draggingNode(previousCollided);}
                else
                    System.err.println("Vous avez sélectionné le vide !!");
            

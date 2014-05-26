@@ -300,10 +300,10 @@ public  class World  implements ClientChannelListener,Sharable {
         // Parameters to material:
         // regionXColorMap: X = 1..4 the texture that should be appliad to state X
         // regionX: a Vector3f containing the following information:
-        //      regionX.x: the start height of the region
-        //      regionX.y: the end height of the region
-        //      regionX.z: the texture scale for the region
-        //  it might not be the most elegant way for storing these 3 values, but it packs the data nicely :)
+        // regionX.x: the start height of the region
+        // regionX.y: the end height of the region
+        // regionX.z: the texture scale for the region
+        // it might not be the most elegant way for storing these 3 values, but it packs the data nicely :)
         // slopeColorMap: the texture to be used for cliffs, and steep mountain sites
         // slopeTileFactor: the texture scale for slopes
         // terrainSize: the total size of the terrain (used for scaling the texture)
@@ -371,8 +371,8 @@ public  class World  implements ClientChannelListener,Sharable {
          * Détails : charge les map en fonction des dimetions du World
          * Hamza ABED
          */
-       createTerrainGrid();
-       /*
+ //      createTerrainGrid();
+       
             for (int x = 0; x < worldSizeX; x++)
 			for (int z = 0; z < worldSizeZ; z++)
 				if (!maps.containsKey(LaComponent.map.prefix() + x + ":" + z)) {
@@ -388,7 +388,7 @@ public  class World  implements ClientChannelListener,Sharable {
             //construites lors de la boucle à l'aide de la méthode addGraphic de World$
             //appelé depuis Map
           
-          */
+          
             
          
 	}
