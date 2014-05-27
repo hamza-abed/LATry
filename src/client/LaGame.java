@@ -529,12 +529,12 @@ private boolean playerInitialized=false;
                 sceneModel.updateGeometricState();
                 sceneModel.setName("Scene of the main game");
                 //sceneModel = assetManager.loadModel("Scenes/starting.j3o");
-                rootNode.attachChild(sceneModel);
+              //  rootNode.attachChild(sceneModel);
                 //rootNode.updateGeometricState();
                 sceneModel.setLocalTranslation(0, 2, 0);
 
 //*/                 
-             //  initTerrain();
+               initTerrain();
 
 if(Variables.isMapsLoaded())
 {
@@ -563,7 +563,7 @@ else
                 System.err.println("name="+sceneModel.getName());
 
              
-               sceneModel.setLocalTranslation(0, 0, 0);
+               sceneModel.setLocalTranslation(0, -50, 0);
                 rootNode.attachChild(sceneModel);
                 bulletAppState.getPhysicsSpace().add(landscape);
 
@@ -609,13 +609,13 @@ else
         /**
          * 1.1) Add ALPHA map (for red-blue-green coded splat textures)
          */
-        mat_terrain.setTexture("Alpha", assetManager.loadTexture("Textures/Terrain/splat/alphamap.png"));
+    //    mat_terrain.setTexture("Alpha", assetManager.loadTexture("Textures/Terrain/splat/alphamap.png"));
 
         /**
          * 1.2) Add GRASS texture into the red layer (Tex1).
          */
-        Texture grass = assetManager.loadTexture(
-                "Textures/Terrain/splat/grass.jpg");//grass
+        //Texture grass = assetManager.loadTexture("Textures/Terrain/splat/grass.jpg");//grass
+        Texture grass = assetManager.loadTexture("Textures/grass-texture.jpg");//grass
         grass.setWrap(WrapMode.Repeat);
         mat_terrain.setTexture("Tex1", grass);
         mat_terrain.setFloat("Tex1Scale", 64f);
@@ -626,8 +626,8 @@ else
         Texture dirt = assetManager.loadTexture(
                 "Textures/Terrain/splat/dirt.jpg");
         dirt.setWrap(WrapMode.Repeat);
-        mat_terrain.setTexture("Tex2", dirt);
-        mat_terrain.setFloat("Tex2Scale", 32f);
+       // mat_terrain.setTexture("Tex2", dirt);
+        //mat_terrain.setFloat("Tex2Scale", 32f);
 
         /**
          * 1.4) Add ROAD texture into the blue layer (Tex3)
@@ -635,15 +635,15 @@ else
         Texture rock = assetManager.loadTexture(
                 "Textures/Terrain/splat/dirt.jpg");//road
         rock.setWrap(WrapMode.Repeat);
-        mat_terrain.setTexture("Tex3", rock);
-        mat_terrain.setFloat("Tex3Scale", 128f);
+        //mat_terrain.setTexture("Tex3", rock);
+        //mat_terrain.setFloat("Tex3Scale", 128f);
 
         /**
          * 2. Create the height map
          */
         AbstractHeightMap heightmap = null;
         Texture heightMapImage = assetManager.loadTexture(
-                "Textures/Terrain/splat/mountain.png");
+                "Scenes/height.png");
         heightmap = new ImageBasedHeightMap(heightMapImage.getImage());
         heightmap.load();
 
@@ -665,15 +665,15 @@ else
         }
         heightMap.load();
         int patchSize = 65;
-        //terrain = new TerrainQuad("my terrain", patchSize, 513, heightmap.getHeightMap());
-        terrain = new TerrainQuad("my terrain", patchSize, 129, heightMap.getHeightMap());
+        terrain = new TerrainQuad("my terrain", patchSize, 513, heightmap.getHeightMap());
+        //terrain = new TerrainQuad("my terrain", patchSize, 129, heightMap.getHeightMap());
 
         /**
          * 4. We give the terrain its material, position & scale it, and attach
          * it.
          **/
         terrain.setMaterial(mat_terrain);
-        terrain.setLocalTranslation(0, 0, 0);
+        terrain.setLocalTranslation(0, 00, 0);
         //terrain.setLocalScale(2f, 1f, 2f);
         terrain.setLocalScale(8f, 0.2f, 8f);
         rootNode.attachChild(terrain);

@@ -1,14 +1,11 @@
-<!-- 
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd http://nifty-gui.sourceforge.net/nifty.xsd">
+    <!-- 
 Cette page XML
 représente toute l'interface graphique conçu avec Nifty 3D
 @author Hamza ABED 2014 hamza.abed.professionel@gmail.com
 -->
-
-
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<nifty xmlns="http://nifty-gui.sourceforge.net/nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-       xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd http://nifty-gui.sourceforge.net/nifty.xsd">
-    
   <useStyles filename="Interface/nifty-default-styles.xml"/>
   
   <useControls filename="nifty-default-controls.xml"/>
