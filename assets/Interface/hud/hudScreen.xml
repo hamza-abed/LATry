@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<nifty>
+  <useStyles filename="nifty-default-styles.xml"/>
+  <useControls filename="nifty-default-controls.xml"/>
+  <screen id="screen0">
+    <layer childLayout="absolute" id="layer0">
+      <panel childLayout="absolute" height="382px" id="panel1" style="nifty-panel-simple" width="602px" x="100" y="92">
+        <image filename="menu-back.png" height="30%" id="image1" width="50%" x="275" y="253"/>
+      </panel>
+    </layer>
+  </screen>
+</nifty>

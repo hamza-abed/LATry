@@ -1,3 +1,10 @@
+<!-- 
+Cette page XML
+représente toute l'interface graphique conçu avec Nifty 3D
+@author Hamza ABED 2014 hamza.abed.professionel@gmail.com
+-->
+
+
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <nifty xmlns="http://nifty-gui.sourceforge.net/nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
        xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd http://nifty-gui.sourceforge.net/nifty.xsd">
@@ -18,12 +25,25 @@
   
   <style id="nifty-btn-hide">
       <attributes backgroundImage="Interface/imgs/leftarrow-12.png" />
-      <effect>
-           
-            <onEnabled name="imageOverlay" filename="button/button.png"
-                    />
-            
-        </effect>
+      
+  </style>
+  <style id="btn-menu-bag">
+      <attributes backgroundImage="Interface/hud/menu-bag.png" />      
+  </style>
+  <style id="btn-menu-edit">
+      <attributes backgroundImage="Interface/hud/menu-edit.png" />      
+  </style>
+  <style id="btn-menu-exit">
+      <attributes backgroundImage="Interface/hud/menu-exit.png" />      
+  </style>
+  <style id="btn-menu-quest">
+      <attributes backgroundImage="Interface/hud/menu-quest.png" />      
+  </style>
+  <style id="btn-menu-run">
+      <attributes backgroundImage="Interface/hud/menu-run.png" />      
+  </style>
+  <style id="btn-menu-stat">
+      <attributes backgroundImage="Interface/hud/menu-bag.png" />      
   </style>
   
   <!--
@@ -156,6 +176,42 @@
       <interact onClick="hideChatBar(true,btnReduce)" />
  </control>
         
+      </panel>
+      </layer>
+      <layer childLayout="absolute" id="layerForMenu"  >
+ <!-- PANEL FOR THE HUD   -->
+ <panel  childLayout="absolute"  id="menuPanel" style="nifty-panel-simple" height="60px" width="246px" x="774" y="714px" backgroundImage="Interface/hud/menu-back.png">
+  
+    
+        <image filename="Interface/hud/menu-back.png" height="42px" id="menuBackground" width="246px" x="0%" y="0%"/>
+ <!--
+ BUTTONS FOR THE MAIN MENU 32PX BETWEEN EACH 2 BUTTONS
+ -->
+<control childLayout="absolute" height="28px" width="28px" id="btn-run" label="-" name="button" x="29px" y="5px" 
+        style="btn-menu-run" focusable="false">
+      <interact onClick="" />
+</control>
+<control childLayout="absolute" height="28px" width="28px" id="btn-bag" label="-" name="button" x="61px" y="5px" 
+        style="btn-menu-bag" focusable="false">
+      <interact onClick="" />
+</control>
+<control childLayout="absolute" height="28px" width="28px" id="btn-stat" label="-" name="button" x="93px" y="5px" 
+        style="btn-menu-stat" focusable="false">
+      <interact onClick="" />
+</control>
+<control childLayout="absolute" height="28px" width="28px" id="btn-quest" label="-" name="button" x="125px" y="5px" 
+        style="btn-menu-quest" focusable="false">
+      <interact onClick="" />
+</control>
+
+<control childLayout="absolute" height="28px" width="28px" id="btn-edit" label="-" name="button" x="157px" y="5px" 
+        style="btn-menu-edit" focusable="false">
+      <interact onClick="" />
+</control>
+<control childLayout="absolute" height="28px" width="28px" id="btn-exit" label="-" name="button" x="189px" y="5px" 
+        style="btn-menu-exit" focusable="false">
+      <interact onClick="" />
+</control>
       </panel>
     </layer>
  </screen>
