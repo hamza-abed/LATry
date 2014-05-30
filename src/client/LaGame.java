@@ -563,7 +563,7 @@ else
                 System.err.println("name="+sceneModel.getName());
 
              
-               sceneModel.setLocalTranslation(0, -50, 0);
+               sceneModel.setLocalTranslation(0, 0, 0);
                 rootNode.attachChild(sceneModel);
                 bulletAppState.getPhysicsSpace().add(landscape);
 
@@ -673,7 +673,7 @@ else
          * it.
          **/
         terrain.setMaterial(mat_terrain);
-        terrain.setLocalTranslation(0, 00, 0);
+        terrain.setLocalTranslation(0, -50, 0);
         //terrain.setLocalScale(2f, 1f, 2f);
         terrain.setLocalScale(8f, 0.2f, 8f);
         rootNode.attachChild(terrain);

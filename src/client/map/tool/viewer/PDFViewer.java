@@ -70,12 +70,12 @@ public class PDFViewer {
     
     String path="C:\\classes.pdf";
     
-     public int pageNumber=0;
-     public int pageCourante=1;
+    public int pageNumber = 0;
+    public int pageCourante = 1;
     public ArrayList<BufferedImage> images;
     public ArrayList<com.jme3.texture.Image> imagesJME;
-    ArrayList<NiftyImage>  imagesNifty;
-    AWTLoader loader ;
+    ArrayList<NiftyImage> imagesNifty;
+    AWTLoader loader;
     ArrayList<Texture> texs;
     public PDFViewer()
     {
@@ -97,12 +97,9 @@ public class PDFViewer {
     
  public void ouvrirPDF()
  {
-   
-
 Variables.getNifty().getScreen("pdfReaderScreen").findElementByName("pdfPage").getRenderer(ImageRenderer.class).setImage(imagesNifty.get(0));
-
-   Variables.getNifty().getScreen("pdfReaderScreen").
-           findNiftyControl("numeroPage", TextField.class).setText(pageCourante+"/"+pageNumber);
+Variables.getNifty().getScreen("pdfReaderScreen").
+findNiftyControl("numeroPage", TextField.class).setText(pageCourante+"/"+pageNumber);
  }
  
 
@@ -134,13 +131,8 @@ Variables.getNifty().getScreen("pdfReaderScreen").findNiftyControl("numeroPage",
  public ArrayList<BufferedImage> getImages() {
         return getImages();
     }
- 
- 
- 
- 
- 
 
-/*
+ /*
  * il faut une liste d'images qui représente 
  * la totalitée du document
  */

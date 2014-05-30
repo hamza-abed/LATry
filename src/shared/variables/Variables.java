@@ -12,6 +12,7 @@ import client.hud3D.MoveCursor;
 import client.map.World;
 import client.map.character.Player;
 import client.network.SimpleClientConnector;
+import com.jme3.asset.TextureKey;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Spatial;
 import de.lessvoid.nifty.Nifty;
@@ -48,6 +49,16 @@ public class Variables {
 
     public static void setNiftyGUI(NGUI_LA niftyGUI) {
         Variables.niftyGUI = niftyGUI;
+    }
+    public static  TextureKey TextKeyDirt;
+
+    public static TextureKey getTextKeyDirt() {
+        if(TextKeyDirt==null) TextKeyDirt = new TextureKey("Textures/dirt.jpg", false);
+        return TextKeyDirt;
+    }
+
+    public static void setTextKeyDirt(TextureKey TextKeyDirt) {
+        Variables.TextKeyDirt = TextKeyDirt;
     }
  
    private static Properties props;

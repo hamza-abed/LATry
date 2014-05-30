@@ -45,7 +45,6 @@ import client.network.SimpleClientConnector;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.scene.Spatial;
 import com.sun.pdfview.PDFFile;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
@@ -65,6 +64,7 @@ import  de.lessvoid.nifty.controls.TextField;
 import  de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.Window;
 import de.lessvoid.nifty.controls.WindowClosedEvent;
+import de.lessvoid.nifty.elements.render.ImageRenderer;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -74,6 +74,7 @@ import java.nio.channels.FileChannel;
 import java.util.concurrent.Callable;
 
 import shared.utils.PropertyReader;
+import client.videoPlayer.VideoPlayer;
 
 /**
  * Cette classe se chage d'afficher l'interface graphique du jeu,
@@ -464,6 +465,69 @@ public void prevPagePDF()
 {
     pdfViewer.predPdfPage();
 }
+
+/***************************************************************************************/
+/**********************************MENU EN BAS à DROITE *******************************/
+/**************************************************************************************/
+
+public void menuClicked(String cmd)
+{
+   if(cmd.equals("menu-bag"))
+   {
+       
+   }
+   else if(cmd.equals("menu-edit"))
+   {
+       playVideo();
+   }
+   else if(cmd.equals("menu-exit"))
+   {
+       
+   }
+   else if(cmd.equals("menu-quest"))
+   {
+       
+   }
+   else if(cmd.equals("menu-run"))
+   {
+       
+   }
+   else if(cmd.equals("menu-stat"))
+   {
+       
+   }
+}
+
+
+public void playVideo()
+{
+   /*
+    * On doit montrer la fenêtre tout d'abord !!
+    */
+   // nifty.gotoScreen("VideoWindow");
+   
+
+    final VideoPlayer videoPlayer=new VideoPlayer("C:\\Wildlife.wmv");
+                  
+    videoPlayer.startPlaying();
+   
+    
+           
+}
+
+ @NiftyEventSubscriber(id="VIDWindow")
+ public void onVideoWindowClose(String id, WindowClosedEvent event) {
+ System.out.println("element with id [" + id + "] "
+         + "clicked at [" + event.toString());
+      nifty.getScreen("VideoWindow").resetLayout();
+    nifty.gotoScreen("chatbar");
+     nifty.getScreen("VideoWindow").findNiftyControl("VIDWindow", Window.class).closeWindow();
+    System.out.println("window closed");
+    
+    
+}
+  
+
 
 
 }
