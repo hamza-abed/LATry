@@ -506,11 +506,14 @@ public void playVideo()
     */
    // nifty.gotoScreen("VideoWindow");
    
+    Variables.getLaGame().initializeVideo("C:\\Wildlife.wmv");
+    Variables.getLaGame().startPlaying();
 
-    final VideoPlayer videoPlayer=new VideoPlayer("C:\\Wildlife.wmv");
+    /*
+   VideoPlayer videoPlayer=new VideoPlayer("C:\\Wildlife.wmv");
                   
     videoPlayer.startPlaying();
-   
+   */
     
            
 }

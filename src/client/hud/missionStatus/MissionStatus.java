@@ -36,7 +36,6 @@
  * along with LA-Client.  If not, see <http://www.gnu.org/licenses/>.
  * ----------------------------------------------------------------------------
  */
-
 package client.hud.missionStatus;
 
 import com.jme3.font.BitmapText;

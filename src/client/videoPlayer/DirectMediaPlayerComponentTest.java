@@ -24,6 +24,7 @@ package client.videoPlayer;
  */
 
 
+import client.LaGame;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
 import java.awt.Color;
@@ -92,7 +93,8 @@ public class DirectMediaPlayerComponentTest extends VlcjTest {
     private final BufferedImage image;
 
     
-    private VideoPlayer mainGame;
+ //   private VideoPlayer mainGame;
+    private LaGame mainGame;
     /**
      * Application entry point.
      *
@@ -146,7 +148,31 @@ public class DirectMediaPlayerComponentTest extends VlcjTest {
     /**
      * Create a new test.
      */
+     /*
     public DirectMediaPlayerComponentTest(VideoPlayer main) {
+     
+        mainGame=main;
+        image = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
+                .getDefaultConfiguration().createCompatibleImage(width, height);
+
+        BufferFormatCallback bufferFormatCallback = new BufferFormatCallback() {
+            @Override
+            public BufferFormat getBufferFormat(int sourceWidth, int sourceHeight) {
+                return new RV32BufferFormat(width, height);
+            }
+        };
+
+        mediaPlayerComponent = new DirectMediaPlayerComponent(bufferFormatCallback) {
+            @Override
+            protected RenderCallback onGetRenderCallback() {
+              
+                return new TestRenderCallbackAdapter();
+            }
+        };
+
+    } */
+    
+     public DirectMediaPlayerComponentTest(LaGame main) {
      
         mainGame=main;
         image = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()

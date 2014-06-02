@@ -38,7 +38,7 @@ public class VideoPlayer {
     
       this.chemin=chemin;
       String osName=System.getProperty("os.name");
-        System.out.println("OsName="+osName);
+      System.out.println("OsName="+osName);
         
      
         
@@ -65,14 +65,18 @@ public class VideoPlayer {
         tex = Variables.getLaGame().getAssetManager().loadTexture(key);
         
     }
-       TextureKey key;
+      TextureKey key;
       Geometry geom;
      
     public void startPlaying()
     {
         // this.element=element;
-        playerComponent= new DirectMediaPlayerComponentTest(this);
-        playerComponent.start(chemin); 
+   //    playerComponent= new DirectMediaPlayerComponentTest(this);
+       playerComponent.start(chemin); 
+       key =new TextureKey( "Textures/dirt.jpg",false);
+       tex = Variables.getLaGame().getAssetManager().loadTexture(key);
+       tex.setAnisotropicFilter(16);
+       tex.setMagFilter(Texture.MagFilter.Bilinear.Bilinear);
     }
     
    
@@ -83,7 +87,7 @@ public class VideoPlayer {
     {
        // System.out.println("this is apply!!!");
       AWTLoader loader = new AWTLoader();
-        com.jme3.texture.Image load = loader.load(image, true);
+      com.jme3.texture.Image load = loader.load(image, true);
       
       
   
@@ -92,16 +96,20 @@ public class VideoPlayer {
                 "Common/MatDefs/Misc/Unshaded.j3md");
            
        
-       key =new TextureKey( "Textures/dirt.jpg",false);
-       tex = Variables.getLaGame().getAssetManager().loadTexture(key);
-       tex.setAnisotropicFilter(16);
-       tex.setMagFilter(Texture.MagFilter.Bilinear.Bilinear);
+      
         
         tex.setImage(load);
         mat1.setTexture("ColorMap",tex);
         mat1.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
         
+        Variables.getLaGame().enqueue(
+                new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
         geom.setMaterial(mat1);
+        return null;
+            }
+                });
         
         
     /*

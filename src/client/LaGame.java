@@ -52,6 +52,7 @@ import client.map.character.Player;
 import client.map.tool.viewer.PDFViewer;
 import client.network.SimpleClientConnector;
 import client.utils.FileLoader;
+import client.videoPlayer.DirectMediaPlayerComponentTest;
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.TextureKey;
 import com.jme3.bullet.BulletAppState;
@@ -91,6 +92,7 @@ import com.jme3.terrain.heightmap.RawHeightMap;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture.WrapMode;
 import com.jme3.texture.plugins.AWTLoader;
+import com.sun.jna.NativeLibrary;
 import com.sun.sgs.client.simple.SimpleClient;
 import de.lessvoid.nifty.Nifty;
 import java.awt.image.BufferedImage;
@@ -102,6 +104,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import shared.variables.Variables;
+import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 
 /**
  * test
@@ -881,6 +884,96 @@ else
 		}
 		return serverEditor;
 	}
+       
+        
+       /* *******************************************************************
+        * *************************À propos des videos***********************
+        * *******************************************************************
+        */
+        
+        
+      String cheminVideo="C:\\Wildlife.wmv";
+      Material matForVideo;
+      Texture texForVideo;
+      DirectMediaPlayerComponentTest playerComponent;
+      
+      TextureKey videokey;
+      Geometry geomForVideo;
+       
+      public void initializeVideo(String chemin)
+        {
+            chemin=chemin;
+      String osName=System.getProperty("os.name");
+      System.out.println("OsName="+osName);
+ 
+      NativeLibrary.addSearchPath(
+         RuntimeUtil.getLibVlcLibraryName(), "C:\\Program Files\\VideoLAN\\VLC"
+            );
+        
+        Box b = new Box(new Vector3f(0, 0, 0), 400, 200, 5);
+        geomForVideo = new Geometry("Box", b);
+        //geom.setLocalScale(3);
+        Material mat = new Material(Variables.getLaGame().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.setColor("Color", ColorRGBA.Blue);
+        geomForVideo.setMaterial(mat);
+
+        
+     
+        guiNode.attachChild(geomForVideo);
+        geomForVideo.move(500, 350, 2);
+        
+         matForVideo = new Material(Variables.getLaGame().getAssetManager(),
+                "Common/MatDefs/Misc/Unshaded.j3md");
+        
+         videokey =new TextureKey("Textures/dirt.jpg",false);
+        texForVideo = assetManager.loadTexture(videokey);
+       texForVideo.setAnisotropicFilter(16);
+       texForVideo.setMagFilter(Texture.MagFilter.Bilinear.Bilinear);
+        }
+      
+       public void startPlaying()
+    {
+        // this.element=element;
+       playerComponent= new DirectMediaPlayerComponentTest(this);
+       playerComponent.start(cheminVideo); 
+       
+      
+    }
+        
+       
+      /*
+       * méthode appelé instantannément pour appliquer l'image reçu par le lecteur video
+       * comme texture 
+       */
+      public void apply(BufferedImage image)
+    {
+       // System.out.println("this is apply!!!");
+      AWTLoader loader = new AWTLoader();
+      com.jme3.texture.Image load = loader.load(image, true);
+ 
+       matForVideo = new Material(Variables.getLaGame().getAssetManager(),
+                "Common/MatDefs/Misc/Unshaded.j3md");
+ 
+        texForVideo.setImage(load);
+        matForVideo.setTexture("ColorMap",texForVideo);
+        matForVideo.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
+        
+        this.enqueue(
+                new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+        geomForVideo.setMaterial(matForVideo);
+        return null;
+            }
+                });
+        
+        
+    /*
+        Variables.getNifty().getScreen("VideoWindow").findElementByName("VIDWindow").
+        getRenderer(ImageRenderer.class).setImage(toNiftyImage(image)); */
+       
+    }
+
        
         
         
