@@ -205,7 +205,24 @@ public class DirectMediaPlayerComponentTest extends VlcjTest {
         
         mediaPlayerComponent.getMediaPlayer().playMedia(mrl);
         
+        
     }
+    /*
+     * Pause la lecture de la vidoe
+     */
+   public void pause()
+   {
+       mediaPlayerComponent.getMediaPlayer().pause();
+       
+   }
+   
+   /*
+    * conitnue la lecture de la video
+    */
+   public void release()
+   {
+       mediaPlayerComponent.getMediaPlayer().release();
+   }
 
     
   public BufferedImage returnImage()

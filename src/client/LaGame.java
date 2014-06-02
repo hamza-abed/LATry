@@ -902,12 +902,14 @@ else
        
       public void initializeVideo(String chemin)
         {
-            chemin=chemin;
+      chemin=chemin;
       String osName=System.getProperty("os.name");
       System.out.println("OsName="+osName);
  
+      
+      String vlcDllPath=Variables.getProps().getProperty("user.vlc.dll.location");
       NativeLibrary.addSearchPath(
-         RuntimeUtil.getLibVlcLibraryName(), "C:\\Program Files\\VideoLAN\\VLC"
+         RuntimeUtil.getLibVlcLibraryName(), vlcDllPath
             );
         
         Box b = new Box(new Vector3f(0, 0, 0), 400, 200, 5);
@@ -937,10 +939,10 @@ else
        playerComponent= new DirectMediaPlayerComponentTest(this);
        playerComponent.start(cheminVideo); 
        
+       
       
     }
-        
-       
+  
       /*
        * méthode appelé instantannément pour appliquer l'image reçu par le lecteur video
        * comme texture 
