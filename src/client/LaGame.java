@@ -842,10 +842,6 @@ else
 		if (scheduledExecutor == null) {
 	scheduledExecutor = new ScheduledThreadPoolExecutor(
 		Integer.parseInt(Variables.getProps().getProperty("la.scheduled.task", "10")));
-			
-			
-			
-
 		}
 		return scheduledExecutor;
 	}
@@ -938,10 +934,44 @@ else
         // this.element=element;
        playerComponent= new DirectMediaPlayerComponentTest(this);
        playerComponent.start(cheminVideo); 
-       
-       
-      
+     
     }
+       /*
+        * sa transmet un ordre de faire un pause pour la vidéo
+        */
+       public void pauseVideo()
+       {
+        playerComponent.pause();
+       }
+       
+       public void stopVideo()
+       {
+           playerComponent.stop();
+       }
+       
+       /*
+        * sa remet la vidéo en marche
+        */
+       public void releaseVideo()
+       {
+           playerComponent.release();
+           
+       }
+       /*
+        * Ceci ferme le player de video
+        */
+       public void exitVideoPlayer()
+       {
+            stopVideo();
+            this.enqueue(
+                new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+               guiNode.detachChild(geomForVideo);
+                return null;
+            }
+                });
+       }
   
       /*
        * méthode appelé instantannément pour appliquer l'image reçu par le lecteur video
@@ -976,7 +1006,11 @@ else
        
     }
 
-       
+       /* *******************************************************************
+        *   ***************fin de ce qui est à propos des videos**********
+        * ******************************************************************
+        */
+          
         
         
 }

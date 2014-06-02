@@ -9,6 +9,8 @@ représente toute l'interface graphique conçu avec Nifty 3D
   <useStyles filename="Interface/nifty-default-styles.xml"/>
   
   <useControls filename="nifty-default-controls.xml"/>
+  
+ <!-- Style des bouton pour la chatbar -->
   <style id="nifty-btn">
       <attributes backgroundImage="Interface/imgs/rightarrow-12.png" />
       <effect>
@@ -24,6 +26,8 @@ représente toute l'interface graphique conçu avec Nifty 3D
       <attributes backgroundImage="Interface/imgs/leftarrow-12.png" />
       
   </style>
+  
+  <!-- Style des boutons pour le menu en bas -->
   <style id="btn-menu-bag">
       <attributes backgroundImage="Interface/hud/menu-bag.png" />      
   </style>
@@ -42,6 +46,22 @@ représente toute l'interface graphique conçu avec Nifty 3D
   <style id="btn-menu-stat">
       <attributes backgroundImage="Interface/hud/menu-stat.png" />      
   </style>
+  
+  <!-- Styles des boutons pour le contrôle de la video -->
+  <style id="btn-video-pause">
+      <attributes backgroundImage="Interface/videoPlayer/pause.png" />      
+  </style>
+
+  <style id="btn-video-play">
+      <attributes backgroundImage="Interface/videoPlayer/play.png" />      
+  </style>  
+  <style id="btn-video-stop">
+      <attributes backgroundImage="Interface/videoPlayer/stop.png" />      
+  </style>
+  <style id="btn-video-exit">
+      <attributes backgroundImage="Interface/videoPlayer/exit.png" />      
+  </style>
+  
   
   <!--
   ******************* DEFINITION DE NOUVELS COMPOSANTS ******************
@@ -211,6 +231,36 @@ représente toute l'interface graphique conçu avec Nifty 3D
 </control>
       </panel>
     </layer>
+    
+    
+  <!-- C'est à propos des boutons de controle de la vidéo -->
+  
+   <layer childLayout="absolute" id="layerForVideoControle"  >
+ 
+ <panel  childLayout="absolute"  id="PanelVideoControle" visible="false"
+ style="nifty-panel-simple" height="100px" width="500px" x="450px" y="605px" backgroundImage="Interface/hud/menu-back.png">
+   
+     
+<control childLayout="absolute" height="28px" width="28px" id="btn_exit" label="-" name="button" x="29px" y="5px"  
+        style="btn-video-exit" focusable="false">
+      <interact onClick="videoControl(exit)" />
+</control>  
+<control childLayout="absolute" height="28px" width="28px" id="btn_stop" label="-" name="button" x="61px" y="5px"  
+        style="btn-video-stop" focusable="false">
+      <interact onClick="videoControl(stop)" />
+</control>
+
+<control childLayout="absolute" height="28px" width="28px" id="btn_play_pause" label="-" name="button" x="93px" y="5px"  
+        style="btn-video-pause" focusable="false">
+      <interact onClick="videoControl(play)" />
+</control>
+     
+     
+ </panel>
+   </layer>
+  
+  
+  
  </screen>
  
  <screen id="chatbarHidden" controller="client.NGUI_LA">

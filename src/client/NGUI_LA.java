@@ -75,6 +75,7 @@ import java.util.concurrent.Callable;
 
 import shared.utils.PropertyReader;
 import client.videoPlayer.VideoPlayer;
+import de.lessvoid.nifty.controls.Button;
 
 /**
  * Cette classe se chage d'afficher l'interface graphique du jeu,
@@ -498,16 +499,21 @@ public void menuClicked(String cmd)
    }
 }
 
-
+/* **************************************************************************
+ * **********************Lecteur Video **************************************
+ * **************************************************************************
+ */
 public void playVideo()
 {
    /*
     * On doit montrer la fenêtre tout d'abord !!
     */
    // nifty.gotoScreen("VideoWindow");
-   
+    videoPaused=false;
+   nifty.getScreen("chatbar").findElementByName("PanelVideoControle").setVisible(true);
     Variables.getLaGame().initializeVideo("C:\\Wildlife.wmv");
     Variables.getLaGame().startPlaying();
+    nifty.getScreen("chatbar").findNiftyControl("btn_play_pause", Button.class).setStyle("btn-video-pause");
 
     /*
    VideoPlayer videoPlayer=new VideoPlayer("C:\\Wildlife.wmv");
@@ -529,6 +535,42 @@ public void playVideo()
     
     
 }
+ 
+ private boolean videoPaused =true;
+ public void videoControl(String menu)
+ {
+     if(menu.equals("exit"))
+     {
+         Variables.getLaGame().exitVideoPlayer();
+         nifty.getScreen("chatbar").findElementByName("PanelVideoControle").setVisible(false);
+         videoPaused=true;
+     }
+     else if(menu.equals("play"))
+     {
+         if(videoPaused)
+         {
+             System.out.println("video paused --> release");
+         Variables.getLaGame().releaseVideo();
+         videoPaused=false;
+         nifty.getScreen("chatbar").findNiftyControl("btn_play_pause", Button.class).setStyle("btn-video-pause");
+         }
+         else{ 
+         Variables.getLaGame().pauseVideo();
+         videoPaused=true;
+         nifty.getScreen("chatbar").findNiftyControl("btn_play_pause", Button.class).setStyle("btn-video-play");
+         }
+     }
+     else if(menu.equals("stop"))
+     {
+         Variables.getLaGame().stopVideo();
+         videoPaused=true;
+         //nifty.getScreen("chatbar").findElementByName("PanelVideoControle").
+         
+         //Variables.getNifty().getScreen("chatbar").findElementByName("PanelVideoControle")
+         nifty.getScreen("chatbar").findNiftyControl("btn_play_pause", Button.class).setStyle("btn-video-play");
+                 
+     }
+ }
   
 
 

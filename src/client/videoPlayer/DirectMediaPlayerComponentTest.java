@@ -216,12 +216,17 @@ public class DirectMediaPlayerComponentTest extends VlcjTest {
        
    }
    
+   public void stop()
+   {
+       mediaPlayerComponent.getMediaPlayer().stop();
+   }
+   
    /*
     * conitnue la lecture de la video
     */
    public void release()
    {
-       mediaPlayerComponent.getMediaPlayer().release();
+       mediaPlayerComponent.getMediaPlayer().play();
    }
 
     
