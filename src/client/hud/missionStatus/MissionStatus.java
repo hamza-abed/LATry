@@ -2,7 +2,7 @@
  * Copyright 2010 http://learning-adventure.fr
  * Tous droits réservés
  * 
- * 
+ *
  * ----------------------------------------------------------------------------
  * Ce fichier fait partie de LA-Client.
  *
@@ -38,6 +38,7 @@
  */
 package client.hud.missionStatus;
 
+import client.LaGame;
 import com.jme3.font.BitmapText;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
@@ -48,7 +49,8 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
-import shared.variables.Variables;
+import java.util.concurrent.Callable;
+
 /**
  * Cette classe représente un noeud graphique qui est utile pour être attaché 
  * à l'interface 2D du jeu et représente un Loading Bar composé de
@@ -56,14 +58,12 @@ import shared.variables.Variables;
  * <li> 2 cubes, l'un à l'intérieur de l'autre </li>
  * <li> Un noeud textuel qui permet d'fficher le message de status de la mission</li>
  * <li> la méthode setAvancementMission(x) prend la valeur du pourcentage d'avancement dans la mission</li>
- * </ul>
+ *</ul>
  * 
  * @author Hamza ABED 2014 hamza.abed.professionel@gmail.com
  */
 public class MissionStatus extends Node{
-    
-
-
+ 
     private static final float INCLINAISON = FastMath.HALF_PI;
     private float ROTATION = 0; // the rotatioon of the box, max =180°
    
@@ -74,10 +74,13 @@ public class MissionStatus extends Node{
     private Geometry centerOfStatusBoxGeo;
     private float initialScale;
     private BitmapText text;
-    public MissionStatus()
+    private LaGame game;
+    public MissionStatus(LaGame game)
     {
         super("missionStatus");
+        this.game=game;
         createBoxes();
+        setLocalTranslation(150, 660, 2);
     }
     
    private void createBoxes()
@@ -85,10 +88,10 @@ public class MissionStatus extends Node{
        Vector3f centerOfTheBox = new Vector3f(0, 0, 0);
       Box statusBox= new Box(centerOfTheBox,boxHeight, boxHeight, boxHeight);
        statusBoxGeo = new Geometry("statusBox", statusBox);
-        Material mat1 = new Material(Variables.getLaGame().getAssetManager(),
+        Material mat1 = new Material(game.getAssetManager(),
                 "Common/MatDefs/Misc/Unshaded.j3md");
               
-        mat1.setTexture("ColorMap", Variables.getLaGame().getAssetManager().
+        mat1.setTexture("ColorMap", game.getAssetManager().
                 loadTexture("Textures/verre.png"));
         mat1.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
    
@@ -101,10 +104,10 @@ public class MissionStatus extends Node{
     
      Box center= new Box(centerOfTheBox,boxHeight, boxHeight, boxHeight);
        centerOfStatusBoxGeo = new Geometry("statusBox", center);
-      Material mat2 = new Material(Variables.getLaGame().getAssetManager(),
+      Material mat2 = new Material(game.getAssetManager(),
                 "Common/MatDefs/Misc/Unshaded.j3md");
               
-        mat2.setTexture("ColorMap", Variables.getLaGame().getAssetManager().
+        mat2.setTexture("ColorMap", game.getAssetManager().
                 loadTexture("Textures/box.jpg"));
         mat2.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
     
@@ -121,14 +124,12 @@ public class MissionStatus extends Node{
     /*************************************************************************/
       
        String txt = "Avancement 10%";
-       text = new BitmapText(Variables.getLaGame().getGuiFont());
-       text.setSize(Variables.getLaGame().getGuiFont().getCharSet().getRenderedSize());
+       text = new BitmapText(game.getGuiFont());
+       text.setSize(game.getGuiFont().getCharSet().getRenderedSize());
        text.setText(txt);
        text.setLocalTranslation(statusBoxGeo.getLocalTranslation().x - boxHeight*1.3f,
                -boxHeight*1.3f, 0);
 
-       
-       
        this.attachChild(text);
   setAvancementMission(80);
    }
@@ -174,10 +175,39 @@ public class MissionStatus extends Node{
         initialScale = centerOfStatusBoxGeo.getLocalScale().x; // valeur utilisée dans la vibration du cube au centre
          text.setText("Avancement "+x+"%");
     }
+        
+    public void showOnScreen()
+    {
+        game.enqueue(
+                new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                game.getGuiNode().attachChild(getGraphic());
+                return null;
+            }
+            
+    });
+    }
+    
+    public void removeFromSCreen()
+    {
+      game.enqueue(
+                new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                game.getGuiNode().detachChild(getGraphic());
+                return null;
+            }
+            
+    });  
+    }
+    
+    
+    private Node getGraphic()
+    {
+        return this;
+    }
 }
     
 
     
-    
-
-

@@ -41,13 +41,13 @@ package client.hud.boussole;
 import client.LaGame;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
-import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
-import shared.variables.Variables;
+import java.util.concurrent.Callable;
+
 
 /**
  * Bousolle 3D dans l'interface
@@ -60,30 +60,29 @@ import shared.variables.Variables;
  * 
  * @author Hamza ABED, <b> hamza.abed.professione@gmail.com</b>, 2014
  */
-public class Boussole {
+public class Boussole extends Node{
 
     private static final long serialVersionUID = 7633204763292312313L;
     Geometry cube;
    // private static final float INCLINAISON = FastMath.HALF_PI;
     public static final float DIST_VIEW = 50f;  // 25m
-    /**
-     *
-     */
-    Node diskBoussole; // je les ai mis dans des Node parce que la méthode GetLocalRotation
-    // n'est plus supporté pour les type Cylender
+   
+    private LaGame game;
 
-    public Boussole() {
+    public Boussole(LaGame game) {
+        super("Boussole");
+        this.game=game;
         Box box = new Box(new Vector3f(0, 0, 0), 90, 90, 5);
         cube = new Geometry("box1", box);
-        Material mat1 = new Material(Variables.getLaGame().getAssetManager(),
+        Material mat1 = new Material(game.getAssetManager(),
                 "Common/MatDefs/Misc/Unshaded.j3md");
               
-        mat1.setTexture("ColorMap", Variables.getLaGame().getAssetManager().
+        mat1.setTexture("ColorMap", game.getAssetManager().
                 loadTexture("Textures/boussole/boussole1.png"));
         mat1.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
         cube.setMaterial(mat1);
         cube.move(850, 660, 2);
-        Variables.getLaGame().getGuiNode().attachChild(cube);
+        this.attachChild(cube);
 
     }
     
@@ -96,6 +95,39 @@ public class Boussole {
         * Cette méthode est à appeler à chaque appel d'update du jeu 
         */
        cube.setLocalRotation(new Quaternion(cube.getLocalRotation().getX(),cube.getLocalRotation().getY(),
-               Variables.getCam().getRotation().getY(),Variables.getCam().getRotation().getW()));
+               game.getCamera().getRotation().getY(),game.getCamera().getRotation().getW()));
    }
+   
+   
+     public void showOnScreen()
+    {
+        game.enqueue(
+                new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                game.getGuiNode().attachChild(getGraphic());
+                return null;
+            }
+            
+    });
+    }
+    
+    public void removeFromSCreen()
+    {
+      game.enqueue(
+                new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                game.getGuiNode().detachChild(getGraphic());
+                return null;
+            }
+            
+    });  
+    }
+    
+    
+    private Node getGraphic()
+    {
+        return this;
+    }
 }

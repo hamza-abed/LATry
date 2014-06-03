@@ -64,7 +64,6 @@ import  de.lessvoid.nifty.controls.TextField;
 import  de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.Window;
 import de.lessvoid.nifty.controls.WindowClosedEvent;
-import de.lessvoid.nifty.elements.render.ImageRenderer;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -74,7 +73,6 @@ import java.nio.channels.FileChannel;
 import java.util.concurrent.Callable;
 
 import shared.utils.PropertyReader;
-import client.videoPlayer.VideoPlayer;
 import de.lessvoid.nifty.controls.Button;
 
 /**
@@ -89,14 +87,46 @@ public class NGUI_LA extends AbstractAppState implements ScreenController {
   private Nifty nifty;
   private Application app;
   private Screen screen;
-  private boolean firstTime=true;
+  
   /** custom methods */
   public NGUI_LA() {
       
     /** You custom constructor, can accept arguments */
   }
-String nextScreen;
 
+  /*****************************************************************************/
+  /*********************** ECRAN DE CONNECTION *********************************/
+  /*****************************************************************************/
+  
+    /*
+     * Cette méthode remplit la listBox pour 
+     * la sélection d'un serveur
+     */
+    public void fillListBox() {
+        DropDown dropDown = nifty.getCurrentScreen().findNiftyControl("selectServer", DropDown.class);
+        if (dropDown != null) {/*
+             * Une fois la classe SimpleClientConnector est instancié 
+             * elle est automatiquement affecté dans la calsse statique Variables
+             */
+            client = Variables.getClientConnecteur();
+            for (int i = 0; i < PropertyReader.getInt(client.getProps(), "server.count", 1); i++) {
+                dropDown.addItem(client.getProps().getProperty("server." + i + ".name", "Server inconnu : " + i));
+            }
+        } else {
+            System.out.println("it s null");
+        }
+    }
+  
+  
+  /*****************************************************************************/
+  /*********************** FIN ECRAN DE CONNECTION *****************************/
+  /*****************************************************************************/
+  
+
+  /*****************************************************************************/
+  /*********************** Chargement du Monde *********************************/
+  /*****************************************************************************/
+  
 private float progressing=0.0f;
 
 public void progress()
@@ -113,7 +143,7 @@ public void progress()
  
 }
 
-private boolean canStartLoading=false;
+
 public void startloadingTheGame()
 {
     System.out.println("start loading the game !!");
@@ -134,105 +164,149 @@ public void startloadingTheGame()
      nifty.getScreen("start").findElementByName("loader").setVisible(true);
          
 }
-  public void startGame() {
-     /*
-       * Verification de la connection
-       */
-      if(Variables.getConnectionStatusLabel()==null)
-          Variables.setConnectionStatusLabel(nifty.getScreen("start").findNiftyControl("connectionStatus",Label.class));
-      
- ///on a besoin de lancer un autre thread ici
+  
+  /*****************************************************************************/
+  /*********************** FIN de chargement du Monde **************************/
+  /*****************************************************************************/
+  
+  /*****************************************************************************/
+  /*********************** DEBUT DU JEU ****************************************/
+  /*****************************************************************************/
+    public void startGame() {
+        /*
+         * Verification de la connection
+         */
+        if (Variables.getConnectionStatusLabel() == null) {
+            Variables.setConnectionStatusLabel(nifty.getScreen("start").
+                    findNiftyControl("connectionStatus", Label.class));
+        }
+
+        ///on a besoin de lancer un autre thread ici
         client.setConnecting(true);
-         connectServer();
-/* Variables.getTaskExecutor().execute(new Runnable() {
-   @Override
-   public void run() {
-  */ 
-   
-                     
-      
+        connectServer();
 
-  
-   
-   }
-int callThread=0;
- public void movetoGameScreen()
- {
-     callThread++;
-     Variables.setConsole(nifty.getScreen("chatbar").
-             findNiftyControl("textfield2", Console.class));
-     System.out.println("This is calling find way niftyCallThread=" + callThread + " threadName=" + Thread.currentThread().getName());
-        Variables.getLaGame().enqueue(
-                 new Callable<Void>() {
-             @Override
-             public Void call() {
-                 // Variables.getLaGame().getSchedulerTaskExecutor().submit(Variables.getLaGame().getFindWay());
-                 System.out.println("This is calling find way from nifty " + Thread.currentThread().getName());
-                 if (Variables.isPlayerModelLoaded())
-                 Variables.getLaGame().initGameWorld();
-                 else 
-                     try {
-             Thread.sleep(100);
-             Variables.getClientConnecteur().callMoveToGameScreen();
-         } catch (Exception ex) {
-         }
-                 return null;
-             }
-         });
+    }
+    SimpleClientConnector client;
+
+    public void connectServer() {
+        Variables.setNiftyGUI(this);
+
+        System.err.println("This is connect server");
+        /// this about connection to the Red Dwarf server
+
+        String login = nifty.getCurrentScreen().
+                findNiftyControl("txtf_login", TextField.class).getText();
+        String pass = nifty.getCurrentScreen().
+                findNiftyControl("txtf_pass", TextField.class).getText();
+
+
+        int index = nifty.getCurrentScreen().
+                findNiftyControl("selectServer", DropDown.class).getSelectedIndex();
+        
+
+        if (index == -1) {
+            index = 0;
+        }
+        client.connect(login, pass, index);
+    }
     
+    int callThread = 0;
 
-
-     nifty.gotoScreen("chatbar");
-     // Variables.getLaGame().initGameWorld();
- }
- 
+    /*
+     * Cette méthode est conçu pour commencer le jeu,
+     * elle attend jusqu'à ce que le joueur est chargé pour terminer l'exécution
+     */
+    public void movetoGameScreen() {
+        callThread++;
+        Variables.setConsole(nifty.getScreen("chatbar").
+                findNiftyControl("textfield2", Console.class));
+ //System.out.println("This is calling find way niftyCallThread=" + callThread + " threadName=" + Thread.currentThread().getName());
+        Variables.getLaGame().enqueue(
+                new Callable<Void>() {
+            @Override
+            public Void call() {
+ //System.out.println("This is calling find way from nifty " + Thread.currentThread().getName());
+                if (Variables.isPlayerModelLoaded()) {
+                    Variables.getLaGame().initGameWorld();
+                } else {
+                    try {
+                        Thread.sleep(100);
+                        Variables.getClientConnecteur().callMoveToGameScreen();
+                    } catch (Exception ex) {
+                    }
+                }
+                return null;
+            }
+        });
+        nifty.gotoScreen("chatbar");
+        // Variables.getLaGame().initGameWorld();
+    }
+  /*****************************************************************************/
+  /*********************** FIN DEBUT DU JEU ************************************/
+  /*****************************************************************************/
   
-  public void quitGame() {
-    app.stop();
-  }
+  
+  /*****************************************************************************/
+  /*********************** ECRAN chartbar de l'interface du jeu ****************/
+  /*****************************************************************************/
+    @NiftyEventSubscriber(id = "textfield2")
+    public void onChatTextSendEvent(String id, ConsoleExecuteCommandEvent event) {
+        System.out.println("element with id [" + id + "] "
+                + "clicked at [" + event.getCommandLine());
 
+
+        Variables.getConsole().output(">J'ai recu sa", Color.BLACK);
+
+    }
+    
+     public void disablePanel()
+  {
+        Variables.getConsole().disable();
+  }
+  
+  
+  private boolean chatBarHidden=false;
+    public void hideChatBar(String ch, String btn) {
+        Element btnClicked = nifty.getCurrentScreen().findElementByName("edit_tabs");
+
+        if (ch.equals("true")) {
+            //Variables.console.output("this is hide chatBar");
+
+            chatBarHidden = true;
+            nifty.gotoScreen("chatbarHidden");
+
+        } else {
+            chatBarHidden = false;
+            nifty.gotoScreen("chatbar");
+        }
+        Variables.getLaGame().gainFocus();
+
+        System.out.println("focus is on \n\n\n\n"
+                + nifty.getCurrentScreen().getDefaultFocusElementId() + "\n\n\n");
+    }
+    
+  /*****************************************************************************/
+  /*********************** FIN ECRAN chartbar de l'interface du jeu ************/
+  /*****************************************************************************/
+  
+ 
   public String getPlayerName() {
     return System.getProperty("user.name");
   }
 
   /** Nifty GUI ScreenControl methods */
   public void bind(Nifty nifty, Screen screen) {
-      
-     
+    
     this.nifty = nifty;
     this.screen = screen;
     Variables.setNifty(nifty);
    
   }
-  
-  
-  /*
-   * Cette méthode remplit la listBox pour 
-   * la sélection d'un serveur
-   */
- public void fillListBox() {
-    
-    
-    DropDown dropDown = nifty.getCurrentScreen().findNiftyControl("selectServer", DropDown.class);
-    if(dropDown!=null)
-    {/*
-     * Une fois la classe SimpleClientConnector est instancié 
-     * elle est automatiquement affecté dans la calsse statique Variables
-     */
-    client=Variables.getClientConnecteur();
-    for (int i=0;i<PropertyReader.getInt(client.getProps(),"server.count", 1);i++) 
-     dropDown.addItem(client.getProps().getProperty("server."+i+".name", "Server inconnu : "+i));
-    }
-    else System.out.println("it s null");
-  }
-  
- 
+
  public void onStartScreen() {
       if(nifty.getCurrentScreen().getScreenId().equals("start"))
       {
-         // nifty.getCurrentScreen().findNiftyControl("txtf_login", TextField.class).setText("hello");
-          //System.out.println("this is start ");
-          fillListBox();
+       fillListBox();
       }
       
   }
@@ -246,147 +320,20 @@ int callThread=0;
   //  this.app = app;
       super.initialize(stateManager, app);
   }
-
- 
   
   
   
   @Override
   public void update(float tpf) {
-   
-  System.out.println("this is nifty update");
-  }
-  
-  SimpleClientConnector client;
-   
-  public void connectServer()
-  {Variables.setNiftyGUI(this);
-      
-      System.err.println("This is connect server");
-      /// this about connection to the Red Dwarf server
-      
-  String login=nifty.getCurrentScreen().findNiftyControl("txtf_login", TextField.class).getText();
-  String pass=nifty.getCurrentScreen().findNiftyControl("txtf_pass", TextField.class).getText();
-  
-  
-  int index=nifty.getCurrentScreen().findNiftyControl("selectServer", DropDown.class).getSelectedIndex();
-  System.out.println("Connection au serveur  -- login="+login+"  pass="+pass+" index="+index);
-  
-  if(index==-1)index=0; 
-     client.connect(login, pass,index);
-      
-
-  }
-  
- 
-  
- @NiftyEventSubscriber(id="textfield2")
- public void onChatTextSendEvent(String id, ConsoleExecuteCommandEvent event) {
- System.out.println("element with id [" + id + "] "
-         + "clicked at [" + event.getCommandLine());
-      
-     
-      Variables.getConsole().output(">J'ai recu sa", Color.BLACK);
-     
-}
+ }
  
  
- 
-
-
-  public void disablePanel()
-  {
-        Variables.getConsole().disable();
-  }
-  
-  
-  private boolean chatBarHidden=false;
-  public void hideChatBar(String ch, String btn)
-  {
-      
-      Element btnClicked=nifty.getCurrentScreen().findElementByName("edit_tabs");
-     
-      if(ch.equals("true"))
-      {
-      //Variables.console.output("this is hide chatBar");
-      
-    chatBarHidden=true;
-      nifty.gotoScreen("chatbarHidden");
-      
-      }
-      else
-      {
-          chatBarHidden=false;
-          nifty.gotoScreen("chatbar");
-          
-      }
-    Variables.getLaGame().gainFocus();
-      //btnClicked.disableFocus();
-      //btnClicked.enable();
-      //nifty.getCurrentScreen().findElementByName("btnReduce").disableFocus();
-      //nifty.getCurrentScreen().findElementByName("btnRetour").disableFocus();
-    System.out.println("focus is on \n\n\n\n"+
-           nifty.getCurrentScreen().getDefaultFocusElementId()+"\n\n\n");
-    //Variables.getLaGame().restart();
-      
-   // nifty.getClipboard().
-      
-  }
   
  /*
   * Ceci pour ouvrir des liens sur
   * un navigateur web
   * (des videos)
   */
-  
-  
-  public static void openWebpage(String urlString) {
-    try {
-        Desktop.getDesktop().browse(new URL(urlString).toURI());
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
-  
-  
-        /*********                                                  **********
-         ***** Cette partie est conçus pour tester l'ouverture d'un pdf **********
-         *********                                                  **********
-        */
-  
-  
-  
-         
-         /**
-	 * Charge le fichier PDF, le télécharge s'il n'est pas en local
-	 */
-  private static final Logger logger = Logger.getLogger("NGUI_LA");
-  PDFFile pdffile;
-	
-  
-  private void openPDF(File f) {
-		//logger.entering(ViewerEngine.class.getName(), "openPDF");
-
-		if (pdffile == null)
-			try {
-				// load the pdf from a byte buffer
-				RandomAccessFile raf = new RandomAccessFile(f, "r");
-				logger.log(Level.INFO, "ouverture PDF{0}", f.getPath());
-				FileChannel channel = raf.getChannel();
-				ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0,
-						channel.size());
-				pdffile = new PDFFile(buf);
-				// ajout pp
-				raf.close();
-			} catch (Exception e) {
-				/*new PopupWindow("Visualisateur",
-						"Erreur lors de l'ouverture de " + f.getName(), "OK",
-						false, PopupIcon.warning); */
-			}
-
-			logger.exiting(NGUI_LA.class.getName(), "openPDF");
-	}
-  
   
   public void autreTaches()
   {
@@ -401,73 +348,59 @@ int callThread=0;
   
   
   
-  /*                                            ********************
-   * Ceci est conçu pour l'affichage d'un PDF     ******************
-   */                                                          
+  /*****************************************************************************/
+  /*********************** À PROPOS DU PDF *************************************/
+  /*****************************************************************************/                                                    
  public void showPDFBrowser()
  {
-     
     nifty.gotoScreen("pdfReaderScreen"); 
-    
-  //  WindowControl w = nifty.getScreen("pdfReaderScreen").findNiftyControl("PDFWindow", WindowControl.class);
-    
     Element z = nifty.getScreen("pdfReaderScreen").findElementByName("PDFWindow");
     z.setVisible(!z.isVisible());
     setNiftyImage();
-    
-   
  }
- 
- 
- 
- 
- 
- 
+  
   @NiftyEventSubscriber(id="PDFWindow")
  public void onPDFWindowClose(String id, WindowClosedEvent event) {
- System.out.println("element with id [" + id + "] "
-         + "clicked at [" + event.toString());
       nifty.getScreen("pdfReaderScreen").resetLayout();
-    nifty.gotoScreen("chatbar");
-     nifty.getScreen("pdfReaderScreen").findNiftyControl("PDFWindow", Window.class).closeWindow();
-    System.out.println("window closed");
-    
-    
+      nifty.gotoScreen("chatbar");
+      nifty.getScreen("pdfReaderScreen").findNiftyControl("PDFWindow", Window.class).closeWindow();
+      System.out.println("window closed");   
 }
   
   public PDFViewer pdfViewer;
  
+  /*
+   * montre la première page du PDF juste après son ouverture
+   */
 private void setNiftyImage() {
-   System.out.println("Instantiation PDFViewer"); 
  pdfViewer=new PDFViewer();
-pdfViewer.ouvrirPDF();
-    
+ pdfViewer.ouvrirPDF();
 
 }
 
-
 public void nextPagePDF()
 {
-  //  System.out.println("traitement fait!!");
     if(pdfViewer!=null)
     pdfViewer.suivPdfPage();
     else 
     {pdfViewer=new PDFViewer();
-        System.out.println("something is happening !!");
+        System.out.println("Reading PDF: something is happening !!");
         
     pdfViewer.suivPdfPage();
     }
-
-    
 }
-
 
 public void prevPagePDF()
 {
     pdfViewer.predPdfPage();
 }
 
-/***************************************************************************************/
+  /*****************************************************************************/
+  /*********************** FIN À PROPOS DU PDF *********************************/
+  /*****************************************************************************/   
+
+
+/**************************************************************************************/
 /**********************************MENU EN BAS à DROITE *******************************/
 /**************************************************************************************/
 
@@ -499,80 +432,88 @@ public void menuClicked(String cmd)
    }
 }
 
-/* **************************************************************************
- * **********************Lecteur Video **************************************
- * **************************************************************************
+/**************************************************************************************/
+/**********************************FIN MENU EN BAS à DROITE ***************************/
+/**************************************************************************************/
+
+/* ***********************************************************************************
+ * *******************************Lecteur Video **************************************
+ * ***********************************************************************************
  */
 public void playVideo()
 {
-   /*
-    * On doit montrer la fenêtre tout d'abord !!
-    */
-   // nifty.gotoScreen("VideoWindow");
     videoPaused=false;
-   nifty.getScreen("chatbar").findElementByName("PanelVideoControle").setVisible(true);
+    nifty.getScreen("chatbar").findElementByName("PanelVideoControle").setVisible(true);
     Variables.getLaGame().initializeVideo("C:\\Wildlife.wmv");
     Variables.getLaGame().startPlaying();
     nifty.getScreen("chatbar").findNiftyControl("btn_play_pause", Button.class).setStyle("btn-video-pause");
-
-    /*
-   VideoPlayer videoPlayer=new VideoPlayer("C:\\Wildlife.wmv");
-                  
-    videoPlayer.startPlaying();
-   */
-    
-           
-}
-
- @NiftyEventSubscriber(id="VIDWindow")
- public void onVideoWindowClose(String id, WindowClosedEvent event) {
- System.out.println("element with id [" + id + "] "
-         + "clicked at [" + event.toString());
-      nifty.getScreen("VideoWindow").resetLayout();
-    nifty.gotoScreen("chatbar");
-     nifty.getScreen("VideoWindow").findNiftyControl("VIDWindow", Window.class).closeWindow();
-    System.out.println("window closed");
-    
-    
+          
 }
  
- private boolean videoPaused =true;
- public void videoControl(String menu)
- {
-     if(menu.equals("exit"))
-     {
-         Variables.getLaGame().exitVideoPlayer();
-         nifty.getScreen("chatbar").findElementByName("PanelVideoControle").setVisible(false);
-         videoPaused=true;
-     }
-     else if(menu.equals("play"))
-     {
-         if(videoPaused)
-         {
-             System.out.println("video paused --> release");
-         Variables.getLaGame().releaseVideo();
-         videoPaused=false;
-         nifty.getScreen("chatbar").findNiftyControl("btn_play_pause", Button.class).setStyle("btn-video-pause");
-         }
-         else{ 
-         Variables.getLaGame().pauseVideo();
-         videoPaused=true;
-         nifty.getScreen("chatbar").findNiftyControl("btn_play_pause", Button.class).setStyle("btn-video-play");
-         }
-     }
-     else if(menu.equals("stop"))
-     {
-         Variables.getLaGame().stopVideo();
-         videoPaused=true;
-         //nifty.getScreen("chatbar").findElementByName("PanelVideoControle").
-         
-         //Variables.getNifty().getScreen("chatbar").findElementByName("PanelVideoControle")
-         nifty.getScreen("chatbar").findNiftyControl("btn_play_pause", Button.class).setStyle("btn-video-play");
-                 
-     }
- }
-  
+    private boolean videoPaused = true;
 
+    public void videoControl(String menu) {
+        if (menu.equals("exit")) {
+            Variables.getLaGame().exitVideoPlayer();
+            nifty.getScreen("chatbar").findElementByName("PanelVideoControle").setVisible(false);
+            videoPaused = true;
+        } else if (menu.equals("play")) {
+            if (videoPaused) {
+                System.out.println("video paused --> release");
+                Variables.getLaGame().releaseVideo();
+                videoPaused = false;
+                nifty.getScreen("chatbar").findNiftyControl("btn_play_pause", Button.class).setStyle("btn-video-pause");
+            } else {
+                Variables.getLaGame().pauseVideo();
+                videoPaused = true;
+                nifty.getScreen("chatbar").findNiftyControl("btn_play_pause", Button.class).setStyle("btn-video-play");
+            }
+        } else if (menu.equals("stop")) {
+            Variables.getLaGame().stopVideo();
+            videoPaused = true;
+            nifty.getScreen("chatbar").findNiftyControl("btn_play_pause", Button.class).setStyle("btn-video-play");
+
+        }
+    }
+/* ***********************************************************************************
+ * ************************** FIN Lecteur Video **************************************
+ * ***********************************************************************************
+ */
+    
+ /* ***********************************************************************************
+ * ************************** Quitter le jeu **************************************
+ * ***********************************************************************************
+ */
+    
+    /*
+     * méthode manquante !!!!!
+     * Il s'agit de changer la scène la motrer pendant 3 secondes et puis fermer 
+     * le jeu à partir de laGame.stop()
+     */
+     public void quitGame() {
+    app.stop();
+  }
+     
+/* ***********************************************************************************
+ * ************************** FIN Quitter le jeu **************************************
+ * ***********************************************************************************
+ */
+
+  
+/**********************************************************************************/
+/************************DES Idées que j'ai pas fini ******************************/
+/**********************************************************************************/
+ 
+ /*
+  * une méthode pour ouvrir une page web dans le navigateur
+  */
+  public static void openWebpage(String urlString) {
+    try {
+        Desktop.getDesktop().browse(new URL(urlString).toURI());
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
 
 
 }

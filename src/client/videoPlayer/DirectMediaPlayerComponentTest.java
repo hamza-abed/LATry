@@ -1,11 +1,47 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Copyright 2010 http://learning-adventure.fr
+ * Tous droits réservés
+ * 
+ * 
+ * ----------------------------------------------------------------------------
+ * Ce fichier fait partie de LA-Client.
+ *
+ * LA-Client est un logiciel libre ; vous pouvez le redistribuer ou le modifier 
+ * suivant les termes de la GNU General Public License telle que publiée par
+ * la Free Software Foundation ; soit la version 3 de la licence, soit 
+ * (à votre gré) toute version ultérieure.
+ * 
+ * LA-Client est distribué dans l'espoir qu'il sera utile, 
+ * mais SANS AUCUNE GARANTIE ; pas même la garantie implicite de 
+ * COMMERCIABILISABILITÉ ni d'ADÉQUATION à UN OBJECTIF PARTICULIER. 
+ * Consultez la GNU General Public License pour plus de détails.
+ * 
+ * Vous devez avoir reçu une copie de la GNU General Public License 
+ * en même temps que LA-Client ; si ce n'est pas le cas, 
+ * consultez <http://www.gnu.org/licenses>.
+ * ----------------------------------------------------------------------------
+ * This file is part of LA-Client.
+ *
+ * LA-Client is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LA-Client is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with LA-Client.  If not, see <http://www.gnu.org/licenses/>.
+ * ----------------------------------------------------------------------------
  */
 package client.videoPlayer;
 
 /*
  * This file is part of VLCJ.
+ * has been modified to reach LA_GAME requirements
+ * @author Hamza ABED hamza.abed.professionel@gmail.com
  *
  * VLCJ is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,22 +61,10 @@ package client.videoPlayer;
 
 
 import client.LaGame;
-import com.sun.jna.Native;
-import com.sun.jna.NativeLibrary;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import uk.co.caprica.vlcj.binding.LibVlc;
 
 import uk.co.caprica.vlcj.component.DirectMediaPlayerComponent;
 import uk.co.caprica.vlcj.player.direct.BufferFormat;
@@ -49,7 +73,6 @@ import uk.co.caprica.vlcj.player.direct.DirectMediaPlayer;
 import uk.co.caprica.vlcj.player.direct.RenderCallback;
 import uk.co.caprica.vlcj.player.direct.RenderCallbackAdapter;
 import uk.co.caprica.vlcj.player.direct.format.RV32BufferFormat;
-import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 import uk.co.caprica.vlcj.test.VlcjTest;
 
 /**

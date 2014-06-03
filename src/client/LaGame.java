@@ -373,10 +373,9 @@ private boolean playerInitialized=false;
        if(!isStartScreen)
        {
            //Variables.getConsole().output("updating");
-        if(boussole ==null )boussole=new Boussole(); 
-        
+        if(boussole !=null ) boussole.update();
         if(missionStatus!=null) missionStatus.update(tpf);
-        boussole.update();
+        
         
         if(playerInitialized)
         {
@@ -520,7 +519,7 @@ private boolean playerInitialized=false;
             public Void call() throws Exception {
                 
                 System.out.println("initSceneGame()");
-                boussole = new Boussole();
+               
                 // sceneModel1.updateGeometricState();
                 // rootNode.updateGeometricState();
                 rootNode.detachAllChildren();
@@ -576,11 +575,9 @@ else
               waterPlan.removeWater();
               
               /*******************************************/
-              /***********ATTACH MISSION STATUS *********/
+              /***********ATTACH MISSION STATUS/ BOUSSOLE *********/
               /******************************************/
-              missionStatus =new MissionStatus();
-              missionStatus.setLocalTranslation(150, 660, 2);
-              guiNode.attachChild(missionStatus);
+              attachBoussole();
               
               
 
@@ -588,6 +585,15 @@ else
             }
         });
 
+    }
+    
+    private void attachBoussole()
+    {
+        missionStatus =new MissionStatus(this);
+              boussole=new Boussole(this);
+             // guiNode.attachChild(missionStatus);
+              missionStatus.showOnScreen();
+              boussole.showOnScreen();
     }
 
     @Override
@@ -599,6 +605,9 @@ else
     private TerrainQuad terrain;
     Material mat_terrain;
 
+    /*
+     * Initialisation d'un terrain basé sur un height map
+     */
     private void initTerrain() // essaye de charger un terrain à partir d'un height map
     {
         /*
@@ -676,7 +685,7 @@ else
          * it.
          **/
         terrain.setMaterial(mat_terrain);
-        terrain.setLocalTranslation(0, -50, 0);
+        terrain.setLocalTranslation(0, -10, 0);
         //terrain.setLocalScale(2f, 1f, 2f);
         terrain.setLocalScale(8f, 0.2f, 8f);
         rootNode.attachChild(terrain);

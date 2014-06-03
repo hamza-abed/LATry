@@ -4,6 +4,7 @@
     <!-- 
 Cette page XML
 représente toute l'interface graphique conçu avec Nifty 3D
+pour le jeu LACORE V4
 @author Hamza ABED 2014 hamza.abed.professionel@gmail.com
 -->
   <useStyles filename="Interface/nifty-default-styles.xml"/>
@@ -63,6 +64,17 @@ représente toute l'interface graphique conçu avec Nifty 3D
   </style>
   
   
+   <!-- SOME STYLE FOR THE HUD "Boutons pour PDF"-->
+ 
+  <style id="btn-next">
+      <attributes backgroundImage="Interface/interfacePDF/suiv.png" />
+  </style>
+  
+  <style id="btn-prev">
+      <attributes backgroundImage="Interface/interfacePDF/pred.png" />
+  </style>
+  
+  
   <!--
   ******************* DEFINITION DE NOUVELS COMPOSANTS ******************
   -->
@@ -77,14 +89,14 @@ représente toute l'interface graphique conçu avec Nifty 3D
         </image>
     </controlDefinition>
 
-    <!-- a simple screen -->
+   
  
-  
+ 
+ 
+  <!--  ECRAN D'ACCUEIL   -->
   <screen id="start" controller="client.NGUI_LA">
-   <!-- <layer childLayout="absolute" id="layer2">
-      <image filename="Interface/imgs/img1.png" height="100%" id="image0" width="100%" x="0" y="0"/> 
-    </layer> -->
-    <layer childLayout="absolute" id="layer3">
+   
+   <layer childLayout="absolute" id="layer3">
       <panel childLayout="absolute" height="30%" id="panel0" style="nifty-panel-simple" backgroundImage="Interface/imgs/bgp.png" width="50%" x="25%" y="35%" alpha="30%">
            <effect>
 	          <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" inherit="true"/>
@@ -129,23 +141,9 @@ représente toute l'interface graphique conçu avec Nifty 3D
     </layer>
   </screen>
   
-  <screen id="loadGame" controller="client.NGUI_LA">
-       <layer childLayout="absolute" id="layerLoadGame">
-      <panel childLayout="absolute" height="30%" id="panelLoadGame" style="nifty-panel-simple" backgroundImage="Interface/imgs/bgp.png" width="50%" x="25%" y="35%" alpha="30%">
-           <effect>
-	          <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" inherit="true"/>
-	          <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" inherit="true"/>
-	   </effect>
-           
-           <control id="loader" name="progressbar" width="400px" height="32px" x="10%" y="37%" visible="false"/>
-           
-            <control  height="33px" id="ok" label="Continue" name="button" x="30%" y="80%">
-            <interact onClick="progress()" />
-        </control>
-      </panel>
-       </layer>
-  </screen>
-  
+ <!-- FIN D'ECRAN DE CONNECTION -->
+ 
+ <!-- ECRAN PRINCIPALE DU JEU -->
 
 <screen id="chatbar" controller="client.NGUI_LA">
     <layer childLayout="absolute" id="layer1"  >
@@ -161,108 +159,110 @@ représente toute l'interface graphique conçu avec Nifty 3D
         
         <!--  
        
-        THIS IS ABOUT TABS
-        -->
+              THIS IS ABOUT TABS
+              -->
         
-<control id="edit_tabs" name="tabGroup" width="100%" focusable="false"> 
+              <control id="edit_tabs" name="tabGroup" width="100%" focusable="false"> 
    
-    <control id="tab_local" name="tab" caption="Local" focusable="false">
-         <panel childLayout="vertical" height="100%" id="panel_grp" style="nifty-panel-simple" width="100%" x="0%" y="0%" backgroundImage="Interface/imgs/bgp.png">
-        <control height="75%" lines="10" id="textfield2" name="nifty-console" width="100%" x="0" y="0px" focusable="false">
+                  <control id="tab_local" name="tab" caption="Local" focusable="false">
+                      <panel childLayout="vertical" height="100%" id="panel_grp" style="nifty-panel-simple" width="100%" x="0%" y="0%" backgroundImage="Interface/imgs/bgp.png">
+                          <control height="75%" lines="10" id="textfield2" name="nifty-console" width="100%" x="0" y="0px" focusable="false">
           
-        </control>        
-        <control height="15%" id="connect" label="PDF locale" name="button" x="0px" y="75%" focusable="false">
-            <interact onClick="showPDFBrowser()"/>
-        </control>
+                          </control>        
+                          <control height="15%" id="connect" label="PDF locale" name="button" x="0px" y="75%" focusable="false">
+                              <interact onClick="showPDFBrowser()"/>
+                          </control>
         
-       </panel>
-    </control>
+                      </panel>
+                  </control>
 
-    <control id="tab_groupe" name="tab" caption="Groupe" focusable="false">
+                  <control id="tab_groupe" name="tab" caption="Groupe" focusable="false">
       
-    </control>
-    <control id="tab_guide" name="tab" caption="Guide" focusable="false" />
-    <control id="tab_monde" name="tab" caption="Monde" focusable="false" />
-    <control id="tab_debug" name="tab" caption="Debug" focusable="false" />
-    <!--
-   J'AI VU QUE L'ONGLET GUIDE PEUT REMPLACER LE DEBUG
-   -->
-</control>
- <control childLayout="absolute" height="12px" width="12px" id="btnReduce" label="-" name="button" x="368px" y="0px" 
+                  </control>
+                  <control id="tab_guide" name="tab" caption="Guide" focusable="false" />
+                  <control id="tab_monde" name="tab" caption="Monde" focusable="false" />
+                  <control id="tab_debug" name="tab" caption="Debug" focusable="false" />
+                  <!--
+                  J'AI VU QUE L'ONGLET GUIDE PEUT REMPLACER LE DEBUG
+                  -->
+              </control>
+              <control childLayout="absolute" height="12px" width="12px" id="btnReduce" label="-" name="button" x="368px" y="0px" 
           style="nifty-btn-hide" focusable="false">
-      <interact onClick="hideChatBar(true,btnReduce)" />
- </control>
+                  <interact onClick="hideChatBar(true,btnReduce)" />
+              </control>
         
-      </panel>
+          </panel>
       </layer>
       <layer childLayout="absolute" id="layerForMenu"  >
- <!-- PANEL FOR THE HUD   -->
- <panel  childLayout="absolute"  id="menuPanel" style="nifty-panel-simple" height="60px" width="246px" x="774" y="714px" backgroundImage="Interface/hud/menu-back.png">
+          <!-- PANEL FOR THE HUD   -->
+          <panel  childLayout="absolute"  id="menuPanel" style="nifty-panel-simple" height="60px" width="246px" x="774" y="714px" backgroundImage="Interface/hud/menu-back.png">
   
     
-        <image filename="Interface/hud/menu-back.png" height="42px" id="menuBackground" width="246px" x="0%" y="0%"/>
- <!--
- BUTTONS FOR THE MAIN MENU 32PX BETWEEN EACH 2 BUTTONS
- -->
-<control childLayout="absolute" height="28px" width="28px" id="btn-run" label="-" name="button" x="29px" y="5px" 
-        style="btn-menu-run" focusable="false">
-      <interact onClick="menuClicked(menu-run)" />
-</control>
-<control childLayout="absolute" height="28px" width="28px" id="btn-bag" label="-" name="button" x="61px" y="5px" 
-        style="btn-menu-bag" focusable="false">
-      <interact onClick="menuClicked(menu-bag)" />
-</control>
-<control childLayout="absolute" height="28px" width="28px" id="btn-stat" label="-" name="button" x="93px" y="5px" 
-        style="btn-menu-stat" focusable="false">
-      <interact onClick="menuClicked(menu-stat)" />
-</control>
-<control childLayout="absolute" height="28px" width="28px" id="btn-quest" label="-" name="button" x="125px" y="5px" 
-        style="btn-menu-quest" focusable="false">
-      <interact onClick="menuClicked(menu-quest)" />
-</control>
+              <image filename="Interface/hud/menu-back.png" height="42px" id="menuBackground" width="246px" x="0%" y="0%"/>
+              <!--
+              BUTTONS FOR THE MAIN MENU 32PX BETWEEN EACH 2 BUTTONS
+              -->
+              <control childLayout="absolute" height="28px" width="28px" id="btn-run" label="-" name="button" x="29px" y="5px" 
+         style="btn-menu-run" focusable="false">
+                  <interact onClick="menuClicked(menu-run)" />
+              </control>
+              <control childLayout="absolute" height="28px" width="28px" id="btn-bag" label="-" name="button" x="61px" y="5px" 
+         style="btn-menu-bag" focusable="false">
+                  <interact onClick="menuClicked(menu-bag)" />
+              </control>
+              <control childLayout="absolute" height="28px" width="28px" id="btn-stat" label="-" name="button" x="93px" y="5px" 
+         style="btn-menu-stat" focusable="false">
+                  <interact onClick="menuClicked(menu-stat)" />
+              </control>
+              <control childLayout="absolute" height="28px" width="28px" id="btn-quest" label="-" name="button" x="125px" y="5px" 
+         style="btn-menu-quest" focusable="false">
+                  <interact onClick="menuClicked(menu-quest)" />
+              </control>
 
-<control childLayout="absolute" height="28px" width="28px" id="btn-edit" label="-" name="button" x="157px" y="5px" 
-        style="btn-menu-edit" focusable="false">
-      <interact onClick="menuClicked(menu-edit)" />
-</control>
-<control childLayout="absolute" height="28px" width="28px" id="btn-exit" label="-" name="button" x="189px" y="5px" 
-        style="btn-menu-exit" focusable="false">
-      <interact onClick="menuClicked(menu-exit)" />
-</control>
-      </panel>
-    </layer>
+              <control childLayout="absolute" height="28px" width="28px" id="btn-edit" label="-" name="button" x="157px" y="5px" 
+         style="btn-menu-edit" focusable="false">
+                  <interact onClick="menuClicked(menu-edit)" />
+              </control>
+              <control childLayout="absolute" height="28px" width="28px" id="btn-exit" label="-" name="button" x="189px" y="5px" 
+         style="btn-menu-exit" focusable="false">
+                  <interact onClick="menuClicked(menu-exit)" />
+              </control>
+          </panel>
+      </layer>
     
     
-  <!-- C'est à propos des boutons de controle de la vidéo -->
+      <!-- C'est à propos des boutons de controle de la vidéo -->
   
-   <layer childLayout="absolute" id="layerForVideoControle"  >
+      <layer childLayout="absolute" id="layerForVideoControle"  >
  
- <panel  childLayout="absolute"  id="PanelVideoControle" visible="false"
- style="nifty-panel-simple" height="100px" width="500px" x="450px" y="605px" backgroundImage="Interface/hud/menu-back.png">
+          <panel  childLayout="absolute"  id="PanelVideoControle" visible="false"
+         style="nifty-panel-simple" height="100px" width="500px" x="450px" y="605px" backgroundImage="Interface/hud/menu-back.png">
    
      
-<control childLayout="absolute" height="28px" width="28px" id="btn_exit" label="-" name="button" x="29px" y="5px"  
-        style="btn-video-exit" focusable="false">
-      <interact onClick="videoControl(exit)" />
-</control>  
-<control childLayout="absolute" height="28px" width="28px" id="btn_stop" label="-" name="button" x="61px" y="5px"  
-        style="btn-video-stop" focusable="false">
-      <interact onClick="videoControl(stop)" />
-</control>
+              <control childLayout="absolute" height="28px" width="28px" id="btn_exit" label="-" name="button" x="29px" y="5px"  
+         style="btn-video-exit" focusable="false">
+                  <interact onClick="videoControl(exit)" />
+              </control>  
+              <control childLayout="absolute" height="28px" width="28px" id="btn_stop" label="-" name="button" x="61px" y="5px"  
+         style="btn-video-stop" focusable="false">
+                  <interact onClick="videoControl(stop)" />
+              </control>
 
-<control childLayout="absolute" height="28px" width="28px" id="btn_play_pause" label="-" name="button" x="93px" y="5px"  
-        style="btn-video-pause" focusable="false">
-      <interact onClick="videoControl(play)" />
-</control>
+              <control childLayout="absolute" height="28px" width="28px" id="btn_play_pause" label="-" name="button" x="93px" y="5px"  
+         style="btn-video-pause" focusable="false">
+                  <interact onClick="videoControl(play)" />
+              </control>
      
      
- </panel>
-   </layer>
+          </panel>
+      </layer>
   
   
   
- </screen>
+  </screen>
  
+ <!-- FIN ECRAN PRINCIPALE DU JEU "chatbar" -->
+ <!-- ECRAN PRINCIPALE CACHE -->
  <screen id="chatbarHidden" controller="client.NGUI_LA">
     <layer childLayout="absolute" id="layer11"  >
       <panel childLayout="horizontal" height="35%" id="panelChatBarHidden" style="nifty-panel-simple" width="30px" x="2px" y="70%" backgroundImage="Interface/imgs/bgp.png" alpha="30%">
@@ -277,50 +277,10 @@ représente toute l'interface graphique conçu avec Nifty 3D
       </panel>
     </layer>
  </screen>
+ <!-- FIN ECRAN PRINCIPALE CACHE -->
  
- 
- <screen id="LACorePDFReader" controller="client.NGUI_LA">
-     <layer childLayout="absolute" id="layer3">
-        
- <panel childLayout="vertical" align="center" valign="center" width="50%" x="25%" y="25%" height="50%" padding="10" >
-    
-     <control id="input" name="textField" />
-     <control height="30px" id="connect" label="show" name="button" x="0px" y="0px" focusable="false">
-            <interact onClick="showText()"/>
-     </control> 
-      <effect>
-	          <onStartScreen name="move" timeType="exp" factor="3.5" direction="left" mode="in" length="500" inherit="true"/>
-	          <onHide name="move" timeType="exp" factor="3.5" direction="left" mode="out" length="370" inherit="true"/>
-      </effect>
-        
-      <control id="scrollbarPanelId" name="scrollText" horizontal="true" height="100%" width="100%" wrap="true"> 
-          <!-- first child is the content, the area to scroll around -->
-  
-      <control id="PDFViewer" name="label"  font="Interface/Fonts/Mangal.fnt" height="100%" 
-               text="ss" width="100%" x="14px" y="20" wrap="true"/>
 
-   <!--     <text text="hello" id="PDFViewer"
-font="Interface/Fonts/Mangal.fnt" width="80%" height="100%" wrap="true" /> -->
-      
- </control> 
-      
- </panel>
-         
-    </layer>
- </screen>
- 
- <!-- LOADING A PDF FILE -->
- 
- <!-- SOME STYLE FOR THE HUD -->
- 
-  <style id="btn-next">
-      <attributes backgroundImage="Interface/interfacePDF/suiv.png" />
-  </style>
-  
-  <style id="btn-prev">
-      <attributes backgroundImage="Interface/interfacePDF/pred.png" />
-  </style>
- 
+<!-- LOADING A PDF FILE -->
 <screen id="pdfReaderScreen" controller="client.NGUI_LA">
     <layer childLayout="absolute" id="layer2">
       <control height="80%" id="PDFWindow" name="window" hideOnClose="true" 
@@ -349,43 +309,4 @@ font="Interface/Fonts/Mangal.fnt" width="80%" height="100%" wrap="true" /> -->
     </layer>
   </screen>
   
- <!-- *********************************************************************************** 
-      ******************************** FENËTRE DE VIDEO *********************************
-      ***********************************************************************************
-  -->
-  
- <screen id="VideoWindow" controller="client.NGUI_LA">
-    <layer childLayout="absolute" id="layer_vid">
- 
-   <control height="50%" id="VIDWindow" name="window" hideOnClose="true" 
-       title="" width="900px" x="109" y="187">
-         
-    <effect>
-         <onStartScreen name="move" timeType="exp" factor="3.5" direction="left" mode="in" length="500" inherit="true"/>
-         <onHide name="move" timeType="exp" factor="3.5" direction="left" mode="out" length="370" inherit="true"/>
-    </effect>
-    
-<panel childLayout="absolute" height="100%" id="panel_vid" style="nifty-panel-simple" width="100%" x="0%" y="0%" backgroundImage="Interface/imgs/bgp.png">     
-    
-    
-<control name="button" style="btn-prev" x="1%" y="1%" id="pred" height="32px" width="32px" childLayout="absolute">
-<interact onClick="prevPagePDF()"/>
-</control>
-<control name="button" style="btn-next" x="7%" y="1%" id="next" height="32px" width="32px" childLayout="absolute" focusable="true">
-<interact onClick="nextPagePDF()"/>
-</control>
- <control id="titre_video" name="textfield" width="130px" x="47%" y="1%" enabled="false"/>
-
-      <!--<control name="scrollPanel" id="scroll_panel_vid"  width="100%" height="95%" x="0%" y="7%"> -->
-        <image filename="Interface/imgs/bgp.png" height="90%" id="videoPict" width="100%" x="0%" y="0%"/>
-      <!--</control> -->
-</panel> 
-      </control>
-    </layer>
-  </screen>
-  <!-- *********************************************************************************** 
-      ******************************** FIN FENËTRE DE VIDEO ******************************
-      ***********************************************************************************
-  -->
- 
 </nifty>
