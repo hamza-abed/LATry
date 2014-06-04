@@ -39,6 +39,8 @@
 
 package client.hud3D;
 
+import client.LaGame;
+import com.jme3.asset.TextureKey;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.control.GhostControl;
@@ -49,7 +51,10 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.debug.Arrow;
+import com.jme3.texture.Texture;
+import com.jme3.texture.plugins.AWTLoader;
 import shared.variables.Variables;
 
 /**
@@ -61,9 +66,10 @@ import shared.variables.Variables;
  */
 public class MoveCursor{
     
-    public MoveCursor()
+    private LaGame game;
+    public MoveCursor(LaGame game)
     {
-     
+     this.game=game;
        //  Variables.getLaGame().getPhysicsSpace().addCollisionListener(this);
     }
     private boolean targetAttended=false;
@@ -75,20 +81,23 @@ public class MoveCursor{
     public void setTargetAttended(boolean targetAttended) {
         this.targetAttended = targetAttended;
     }
-    private Arrow arrow;
+  //  private Arrow arrow;
+    private Spatial arrow;
    Vector3f point;
     public void afficherFlecheDestination(Vector3f pt)
     {
                 
 ///This is about arrow
-arrow = new Arrow(new Vector3f(0,3,0));
+//arrow = new Arrow(new Vector3f(0,3,0));
+        arrow=Variables.getLaGame().getAssetManager().loadModel("Models/pointer2/pointer2.j3o");
 
-arrow.setLineWidth(10); // make arrow thicker
+//arrow.setLineWidth(10); // make arrow thicker
 removeArrow();
 
 if(pt!=null)
         {
             putShape(arrow, ColorRGBA.Green,pt).setLocalTranslation(new Vector3f(pt.x, pt.y,pt.z));
+            startPosition=pt.y;
             Variables.getMainPlayer().moveTo(pt.getX(), pt.getZ()); // utilisation de la méthode de Ludovic Kepka
             
         }
@@ -113,7 +122,8 @@ if(pt!=null)
     
     
      Geometry g=null;
-private Node putShape(Mesh shape, ColorRGBA color,Vector3f pt){
+//private Node putShape(Mesh shape, ColorRGBA color,Vector3f pt){
+private Node putShape(Spatial shape, ColorRGBA color,Vector3f pt){
     
    if(ghostCursor==null)
    {
@@ -123,19 +133,40 @@ private Node putShape(Mesh shape, ColorRGBA color,Vector3f pt){
   
   
   
-   g = new Geometry("coordinate axis", shape);
-   g.setMaterial(mat);
+  /*
+   * 
+   */
+ 
+  
+   Material mat1 = new Material(Variables.getLaGame().getAssetManager(),
+                "Common/MatDefs/Misc/Unshaded.j3md");
+           
+        
+        TextureKey key =new TextureKey("Textures/tex2.jpg",false);
+        Texture tex = Variables.getLaGame().getAssetManager().loadTexture(key);
+        System.out.println("this is show PDF attaching child");
+        
+        //tex.setImage(
+        mat1.setTexture("ColorMap",tex);
+      //  shape.setMaterial(mat1);
+        
+  
+  // g = new Geometry("coordinate axis", shape);
+  // g.setMaterial(mat);
         bx= new BoxCollisionShape(new Vector3f(3f,02f,1));
         ghostCursor = new GhostControl(bx);
         nodeGostCursor=new Node("gostC");
-        nodeGostCursor.attachChild(g);
+        //nodeGostCursor.attachChild(g);
+        nodeGostCursor.attachChild(shape);
    }
      
   
-  Variables.getLaGame().getRootNode().attachChild(nodeGostCursor);
-  Variables.getLaGame().getPhysicsSpace().add(ghostCursor);
+  game.getRootNode().attachChild(nodeGostCursor);
+  game.getPhysicsSpace().add(ghostCursor);
+  
+  visible=true;
   //targetAttended=false;
-  g.addControl(ghostCursor);
+ // g.addControl(ghostCursor);
   nodeGostCursor.addControl(ghostCursor);
   //nodeGostCursor.setLocalRotation(new Quaternion(0, 0 , 180, 180));
   
@@ -143,13 +174,11 @@ private Node putShape(Mesh shape, ColorRGBA color,Vector3f pt){
  return nodeGostCursor;
 }
 
-public Geometry getShapeCursor()
-{
-    return g;
-}
+
 public void removeArrow()
 {    if(Variables.getLaGame().getRootNode().getChild("gostC")!=null)
     Variables.getLaGame().getRootNode().detachChild(Variables.getLaGame().getRootNode().getChild("gostC"));
+visible=false;
 //Variables.getConsole().output("this is removeArrow from MoveCursor Class");
 }
 
@@ -164,6 +193,29 @@ public void removeArrow()
                 }
         
         
+    }
+    
+    private boolean visible=false;
+    
+    
+    /*
+     * ceci pour faire la petite animation de monté et décente du pointeur
+     */
+    float animationIndex=0f;
+    float startPosition=0f;
+    boolean movingUp=true;
+    public void update()
+    {
+        if(animationIndex>=3) movingUp=false;
+        if(animationIndex<=0) movingUp=true;
+        
+        if(movingUp) animationIndex+=0.03f;
+        else animationIndex -=0.03f;
+        
+        if(visible)
+            nodeGostCursor.setLocalTranslation(nodeGostCursor.getLocalTranslation().getX(),
+                    startPosition+animationIndex,
+                    nodeGostCursor.getLocalTranslation().getZ());
     }
 
 }

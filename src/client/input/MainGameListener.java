@@ -103,8 +103,9 @@ Variables.getConsole().clear();
                 
         }
         
-        
+      if(object!=null && pt !=null)  
         object.setLocalTranslation(pt);
+      else System.err.println("objet null selectionné");
   }
    
     

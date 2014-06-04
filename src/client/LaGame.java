@@ -227,14 +227,6 @@ public class LaGame extends SimpleApplication {
         app.setDisplayStatView(false);
         bulletAppState = new BulletAppState(); //Ceci c'est pour spécifier 
         stateManager.attach(bulletAppState); //qu'on va travailler avec des physics
-       
-        
-     
-        
-        
-        
-        
-        
         //le bulletAppState est un variable utilisé dans tout le jeux
         //pour ajouter des palyers
         
@@ -245,12 +237,7 @@ public class LaGame extends SimpleApplication {
         initStartingScene();
        
         initStartingCamera();
-       
-     
-        
-        
-           
-     
+ 
         }
   
     
@@ -376,6 +363,7 @@ private boolean playerInitialized=false;
         if(boussole !=null ) boussole.update();
         if(missionStatus!=null) missionStatus.update(tpf);
         
+        if(moveCursor!=null) moveCursor.update();
         
         if(playerInitialized)
         {
@@ -762,7 +750,7 @@ else
 
                 isStartScreen = false;
 
-                bulletAppState.getPhysicsSpace().enableDebug(assetManager);
+               // bulletAppState.getPhysicsSpace().enableDebug(assetManager);
 
                 setUpKeys();
           
@@ -773,10 +761,11 @@ else
          
          
     }
+    private MoveCursor moveCursor;
     public void initNiftyGUI() {
-
+       moveCursor=new MoveCursor(this);
         Variables.setLaGame(this);
-        Variables.setMoveCursor(new MoveCursor());
+        Variables.setMoveCursor(moveCursor);
         
         NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(
                 assetManager, inputManager, audioRenderer, guiViewPort);
